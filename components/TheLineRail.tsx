@@ -254,7 +254,7 @@ export function TheLineRail({ artists }: Props) {
         onMouseLeave={e => (e.currentTarget.style.opacity = '0.4')}
         aria-label="Scroll right 10 lines"
       >
-        <span className="font-mono text-[9px] text-line-muted tracking-widest group-hover:text-line-accent transition-colors">THE LINE</span>
+        <span className="font-mono text-[9px] text-line-muted tracking-widest group-hover:text-line-accent transition-colors">LFFFLINE!!!</span>
         <svg width="28" height="10" viewBox="0 0 28 10" fill="none">
           <line x1="0" y1="5" x2="24" y2="5" stroke="#C8A96E" strokeWidth="0.8"/>
           <polyline points="19,1 24,5 19,9" stroke="#C8A96E" strokeWidth="0.8" fill="none"/>
