@@ -22,6 +22,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.mypinata.cloud',
       },
+      {
+        protocol: 'https',
+        hostname: 'pub-d9cd1d9cbee240ac910a712435c5224c.r2.dev',
+      },
     ],
   },
   async redirects() {
