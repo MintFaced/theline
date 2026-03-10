@@ -145,13 +145,13 @@ export default function HomePage() {
           </div>
 
           {/* Gallery interior photo */}
-          <div className="mt-px relative overflow-hidden" style={{ height: 'clamp(200px, 30vw, 400px)' }}>
+          <div className="mt-px relative overflow-hidden" style={{ height: 'clamp(400px, 60vw, 800px)' }}>
             <Image
               src="/images/gallery/interior.jpg"
               alt="The Line Gallery opening night"
               fill
               className="object-cover"
-              style={{ objectPosition: 'center 65%' }}
+              style={{ objectPosition: 'center 47%' }}
             />
             <div className="absolute inset-0"
               style={{ background: 'rgba(10,10,10,0.3)' }} />
