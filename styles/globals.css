@@ -1,67 +1,5 @@
 /* styles/globals.css */
-
-/* ── Font Face Declarations ─────────────────────────────────────────────────── */
-/* Canela Display — editorial serif */
-@font-face {
-  font-family: 'Canela';
-  src: url('/fonts/Canela-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Canela';
-  src: url('/fonts/Canela-Light.woff2') format('woff2');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Canela';
-  src: url('/fonts/Canela-Thin.woff2') format('woff2');
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Söhne — refined grotesque UI font */
-@font-face {
-  font-family: 'Sohne';
-  src: url('/fonts/Sohne-Buch.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Sohne';
-  src: url('/fonts/Sohne-Kraftig.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Sohne';
-  src: url('/fonts/Sohne-Halbfett.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* JetBrains Mono — data, wallets, line numbers */
-@font-face {
-  font-family: 'JetBrains Mono';
-  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'JetBrains Mono';
-  src: url('/fonts/JetBrainsMono-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
+/* Fonts loaded via next/font/google in app/layout.tsx — no font files needed */
 
 /* ── CSS Custom Properties ──────────────────────────────────────────────────── */
 :root {
@@ -74,9 +12,10 @@
   --color-ghost:    #1A1A1A;
   --color-hover:    #E8E8E8;
 
-  --font-display: 'Canela', Georgia, serif;
-  --font-sans:    'Sohne', system-ui, sans-serif;
-  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+  /* Font variables injected by next/font via CSS variables in layout.tsx */
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-sans:    var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains-mono), 'Courier New', monospace;
 
   --nav-height:   56px;
   --rail-height:  70vh;

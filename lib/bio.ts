@@ -6,13 +6,15 @@ export async function getBio(artist: Artist): Promise<string | null> {
   if (artist.bioLocked && artist.bioOverride) return artist.bioOverride
   if (artist.bioOverride) return artist.bioOverride
 
-  // Try KV cache
-  try {
-    const { kv } = await import('@vercel/kv')
-    const cached = await kv.get<string>(`bio:${artist.slug}`)
-    if (cached) return cached
-  } catch {
-    // KV not configured in dev — fall through
+  // Try KV cache (only at runtime, not build time)
+  if (process.env.KV_REST_API_URL) {
+    try {
+      const { kv } = await import('@vercel/kv')
+      const cached = await kv.get<string>(`bio:${artist.slug}`)
+      if (cached) return cached
+    } catch {
+      // KV not reachable — fall through
+    }
   }
 
   // Fall back to CSV description
@@ -21,6 +23,11 @@ export async function getBio(artist: Artist): Promise<string | null> {
 
 // Called by the weekly cron job — not used on page render
 export async function generateAndCacheBio(artist: Artist): Promise<string | null> {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.warn('ANTHROPIC_API_KEY not set — skipping bio generation')
+    return null
+  }
+
   try {
     const Anthropic = (await import('@anthropic-ai/sdk')).default
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
@@ -63,11 +70,13 @@ Recent posts: ${tweetContext}`,
     const bio = message.content[0].type === 'text' ? message.content[0].text : null
     if (!bio) return null
 
-    // Cache in KV
-    try {
-      const { kv } = await import('@vercel/kv')
-      await kv.set(`bio:${artist.slug}`, bio, { ex: 8 * 24 * 60 * 60 }) // 8 days
-    } catch { /* KV not available */ }
+    // Cache in KV if available
+    if (process.env.KV_REST_API_URL) {
+      try {
+        const { kv } = await import('@vercel/kv')
+        await kv.set(`bio:${artist.slug}`, bio, { ex: 8 * 24 * 60 * 60 })
+      } catch { /* KV not available */ }
+    }
 
     return bio
   } catch (err) {
@@ -80,7 +89,6 @@ async function fetchRecentTweets(handle: string): Promise<string> {
   const bearer = process.env.X_BEARER_TOKEN
   if (!bearer) return 'No Twitter/X credentials configured.'
 
-  // Look up user ID
   const userRes = await fetch(
     `https://api.twitter.com/2/users/by/username/${handle}`,
     { headers: { Authorization: `Bearer ${bearer}` } }
@@ -90,7 +98,6 @@ async function fetchRecentTweets(handle: string): Promise<string> {
   const userId = userData.data?.id
   if (!userId) return 'User not found.'
 
-  // Fetch tweets
   const tweetsRes = await fetch(
     `https://api.twitter.com/2/users/${userId}/tweets?max_results=20&exclude=retweets,replies&tweet.fields=text`,
     { headers: { Authorization: `Bearer ${bearer}` } }
@@ -99,7 +106,7 @@ async function fetchRecentTweets(handle: string): Promise<string> {
   const tweetsData = await tweetsRes.json()
   const tweets: string[] = (tweetsData.data ?? [])
     .map((t: { text: string }) => t.text)
-    .filter((t: string) => t.length > 30) // filter out short engagement tweets
+    .filter((t: string) => t.length > 30)
     .slice(0, 12)
 
   return tweets.length > 0 ? tweets.join('\n') : 'No substantial posts found.'

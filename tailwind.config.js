@@ -18,9 +18,9 @@ module.exports = {
         'line-hover':   '#E8E8E8',
       },
       fontFamily: {
-        display: ['Canela', 'Georgia', 'serif'],
-        sans:    ['Sohne', 'system-ui', 'sans-serif'],
-        mono:    ['JetBrains Mono', 'monospace'],
+        display: ['var(--font-cormorant)', 'Georgia', 'serif'],
+        sans:    ['var(--font-dm-sans)', 'system-ui', 'sans-serif'],
+        mono:    ['var(--font-jetbrains-mono)', 'monospace'],
       },
       fontSize: {
         'display-2xl': ['clamp(3rem, 8vw, 7rem)', { lineHeight: '1.0', letterSpacing: '-0.02em' }],

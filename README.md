@@ -58,18 +58,17 @@ types/index.ts       TypeScript types
 
 ## Fonts
 
-Self-host these WOFF2 files in `public/fonts/`:
-- `Canela-Light.woff2` — display serif
-- `Canela-Regular.woff2`
-- `Canela-Thin.woff2`
-- `Sohne-Buch.woff2` — UI font
-- `Sohne-Kraftig.woff2`
-- `Sohne-Halbfett.woff2`
-- `JetBrainsMono-Regular.woff2` — data/mono
-- `JetBrainsMono-Medium.woff2`
+All fonts load automatically via `next/font/google` — **no font files needed**.
 
-JetBrains Mono is free: https://www.jetbrains.com/legalforms/fonts/
-Canela + Söhne are licensed from Klim Type Foundry: https://klim.co.nz
+- **Cormorant Garamond** — display serif (replaces Canela; swap when licensed)
+- **DM Sans** — clean UI font (replaces Söhne; swap when licensed)
+- **JetBrains Mono** — data, wallets, line numbers (free, stays)
+
+To upgrade to Canela + Söhne later:
+1. License from https://klim.co.nz
+2. Add WOFF2 files to `public/fonts/`
+3. Replace `next/font/google` imports in `app/layout.tsx` with `next/font/local`
+4. Update CSS variable names in `styles/globals.css`
 
 ## Artist Data
 
