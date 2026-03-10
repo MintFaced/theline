@@ -10,9 +10,10 @@ export const revalidate = 21600 // 6 hours
 
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+ { params }: { params: Promise<{ slug: string }> }
 ) {
-  const artist = artists.find(a => a.slug === params.slug)
+  const { slug } = await params
+  const artist = artists.find(a => a.slug === slug)
   if (!artist || !artist.walletAddress) {
     return NextResponse.json([], { status: 200 })
   }
