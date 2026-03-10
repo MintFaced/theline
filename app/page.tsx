@@ -150,7 +150,8 @@ export default function HomePage() {
               src="/images/gallery/interior.jpg"
               alt="The Line Gallery opening night"
               fill
-              className="object-cover object-top"
+              className="object-cover"
+              style={{ objectPosition: 'center 65%' }}
             />
             <div className="absolute inset-0"
               style={{ background: 'rgba(10,10,10,0.3)' }} />

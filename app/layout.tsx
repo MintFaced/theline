@@ -91,7 +91,10 @@ function Footer() {
       <div className="max-w-content mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
         <div>
           <p className="font-mono text-xs text-line-muted tracking-widest uppercase">
-            The Line · Napier, New Zealand
+            The Line · 318 Heretaunga St West, Hastings ·{' '}
+            <a href="https://www.hawkesbaynz.com/destinations/hastings-district" target="_blank" rel="noopener noreferrer" className="hover:text-line-accent transition-colors">
+              Hawke&apos;s Bay, New Zealand
+            </a>
           </p>
           <p className="font-mono text-xs text-line-muted mt-1">
             {_artistCount} artists · 1,000 positions · {_remain} remain
