@@ -26,7 +26,42 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'pub-d9cd1d9cbee240ac910a712435c5224c.r2.dev',
       },
+      {
+        protocol: 'https',
+        hostname: '**.arweave.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'arweave.net',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.nftstorage.link',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.seadn.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'openseauserdata.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets.objkt.media',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.objkt.media',
+      },
     ],
+    // Allow all domains as fallback for development
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   async redirects() {
     return [

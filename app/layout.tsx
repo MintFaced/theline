@@ -4,6 +4,13 @@ import { Cormorant_Garamond, DM_Sans, JetBrains_Mono } from 'next/font/google'
 import '../styles/globals.css'
 import { Navigation } from '@/components/Navigation'
 import { Providers } from '@/components/Providers'
+import artistsData from '@/data/artists.json'
+import type { Artist } from '@/types'
+
+const _artists = artistsData as Artist[]
+const _maxLine = Math.max(..._artists.flatMap(a => a.allLineNumbers))
+const _artistCount = _artists.length
+const _remain = 1000 - _maxLine - 1
 
 // Display serif — replaces Canela
 const cormorant = Cormorant_Garamond({
@@ -87,7 +94,7 @@ function Footer() {
             The Line · Napier, New Zealand
           </p>
           <p className="font-mono text-xs text-line-muted mt-1">
-            821 artists · 1,000 positions · 179 remain
+            {_artistCount} artists · 1,000 positions · {_remain} remain
           </p>
         </div>
         <nav className="flex flex-wrap gap-6">

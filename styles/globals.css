@@ -1,6 +1,11 @@
 /* styles/globals.css */
 /* Fonts loaded via next/font/google in app/layout.tsx — no font files needed */
 
+/* ── Tailwind (must come first so our custom CSS wins) ──────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ── CSS Custom Properties ──────────────────────────────────────────────────── */
 :root {
   --color-bg:       #0A0A0A;
@@ -220,7 +225,4 @@ a {
   background: var(--color-surface);
 }
 
-/* ── Tailwind @layer ────────────────────────────────────────────────────────── */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ── end of globals.css ─────────────────────────────────────────────────────── */
