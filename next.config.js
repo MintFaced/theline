@@ -5,7 +5,7 @@ const nextConfig = {
       // Cloudflare R2 — primary image store (all 784 artist images)
       {
         protocol: 'https',
-        hostname: 'pub-d9cd1d9cbee240ac910a712435c5224c.r2.dev',
+        hostname: 'pub-40df8e6473b14a10a093ecf8c80c2f92.r2.dev',
         pathname: '/**',
       },
       // Vercel Blob — future uploads
