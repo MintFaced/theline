@@ -242,14 +242,24 @@ export function TheLineRail({ artists }: Props) {
         </p>
       </div>
 
-      {/* Drag hint */}
-      <div className="absolute bottom-8 right-8 z-10 hidden md:flex items-center gap-2 opacity-40">
-        <span className="font-mono text-[9px] text-line-muted tracking-widest">DRAG</span>
-        <svg width="20" height="8" viewBox="0 0 20 8" fill="none">
-          <line x1="0" y1="4" x2="18" y2="4" stroke="#666" strokeWidth="0.8"/>
-          <polyline points="14,1 18,4 14,7" stroke="#666" strokeWidth="0.8" fill="none"/>
+      {/* Scroll arrow — click to advance 10 lines */}
+      <button
+        onClick={() => {
+          const outer = (listRef.current as any)?._outerRef
+          if (outer) outer.scrollBy({ left: NODE_WIDTH * 10, behavior: 'smooth' })
+        }}
+        className="absolute bottom-8 right-8 z-10 hidden md:flex items-center gap-2 group cursor-pointer"
+        style={{ opacity: 0.4, transition: 'opacity 200ms ease', background: 'none', border: 'none', padding: 0 }}
+        onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+        onMouseLeave={e => (e.currentTarget.style.opacity = '0.4')}
+        aria-label="Scroll right 10 lines"
+      >
+        <span className="font-mono text-[9px] text-line-muted tracking-widest group-hover:text-line-accent transition-colors">THE LINE</span>
+        <svg width="28" height="10" viewBox="0 0 28 10" fill="none">
+          <line x1="0" y1="5" x2="24" y2="5" stroke="#C8A96E" strokeWidth="0.8"/>
+          <polyline points="19,1 24,5 19,9" stroke="#C8A96E" strokeWidth="0.8" fill="none"/>
         </svg>
-      </div>
+      </button>
     </section>
   )
 }
