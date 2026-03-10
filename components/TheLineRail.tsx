@@ -152,13 +152,13 @@ export function TheLineRail({ artists }: Props) {
     return () => window.removeEventListener('resize', measure)
   }, [])
 
-  // Auto-scroll to most recent artist
+  // Auto-scroll to around line 200 on load (most artists are in 0–900, activity peaks early)
   useEffect(() => {
     if (listRef.current) {
-      const target = Math.max(0, maxOccupied - Math.floor(containerWidth / NODE_WIDTH / 2))
+      const target = Math.max(0, 200 - Math.floor(containerWidth / NODE_WIDTH / 2))
       listRef.current.scrollToItem(target, 'start')
     }
-  }, [maxOccupied, containerWidth])
+  }, [containerWidth])
 
   // Drag-to-scroll
   const isDragging = useRef(false)
