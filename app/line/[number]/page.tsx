@@ -11,8 +11,9 @@ export async function generateStaticParams() {
   return [...new Set(lines)].map(n => ({ number: String(n) }))
 }
 
-export default function LinePage({ params }: { params: { number: string } }) {
-  const lineNum = parseInt(params.number)
+export default async function LinePage({ params }: { params: Promise<{ number: string }> }) {
+  const { number } = await params
+  const lineNum = parseInt(number)
   if (isNaN(lineNum)) notFound()
 
   const artist = artists.find(a => a.allLineNumbers.includes(lineNum))
