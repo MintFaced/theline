@@ -17,6 +17,7 @@ const NAV_LINKS = [
   { label: 'Gallery',    href: '/gallery' },
   { label: 'Collect',    href: '/collect' },
   { label: 'Membership', href: '/membership' },
+  { label: 'LARP',       href: '/members/chat' },
 ]
 
 export function Navigation() {
@@ -67,7 +68,7 @@ export function Navigation() {
             <button onClick={() => setSearchOpen(true)} className="text-line-muted hover:text-line-accent transition-colors p-1" aria-label="Search artists">
               <SearchIcon />
             </button>
-            {hasPrivy && <PrivyConnectButton />}
+            {hasPrivy && <PrivyInner />}
             <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-line-muted hover:text-line-text transition-colors p-1" aria-label="Menu">
               {menuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
@@ -96,26 +97,6 @@ export function Navigation() {
   )
 }
 
-function PrivyConnectButton() {
-  const [state, setState] = useState<{ ready: boolean; authenticated: boolean; shortAddress: string | null }>({ ready: false, authenticated: false, shortAddress: null })
-  const [actions, setActions] = useState<{ login: () => void; logout: () => void } | null>(null)
-
-  useEffect(() => {
-    // Privy can only be used as a hook from within PrivyProvider
-    // This component only renders when hasPrivy is true (PrivyProvider is in tree)
-    // We use a dynamic approach to safely access Privy context
-    try {
-      import('@privy-io/react-auth').then(() => {
-        // Privy loaded - but we can't call hooks here
-        // The PrivyInner component handles the actual hook call
-      })
-    } catch {
-      // ignore
-    }
-  }, [])
-
-  return <PrivyInner />
-}
 
 function PrivyInner() {
   const { usePrivy } = require('@privy-io/react-auth')
@@ -129,7 +110,7 @@ function PrivyInner() {
     </button>
   ) : (
     <button onClick={login} className="font-mono text-[11px] tracking-widest uppercase text-line-bg bg-line-accent px-4 py-1.5 hover:opacity-85 transition-opacity">
-      Connect
+      Connect Wallet
     </button>
   )
 }

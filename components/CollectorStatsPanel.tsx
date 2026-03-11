@@ -67,7 +67,11 @@ export function CollectorStatsPanel({ artist }: { artist: Artist }) {
   }
 
   return (
-    <div ref={ref} className="grid grid-cols-2 gap-px bg-line-border">
+    <div ref={ref}>
+      <p className="font-mono text-[9px] text-line-muted tracking-widest mb-3">
+        Last 100 sales on-chain · Updated hourly
+      </p>
+      <div className="grid grid-cols-2 gap-px bg-line-border">
       {[
         {
           label: 'Total Sold',
@@ -104,6 +108,7 @@ export function CollectorStatsPanel({ artist }: { artist: Artist }) {
           )}
         </div>
       ))}
+      </div>
     </div>
   )
 }
