@@ -16,8 +16,8 @@ const NAV_LINKS = [
   { label: 'Storyline',  href: '/storyline' },
   { label: 'Gallery',    href: '/gallery' },
   { label: 'Collect',    href: '/collect' },
-  { label: 'Membership', href: '/membership' },
-  { label: 'LARP',       href: '/members/chat' },
+  { label: 'LARP',      href: '/membership' },
+  { label: 'Chat',      href: '/members/chat' },
 ]
 
 export function Navigation() {
