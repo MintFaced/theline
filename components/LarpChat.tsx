@@ -83,55 +83,73 @@ function LarpChatInner() {
 
 function StreamChatRoom({ walletAddress, shortAddress }: { walletAddress: string; shortAddress: string }) {
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [step, setStep] = useState('Requesting token…')
   const [errorMsg, setErrorMsg] = useState('')
   const mountedRef = useRef(true)
+  const clientRef = useRef<any>(null)
   const [chatData, setChatData] = useState<{ client: any; channel: any } | null>(null)
 
   useEffect(() => {
     mountedRef.current = true
-    const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
 
+    const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
     if (!apiKey) {
-      setErrorMsg('Stream API key not configured — add NEXT_PUBLIC_STREAM_API_KEY to Vercel')
+      setErrorMsg('NEXT_PUBLIC_STREAM_API_KEY not set in Vercel environment')
       setStatus('error')
       return
     }
 
+    // Timeout safety — if stuck > 15s show where we are
+    const timeout = setTimeout(() => {
+      if (mountedRef.current && status !== 'ready') {
+        setErrorMsg(`Timed out at: ${step}`)
+        setStatus('error')
+      }
+    }, 15000)
+
     ;(async () => {
       try {
-        // 1. Get server token
+        // Step 1 — get token from server
+        setStep('Requesting token…')
         const tokenRes = await fetch(`/api/members/chat-token?address=${walletAddress}`)
-        if (!tokenRes.ok) {
-          const err = await tokenRes.json()
-          throw new Error(err.error ?? 'Token request failed')
-        }
-        const { token } = await tokenRes.json()
+        const tokenBody = await tokenRes.json()
+        if (!tokenRes.ok) throw new Error(`Token error (${tokenRes.status}): ${tokenBody.error ?? 'unknown'}`)
+        const { token } = tokenBody
 
-        // 2. Load Stream Chat client only (react components are statically imported)
+        if (!mountedRef.current) return
+
+        // Step 2 — import Stream
+        setStep('Loading Stream client…')
         const { StreamChat } = await import('stream-chat')
 
         if (!mountedRef.current) return
 
-        // 3. Connect user
-        const client = StreamChat.getInstance(apiKey)
+        // Step 3 — connect (use new instance to avoid stale state)
+        setStep('Connecting user…')
+        const client = new (StreamChat as any)(apiKey)
+        clientRef.current = client
         await client.connectUser({ id: walletAddress, name: shortAddress }, token)
 
         if (!mountedRef.current) { client.disconnectUser(); return }
 
-        // 4. Get/create the LARP channel
+        // Step 4 — join channel
+        setStep('Joining LARP channel…')
         const channel = client.channel('messaging', 'larp-main', {
           name: 'LARP — Line Artists Rad Party',
+          members: [walletAddress],
         })
         await channel.watch()
 
         if (!mountedRef.current) { client.disconnectUser(); return }
 
+        clearTimeout(timeout)
         setChatData({ client, channel })
         setStatus('ready')
       } catch (err: any) {
+        clearTimeout(timeout)
         console.error('Stream Chat error:', err)
         if (mountedRef.current) {
-          setErrorMsg(err.message ?? 'Chat failed to load')
+          setErrorMsg(`${step} — ${err.message ?? String(err)}`)
           setStatus('error')
         }
       }
@@ -139,9 +157,10 @@ function StreamChatRoom({ walletAddress, shortAddress }: { walletAddress: string
 
     return () => {
       mountedRef.current = false
-      chatData?.client?.disconnectUser()
+      clearTimeout(timeout)
+      clientRef.current?.disconnectUser?.()
     }
-  }, [walletAddress, shortAddress])
+  }, [walletAddress])
 
   if (status === 'error') {
     return (
@@ -153,7 +172,7 @@ function StreamChatRoom({ walletAddress, shortAddress }: { walletAddress: string
   }
 
   if (status === 'loading' || !chatData) {
-    return <Spinner label="Loading LARP chat…" />
+    return <Spinner label={step} />
   }
 
   return (
