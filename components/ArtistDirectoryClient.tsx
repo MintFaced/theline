@@ -5,7 +5,7 @@ import type { Artist } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 import { ArtistCard } from './ArtistCard'
 
-const PAGE_SIZE = 32
+const PAGE_SIZE = 60
 const CATEGORIES = ['lens-based', 'illustration', 'glitch', 'ai', 'generative', '3d', 'painting']
 const CHAINS = ['ethereum', 'tezos']
 const SORTS = [
