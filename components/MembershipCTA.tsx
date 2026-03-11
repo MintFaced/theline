@@ -5,53 +5,25 @@ import Link from 'next/link'
 import type { Artist } from '@/types'
 
 export function MembershipCTA({ artist }: { artist: Artist }) {
-  const [privyState, setPrivyState] = useState<{
-    ready: boolean
-    authenticated: boolean
-    isMember: boolean | null
-    checking: boolean
-  }>({ ready: false, authenticated: false, isMember: null, checking: false })
-
   const hasPrivy = !!process.env.NEXT_PUBLIC_PRIVY_APP_ID
-
-  useEffect(() => {
-    if (!hasPrivy) {
-      setPrivyState(s => ({ ...s, ready: true }))
-      return
-    }
-
-    import('@privy-io/react-auth').then(({ usePrivy: _usePrivy }) => {
-      // Privy state is read in the PrivyMembership subcomponent
-      setPrivyState(s => ({ ...s, ready: true }))
-    }).catch(() => {
-      setPrivyState(s => ({ ...s, ready: true }))
-    })
-  }, [hasPrivy])
-
-  const CollectButton = () => (
-    <a
-      href={artist.purchaseUrl ?? 'https://opensea.io'}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="btn-primary"
-    >
-      Collect {artist.name}&apos;s Work →
-    </a>
-  )
 
   return (
     <div className="grid md:grid-cols-2 gap-px bg-line-border">
       <div className="bg-line-bg p-8 md:p-10">
-        <p className="label mb-6">Membership</p>
+        <p className="label mb-2">Membership</p>
+        <p className="font-display font-light text-line-text text-xl mb-6">
+          Line Artists Rad Party (LARP)
+        </p>
         {hasPrivy ? (
-          <PrivyMembershipPanel artist={artist} />
+          <PrivyMembershipPanel />
         ) : (
           <div>
             <p className="font-sans text-sm text-line-muted mb-6 leading-relaxed">
-              Connect your wallet to check your Line membership status and access the artist community.
+              LARP Membership is token gated for Line Artists only.
+              <br />Connect your wallet to LARP.
             </p>
             <Link href="/membership" className="btn-outline">
-              Get a Token
+              Connect Wallet
             </Link>
           </div>
         )}
@@ -66,13 +38,20 @@ export function MembershipCTA({ artist }: { artist: Artist }) {
             )}
           </p>
         </div>
-        <CollectButton />
+        <a
+          href={artist.purchaseUrl ?? 'https://opensea.io'}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-primary"
+        >
+          Collect {artist.name}&apos;s Work →
+        </a>
       </div>
     </div>
   )
 }
 
-function PrivyMembershipPanel({ artist }: { artist: Artist }) {
+function PrivyMembershipPanel() {
   const { usePrivy } = require('@privy-io/react-auth')
   const { ready, authenticated, login, user } = usePrivy()
   const [isMember, setIsMember] = useState<boolean | null>(null)
@@ -95,7 +74,8 @@ function PrivyMembershipPanel({ artist }: { artist: Artist }) {
     return (
       <div>
         <p className="font-sans text-sm text-line-muted mb-6 leading-relaxed">
-          Connect your wallet to check your Line membership status and access the artist community.
+          LARP Membership is token gated for Line Artists only.
+          <br />Connect your wallet to LARP.
         </p>
         <button onClick={login} className="btn-outline">Connect Wallet</button>
       </div>
@@ -107,12 +87,12 @@ function PrivyMembershipPanel({ artist }: { artist: Artist }) {
       <div>
         <div className="flex items-center gap-2 mb-4">
           <div className="w-2 h-2 rounded-full bg-line-accent" />
-          <p className="font-mono text-xs text-line-accent tracking-widest">You&apos;re a Line member</p>
+          <p className="font-mono text-xs text-line-accent tracking-widest">LARP member verified</p>
         </div>
         <p className="font-sans text-sm text-line-muted mb-6 leading-relaxed">
-          Access the private artist community — one room, all Line members.
+          Welcome to the party. One room, all Line Artists.
         </p>
-        <Link href="/members" className="btn-primary">Enter The Artist Chat →</Link>
+        <Link href="/members/chat" className="btn-primary">Enter LARP Chat →</Link>
       </div>
     )
   }
@@ -120,9 +100,10 @@ function PrivyMembershipPanel({ artist }: { artist: Artist }) {
   return (
     <div>
       <p className="font-sans text-sm text-line-muted mb-6 leading-relaxed">
-        Hold a Line membership token to join the artist community, access gallery retreats and screen takeovers.
+        LARP Membership is token gated for Line Artists only.
+        <br />Connect your wallet to LARP.
       </p>
-      <Link href="/membership" className="btn-outline">Get a Token</Link>
+      <button onClick={login} className="btn-outline">Connect Wallet</button>
     </div>
   )
 }
