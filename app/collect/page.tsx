@@ -146,7 +146,7 @@ export default function CollectPage() {
                 >
                   <div className="relative overflow-hidden" style={{ aspectRatio: '1' }}>
                     <img
-                      src={artist.galleryImage}
+                      src={artist.galleryImage ?? ''}
                       alt={artist.name}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
