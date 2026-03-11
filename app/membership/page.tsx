@@ -201,35 +201,7 @@ export default function MembershipPage() {
           </div>
         </RevealSection>
 
-        {/* ── CTA ─────────────────────────────────────────────────────────── */}
-        <RevealSection className="py-16 md:py-24">
-          <div className="grid md:grid-cols-2 gap-px bg-line-border">
-            <div className="bg-line-bg p-10 md:p-14">
-              <p className="label mb-4">Already a Line Artist?</p>
-              <h2 className="font-display font-light text-3xl text-line-text mb-6" style={{ letterSpacing: '-0.02em' }}>
-                Connect your wallet<br />to enter LARP
-              </h2>
-              <p className="font-sans text-sm text-line-muted leading-relaxed mb-8">
-                If you hold a <em>'First 1,000 Artists on The Line'</em> NFT, connect your wallet to access LARP Chat.
-              </p>
-              <Link href="/members/chat" className="btn-primary">
-                Connect Wallet →
-              </Link>
-            </div>
-            <div className="bg-line-surface p-10 md:p-14">
-              <p className="label mb-4">Not yet on The Line?</p>
-              <h2 className="font-display font-light text-3xl text-line-text mb-6" style={{ letterSpacing: '-0.02em' }}>
-                Browse the artists<br />who are
-              </h2>
-              <p className="font-sans text-sm text-line-muted leading-relaxed mb-8">
-                Explore all 784 artists currently on The Line — their work, their positions, and their on-chain history.
-              </p>
-              <Link href="/artists" className="btn-outline">
-                Browse Artists →
-              </Link>
-            </div>
-          </div>
-        </RevealSection>
+
 
       </div>
     </div>
