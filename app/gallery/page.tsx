@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 }
 
 const HOURS = [
-  { day: 'Monday – Friday', hours: '10am – 5pm' },
-  { day: 'Saturday',        hours: '10am – 3pm' },
-  { day: 'Sunday',          hours: 'Closed' },
+  { day: 'Mon – Tue',   hours: 'Rarely' },
+  { day: 'Wed – Sun',   hours: '10 – 6' },
+  { day: 'TheL​ine.nz', hours: 'Always' },
 ]
 
 export default function GalleryPage() {
@@ -54,7 +54,7 @@ export default function GalleryPage() {
                 </p>
               </address>
               <p className="font-sans text-sm text-line-muted leading-relaxed mb-8">
-                The Line occupies a purpose-built space in central Hastings, Hawke's Bay. The gallery stretches the full length of a city block — a single continuous wall housing 1,000 works of permanent cryptoart.
+                The Line occupies a CBD space in Hastings, Hawke's Bay. The gallery features primarily MintFace paintings, and select works from cryptoartists on The Line.
               </p>
               <a
                 href="https://maps.google.com/?q=318+Heretaunga+Street+West+Hastings+New+Zealand"
@@ -68,7 +68,7 @@ export default function GalleryPage() {
 
             <div>
               <p className="label mb-6">Opening Hours</p>
-              <div className="space-y-px bg-line-border mb-4">
+              <div className="space-y-px bg-line-border">
                 {HOURS.map(({ day, hours }) => (
                   <div key={day} className="bg-line-bg py-5 flex items-center justify-between">
                     <span className="font-sans text-sm text-line-muted">{day}</span>
@@ -76,27 +76,28 @@ export default function GalleryPage() {
                   </div>
                 ))}
               </div>
-              <p className="font-mono text-[10px] text-line-muted tracking-widest">
-                Public holidays — please check ahead
-              </p>
             </div>
           </div>
         </RevealSection>
 
-        {/* ── Hero interior + founder ──────────────────────────────────────── */}
+        {/* ── The Line IRL ─────────────────────────────────────────────────── */}
         <RevealSection className="py-16 md:py-24 border-b border-line-border">
-          <div className="grid md:grid-cols-5 gap-px bg-line-border">
-            {/* Large interior — 3 cols */}
-            <div className="md:col-span-3 relative overflow-hidden" style={{ aspectRatio: '16/10' }}>
-              <Image
-                src="/images/gallery/gallery-interior-5.jpg"
-                alt="The Line gallery interior"
-                fill
-                className="object-cover"
-              />
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <p className="label mb-6">The Line IRL</p>
+              <h2 className="font-display font-light text-4xl text-line-text mb-8" style={{ letterSpacing: '-0.02em' }}>
+                A wall that stretches<br />to 1,000
+              </h2>
+              <div className="space-y-4 font-sans text-sm text-line-muted leading-relaxed">
+                <p>
+                  Each of the 1,000 positions on The Line is a permanent home for a cryptoartist's work. The physical gallery makes visible what exists on-chain... a continuous, ordered archive of digital art history.
+                </p>
+                <p>
+                  Visitors can walk the full length of The Line digitally, or ask to browse the collection at The Line gallery. The gallery hosts random events — artist talks, collector evenings, and open studio sessions... creating a meeting point between the digital and physical art worlds.
+                </p>
+              </div>
             </div>
-            {/* Founder — 2 cols */}
-            <div className="md:col-span-2 relative overflow-hidden" style={{ aspectRatio: '3/4' }}>
+            <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
               <Image
                 src="/images/gallery/gallery-founder.jpg"
                 alt="MintFace, founder of The Line"
@@ -108,76 +109,6 @@ export default function GalleryPage() {
                 <p className="font-mono text-[10px] text-line-accent tracking-widest mb-1">Founder</p>
                 <p className="font-display font-light text-xl text-line-text">MintFace · The Line 0</p>
               </div>
-            </div>
-          </div>
-        </RevealSection>
-
-        {/* ── About the space ──────────────────────────────────────────────── */}
-        <RevealSection className="py-16 md:py-24 border-b border-line-border">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div>
-              <p className="label mb-6">The Space</p>
-              <h2 className="font-display font-light text-4xl text-line-text mb-8" style={{ letterSpacing: '-0.02em' }}>
-                A wall that stretches<br />to 1,000
-              </h2>
-              <div className="space-y-4 font-sans text-sm text-line-muted leading-relaxed">
-                <p>
-                  Each of the 1,000 positions on The Line is a permanent home for a cryptoartist's work. The physical gallery makes visible what exists on-chain — a continuous, ordered archive of digital art history.
-                </p>
-                <p>
-                  Visitors can walk the full length of The Line, stopping at any artist's position to scan a QR code that opens their full on-chain profile, sales history, and gallery of works.
-                </p>
-                <p>
-                  The gallery hosts regular events — artist talks, collector evenings, and open studio sessions — creating a meeting point between the digital and physical art worlds.
-                </p>
-              </div>
-            </div>
-            <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
-              <Image
-                src="/images/gallery/gallery-interior-3.jpg"
-                alt="The Line gallery interior"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </RevealSection>
-
-        {/* ── Photo grid — 4 interiors ─────────────────────────────────────── */}
-        <RevealSection className="py-0 pb-0 border-b border-line-border">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-line-border">
-            {[
-              { src: '/images/gallery/gallery-interior-1.jpg', alt: 'The Line gallery' },
-              { src: '/images/gallery/gallery-interior-2.jpg', alt: 'The Line gallery' },
-              { src: '/images/gallery/gallery-interior-4.jpg', alt: 'The Line gallery' },
-              { src: '/images/gallery/gallery-interior-6.jpg', alt: 'The Line gallery' },
-            ].map(({ src, alt }, i) => (
-              <div key={i} className="relative overflow-hidden group" style={{ aspectRatio: '1' }}>
-                <Image
-                  src={src}
-                  alt={alt}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                />
-              </div>
-            ))}
-          </div>
-        </RevealSection>
-
-        {/* ── Night shot — full width ───────────────────────────────────────── */}
-        <RevealSection className="border-b border-line-border">
-          <div className="relative w-full overflow-hidden" style={{ height: 'clamp(280px, 40vw, 560px)' }}>
-            <Image
-              src="/images/gallery/gallery-night.jpg"
-              alt="The Line gallery at night"
-              fill
-              className="object-cover"
-              style={{ objectPosition: 'center 65%' }}
-            />
-            <div className="absolute inset-0 flex items-end px-6 pb-8 md:px-12 md:pb-12" style={{ background: 'linear-gradient(to top, rgba(10,10,10,0.7) 0%, transparent 60%)' }}>
-              <p className="font-display font-light text-2xl md:text-3xl text-line-text" style={{ letterSpacing: '-0.02em' }}>
-                318 Heretaunga Street West, Hastings
-              </p>
             </div>
           </div>
         </RevealSection>
