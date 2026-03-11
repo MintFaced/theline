@@ -31,7 +31,6 @@ export function Navigation() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const hasPrivy = !!process.env.NEXT_PUBLIC_PRIVY_APP_ID
 
   return (
     <>
@@ -68,7 +67,7 @@ export function Navigation() {
             <button onClick={() => setSearchOpen(true)} className="text-line-muted hover:text-line-accent transition-colors p-1" aria-label="Search artists">
               <SearchIcon />
             </button>
-            {hasPrivy && <PrivyInner />}
+            <PrivyInner />
             <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-line-muted hover:text-line-text transition-colors p-1" aria-label="Menu">
               {menuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
