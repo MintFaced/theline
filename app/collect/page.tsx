@@ -44,17 +44,17 @@ const STEPS = [
   {
     step: '01',
     heading: 'Get a wallet',
-    body: 'Download MetaMask (Ethereum) or Temple (Tezos). Your wallet is your identity on-chain — it holds your art and proves ownership.',
+    body: 'Download <a href="https://rabby.io/" target="_blank" rel="noopener noreferrer" class="text-line-accent hover:opacity-70 transition-opacity">Rabby</a> (Ethereum) or <a href="https://www.templewallet.com/" target="_blank" rel="noopener noreferrer" class="text-line-accent hover:opacity-70 transition-opacity">Temple</a> (Tezos). Your wallet is your identity on-chain — it holds your art and proves ownership.',
   },
   {
     step: '02',
     heading: 'Fund your wallet',
-    body: 'Buy ETH or XTZ from an exchange like Coinbase or Kraken and send it to your wallet address. Most works on The Line sell for 0.01–1 ETH.',
+    body: 'Buy ETH or XTZ from an exchange like <a href="https://www.coinbase.com/" target="_blank" rel="noopener noreferrer" class="text-line-accent hover:opacity-70 transition-opacity">Coinbase</a> or <a href="https://easycrypto.com/" target="_blank" rel="noopener noreferrer" class="text-line-accent hover:opacity-70 transition-opacity">EasyCrypto</a> and send it to your wallet address. Most works on The Line sell for 0.01–1 ETH.',
   },
   {
     step: '03',
     heading: 'Find an artist',
-    body: 'Browse The Line\'s artist directory. Each profile shows the artist\'s work, sales history, and links to where their art is available to collect.',
+    body: 'Browse <a href="/artists" class="text-line-accent hover:opacity-70 transition-opacity">The Line\'s artist directory</a>. Each profile shows the artist\'s work, sales history, and links to where their art is available to collect.',
   },
   {
     step: '04',
@@ -64,7 +64,7 @@ const STEPS = [
   {
     step: '05',
     heading: 'Your collection lives on-chain',
-    body: 'Connect your wallet on The Line to see your collection displayed alongside the artists you\'ve collected from. Provenance is permanent.',
+    body: 'Connect your wallet on <a href="https://opensea.io/" target="_blank" rel="noopener noreferrer" class="text-line-accent hover:opacity-70 transition-opacity">OpenSea</a> to see your collection displayed alongside the artists you\'ve collected from. Provenance is permanent.',
   },
 ]
 
@@ -97,7 +97,7 @@ export default function CollectPage() {
               <div key={step} className="bg-line-bg p-8 md:p-10 grid md:grid-cols-[80px_1fr_2fr] gap-6 md:gap-12 items-start">
                 <span className="font-mono text-[10px] text-line-accent tracking-widest">{step}</span>
                 <h3 className="font-display font-light text-xl text-line-text" style={{ letterSpacing: '-0.01em' }}>{heading}</h3>
-                <p className="font-sans text-sm text-line-muted leading-relaxed">{body}</p>
+                <p className="font-sans text-sm text-line-muted leading-relaxed" dangerouslySetInnerHTML={{ __html: body }} />
               </div>
             ))}
           </div>
