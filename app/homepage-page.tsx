@@ -169,32 +169,36 @@ export default function HomePage() {
               All stories →
             </Link>
           </div>
-          {/* Placeholder article grid — populated from MDX in Phase 6 */}
+          {/* Top 3 articles from real posts data */}
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 title: "The End of Gatekeepers",
+                slug: "the-end-of-gatekeepers",
                 date: "Oct 2025",
                 excerpt: "You can mint an artwork and sell it to anyone in the world without a gallery. You don't need to wait for permission.",
-                img: "https://theline1.wpenginepowered.com/wp-content/uploads/2025/10/IMG_2506-scaled.jpg"
+                img: "https://theline.wtf/wp-content/uploads/2025/10/IMG_2506-scaled.jpg"
               },
               {
                 title: "Roads and Rivers Exhibition",
+                slug: "roads-and-rivers-exhibition-explores-connection",
                 date: "Sep 2025",
                 excerpt: "MintFace chose to photograph bridges that were the most beautiful or rarely seen. Most works were one-of-ones.",
-                img: "https://theline1.wpenginepowered.com/wp-content/uploads/2025/09/Screenshot-2025-09-05-at-10.16.23-AM.png"
+                img: "https://theline.wtf/wp-content/uploads/2025/09/EZFGXW564ZH3LHORUVYS237KLQ.jpg-726x1024.jpg"
               },
               {
                 title: "The Line Gallery Opens",
+                slug: "the-line-gallery-in-new-zealand-opens",
                 date: "Jul 2025",
-                excerpt: "The first art show at The Line is now open to the public in Napier, New Zealand.",
-                img: "https://theline1.wpenginepowered.com/wp-content/uploads/2025/07/gallery-scaled.jpg"
+                excerpt: "The first art show at The Line is now open to the public in Hastings, New Zealand.",
+                img: "https://theline.wtf/wp-content/uploads/2025/07/gallery-scaled.jpg"
               }
             ].map((article, i) => (
-              <Link key={i} href="/storyline" className="group">
+              <Link key={i} href={`/storyline/${article.slug}`} className="group">
                 <div className="relative aspect-[4/3] overflow-hidden bg-line-surface mb-4">
-                  <Image src={article.img} alt={article.title} fill
-                    className="object-cover transition-all duration-500 group-hover:brightness-110 group-hover:scale-[1.02]" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={article.img} alt={article.title}
+                    className="w-full h-full object-cover transition-all duration-500 group-hover:brightness-110 group-hover:scale-[1.02]" />
                 </div>
                 <p className="font-mono text-[10px] text-line-muted tracking-widest uppercase mb-2">{article.date}</p>
                 <h3 className="font-display font-light text-line-text text-xl mb-2 group-hover:text-line-hover transition-colors">
