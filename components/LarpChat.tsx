@@ -1,11 +1,9 @@
 'use client'
 // components/LarpChat.tsx
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 
 export function LarpChat() {
-  // Can't use Privy hooks directly here — need to be inside PrivyProvider tree
-  // which Providers.tsx handles. So we just render the inner component.
   return <LarpChatInner />
 }
 
@@ -14,18 +12,11 @@ function LarpChatInner() {
   const { ready, authenticated, login, user } = usePrivy()
 
   const [memberState, setMemberState] = useState<'idle' | 'checking' | 'member' | 'not-member'>('idle')
+  const walletAddress = user?.wallet?.address?.toLowerCase() ?? null
+  const shortAddress  = walletAddress ? `${walletAddress.slice(0,6)}…${walletAddress.slice(-4)}` : null
 
-  const walletAddress = user?.wallet?.address ?? null
-  const shortAddress  = walletAddress
-    ? `${walletAddress.slice(0, 6)}…${walletAddress.slice(-4)}`
-    : null
-
-  // Check membership whenever wallet connects
   useEffect(() => {
-    if (!authenticated || !walletAddress) {
-      setMemberState('idle')
-      return
-    }
+    if (!authenticated || !walletAddress) { setMemberState('idle'); return }
     setMemberState('checking')
     fetch(`/api/membership/check?address=${walletAddress}`)
       .then(r => r.ok ? r.json() : { isMember: false })
@@ -33,10 +24,8 @@ function LarpChatInner() {
       .catch(() => setMemberState('not-member'))
   }, [authenticated, walletAddress])
 
-  // ── Still loading Privy ──────────────────────────────────────────────────
   if (!ready) return <Shell><Spinner label="Loading…" /></Shell>
 
-  // ── Not connected ────────────────────────────────────────────────────────
   if (!authenticated) {
     return (
       <Shell>
@@ -57,12 +46,10 @@ function LarpChatInner() {
     )
   }
 
-  // ── Checking token ───────────────────────────────────────────────────────
   if (memberState === 'idle' || memberState === 'checking') {
     return <Shell><Spinner label="Verifying membership token…" /></Shell>
   }
 
-  // ── Not a member ─────────────────────────────────────────────────────────
   if (memberState === 'not-member') {
     return (
       <Shell>
@@ -72,9 +59,7 @@ function LarpChatInner() {
             No LARP token found
           </h1>
           <p className="font-sans text-sm text-line-muted leading-relaxed mb-2">
-            Wallet{' '}
-            <span className="font-mono text-line-accent">{shortAddress}</span>{' '}
-            doesn't hold a LARP membership token.
+            Wallet <span className="font-mono text-line-accent">{shortAddress}</span> doesn't hold a LARP token.
           </p>
           <p className="font-sans text-sm text-line-muted leading-relaxed mb-8">
             LARP is for Line Artists only. Make sure you're connected with the right wallet.
@@ -88,7 +73,6 @@ function LarpChatInner() {
     )
   }
 
-  // ── Member verified — show chat ──────────────────────────────────────────
   return (
     <Shell fullHeight>
       <StreamChatRoom walletAddress={walletAddress!} shortAddress={shortAddress!} />
@@ -96,94 +80,146 @@ function LarpChatInner() {
   )
 }
 
-// ── Stream Chat room ─────────────────────────────────────────────────────────
 function StreamChatRoom({ walletAddress, shortAddress }: { walletAddress: string; shortAddress: string }) {
-  const [chatReady, setChatReady] = useState(false)
-  const [error, setError]         = useState<string | null>(null)
-  const [ChatUI, setChatUI]       = useState<React.ReactNode>(null)
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [errorMsg, setErrorMsg] = useState('')
+  const mountedRef = useRef(true)
+
+  // We render the Stream UI declaratively once we have a token
+  const [chatState, setChatState] = useState<{
+    client: any
+    channel: any
+    SC: any
+  } | null>(null)
 
   useEffect(() => {
+    mountedRef.current = true
     const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
-    if (!apiKey) { setError('Stream API key not configured'); return }
 
-    const userId = walletAddress.toLowerCase()
+    if (!apiKey) {
+      setErrorMsg('Stream API key not configured — add NEXT_PUBLIC_STREAM_API_KEY to Vercel')
+      setStatus('error')
+      return
+    }
 
-    Promise.all([
-      import('stream-chat'),
-      import('stream-chat-react'),
-    ]).then(async ([{ StreamChat }, SC]) => {
-      // Get server-issued token
-      const tokenRes = await fetch(`/api/members/chat-token?address=${walletAddress}`)
-      if (!tokenRes.ok) { setError('Could not verify membership token'); return }
-      const { token } = await tokenRes.json()
+    ;(async () => {
+      try {
+        // 1. Get server token
+        const tokenRes = await fetch(`/api/members/chat-token?address=${walletAddress}`)
+        if (!tokenRes.ok) {
+          const err = await tokenRes.json()
+          throw new Error(err.error ?? 'Token request failed')
+        }
+        const { token } = await tokenRes.json()
 
-      // Connect to Stream
-      const client = StreamChat.getInstance(apiKey)
-      await client.connectUser({ id: userId, name: shortAddress }, token)
+        // 2. Load Stream Chat
+        const [{ StreamChat }, SC] = await Promise.all([
+          import('stream-chat'),
+          import('stream-chat-react'),
+        ])
 
-      // Get or create the single LARP channel
-      const channel = client.channel('messaging', 'larp-main', {
-        name: 'LARP — Line Artists Rad Party',
-      })
-      await channel.watch()
+        if (!mountedRef.current) return
 
-      // Build the UI
-      const { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader } = SC
+        // 3. Connect user
+        const client = StreamChat.getInstance(apiKey)
+        await client.connectUser({ id: walletAddress, name: shortAddress }, token)
 
-      setChatUI(
-        <div className="h-full larp-chat-theme">
-          <Chat client={client} theme="str-chat__theme-dark">
-            <Channel channel={channel}>
-              <Window>
-                <ChannelHeader />
-                <MessageList />
-                <MessageInput focus />
-              </Window>
-            </Channel>
-          </Chat>
-        </div>
-      )
-      setChatReady(true)
+        if (!mountedRef.current) { client.disconnectUser(); return }
 
-      return () => { client.disconnectUser() }
-    }).catch(err => {
-      console.error('Stream Chat init error:', err)
-      setError('Chat failed to load — please refresh.')
-    })
+        // 4. Get/create the LARP channel
+        const channel = client.channel('messaging', 'larp-main', {
+          name: 'LARP — Line Artists Rad Party',
+        })
+        await channel.watch()
+
+        if (!mountedRef.current) { client.disconnectUser(); return }
+
+        setChatState({ client, channel, SC })
+        setStatus('ready')
+      } catch (err: any) {
+        console.error('Stream Chat error:', err)
+        if (mountedRef.current) {
+          setErrorMsg(err.message ?? 'Chat failed to load')
+          setStatus('error')
+        }
+      }
+    })()
+
+    return () => {
+      mountedRef.current = false
+      chatState?.client?.disconnectUser()
+    }
   }, [walletAddress, shortAddress])
 
-  if (error) {
+  if (status === 'error') {
     return (
-      <div className="flex items-center justify-center h-full">
-        <p className="font-mono text-xs text-line-muted tracking-widest">{error}</p>
+      <div className="flex flex-col items-center justify-center h-full gap-4">
+        <p className="font-mono text-xs text-line-muted tracking-widest text-center max-w-sm">{errorMsg}</p>
+        <button onClick={() => window.location.reload()} className="btn-ghost">Retry</button>
       </div>
     )
   }
 
-  if (!chatReady) return <Spinner label="Loading LARP chat…" />
+  if (status === 'loading' || !chatState) {
+    return <Spinner label="Loading LARP chat…" />
+  }
 
-  return <>{ChatUI}</>
+  const { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader } = chatState.SC
+
+  return (
+    <>
+      <style>{`
+        .larp-chat { height: 100%; }
+        .larp-chat .str-chat { height: 100%; }
+        .larp-chat .str-chat__container { height: 100%; }
+        .larp-chat .str-chat-channel { height: 100%; background: #0A0A0A; }
+        .larp-chat .str-chat__main-panel { background: #0A0A0A; }
+        .larp-chat .str-chat__list { background: #0A0A0A; padding: 16px; }
+        .larp-chat .str-chat__message-input { background: #111111; border-top: 1px solid #1E1E1E; padding: 12px 16px; }
+        .larp-chat .str-chat__message-input-inner { background: #161616; border: 1px solid #1E1E1E; border-radius: 2px; }
+        .larp-chat .str-chat__textarea textarea { background: transparent; color: #F0EDE6; font-family: var(--font-sans); }
+        .larp-chat .str-chat__header-livestream { background: #111111; border-bottom: 1px solid #1E1E1E; color: #F0EDE6; }
+        .larp-chat .str-chat__header-livestream-left--title { color: #C8A96E; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+        .larp-chat .str-chat__message-text { color: #F0EDE6; }
+        .larp-chat .str-chat__message-sender-name { color: #C8A96E; font-size: 11px; }
+        .larp-chat .str-chat__message-simple-name { color: #C8A96E; }
+        .larp-chat .str-chat__date-separator-line { border-color: #1E1E1E; }
+        .larp-chat .str-chat__date-separator-date { color: #666666; background: #0A0A0A; font-size: 10px; }
+        .larp-chat .str-chat__send-button { color: #C8A96E; }
+        .larp-chat .str-chat__message-reactions-list { background: #111111; }
+        .larp-chat .str-chat__li--top .str-chat__message-simple,
+        .larp-chat .str-chat__li--single .str-chat__message-simple { margin-top: 12px; }
+      `}</style>
+      <div className="larp-chat h-full">
+        <Chat client={chatState.client} theme="str-chat__theme-dark">
+          <Channel channel={chatState.channel}>
+            <Window>
+              <ChannelHeader />
+              <MessageList />
+              <MessageInput focus />
+            </Window>
+          </Channel>
+        </Chat>
+      </div>
+    </>
+  )
 }
 
-// ── Layout shell ─────────────────────────────────────────────────────────────
 function Shell({ children, fullHeight = false }: { children: React.ReactNode; fullHeight?: boolean }) {
   return (
-    <div className="bg-line-bg min-h-svh" style={{ paddingTop: 'var(--nav-height)' }}>
-      {/* Top bar */}
+    <div className="bg-line-bg" style={{ minHeight: '100svh', paddingTop: 'var(--nav-height)' }}>
       <div className="border-b border-line-border px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/" className="font-mono text-[10px] text-line-muted tracking-widest hover:text-line-accent transition-colors">
             ← THE LINE
           </Link>
           <span className="text-line-border font-mono text-xs">|</span>
-          <span className="font-mono text-[10px] text-line-accent tracking-widest">LARP</span>
+          <span className="font-mono text-[10px] text-line-accent tracking-widest">LARP CHAT</span>
         </div>
         <span className="font-display font-light text-sm text-line-muted hidden sm:block">
           Line Artists Rad Party
         </span>
       </div>
-
-      {/* Content */}
       <div className={
         fullHeight
           ? 'h-[calc(100svh-var(--nav-height)-49px)]'
@@ -191,20 +227,6 @@ function Shell({ children, fullHeight = false }: { children: React.ReactNode; fu
       }>
         {children}
       </div>
-
-      {/* Stream Chat CSS */}
-      <style>{`
-        @import url('https://cdn.jsdelivr.net/npm/stream-chat-react@11/dist/css/v2/index.css');
-        .larp-chat-theme { height: 100%; }
-        .larp-chat-theme .str-chat { height: 100%; background: #0A0A0A; }
-        .larp-chat-theme .str-chat__channel { background: #0A0A0A; }
-        .larp-chat-theme .str-chat__message-input { background: #111111; border-top: 1px solid #1E1E1E; }
-        .larp-chat-theme .str-chat__message-input-inner { background: #111111; }
-        .larp-chat-theme .str-chat__message-textarea { background: #111111; color: #F0EDE6; }
-        .larp-chat-theme .str-chat__list { background: #0A0A0A; }
-        .larp-chat-theme .str-chat__header-livestream { background: #111111; border-bottom: 1px solid #1E1E1E; color: #F0EDE6; }
-        .larp-chat-theme .str-chat__message-simple__actions { color: #C8A96E; }
-      `}</style>
     </div>
   )
 }
