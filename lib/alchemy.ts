@@ -3,25 +3,21 @@
 
 const ALCHEMY_KEY = process.env.ALCHEMY_API_KEY
 const MEMBERSHIP_CONTRACT = process.env.MEMBERSHIP_CONTRACT_ADDRESS
+const ALCHEMY_BASE = `https://eth-mainnet.g.alchemy.com`
 
 export async function resolveAddress(address: string): Promise<string> {
-  // If it's an ENS name, resolve it
   if (!address.startsWith('0x') && address.endsWith('.eth')) {
-    if (!ALCHEMY_KEY) return address // can't resolve without key
+    if (!ALCHEMY_KEY) return address
     try {
-      const res = await fetch(
-        `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            jsonrpc: '2.0',
-            id: 1,
-            method: 'eth_call',
-            params: [{ to: address }, 'latest'],
-          }),
-        }
-      )
+      const res = await fetch(`${ALCHEMY_BASE}/v2/${ALCHEMY_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0', id: 1,
+          method: 'eth_call',
+          params: [{ to: address }, 'latest'],
+        }),
+      })
       const data = await res.json()
       return data.result ?? address
     } catch {
@@ -44,15 +40,21 @@ export async function getSalesStats(address: string): Promise<SalesStats | null>
   if (!ALCHEMY_KEY) return null
 
   try {
-    // Fetch NFT sales activity from Alchemy
-    const res = await fetch(
-      `https://eth-mainnet.g.alchemy.com/nft/v3/${ALCHEMY_KEY}/getNFTSales?fromAddress=${address}&limit=100&order=desc`,
-      { next: { revalidate: 3600 } }
-    )
+    const url = new URL(`${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getNFTSales`)
+    url.searchParams.set('sellerAddress', address)
+    url.searchParams.set('limit', '100')
+    url.searchParams.set('order', 'desc')
+
+    const res = await fetch(url.toString(), { next: { revalidate: 3600 } })
     if (!res.ok) return null
 
     const data = await res.json()
-    const sales: Array<{ sellerFee: { amount: string; decimals: number }; blockTimestamp: string }> = data.nftSales ?? []
+    const sales: Array<{
+      sellerFee: { amount: string; decimals: number }
+      buyerFee: { amount: string; decimals: number }
+      royaltyFee: { amount: string; decimals: number }
+      blockTimestamp: string
+    }> = data.nftSales ?? []
 
     if (sales.length === 0) return null
 
@@ -60,24 +62,25 @@ export async function getSalesStats(address: string): Promise<SalesStats | null>
     let lastSaleDate: string | null = null
 
     for (const sale of sales) {
-      const amount = BigInt(sale.sellerFee?.amount ?? '0')
-      totalVolumeWei += amount
+      // Total sale price = sellerFee + buyerFee + royaltyFee
+      const seller  = BigInt(sale.sellerFee?.amount  ?? '0')
+      const buyer   = BigInt(sale.buyerFee?.amount   ?? '0')
+      const royalty = BigInt(sale.royaltyFee?.amount ?? '0')
+      totalVolumeWei += seller + buyer + royalty
       if (!lastSaleDate && sale.blockTimestamp) {
         lastSaleDate = sale.blockTimestamp
       }
     }
 
     const totalVolumeEth = Number(totalVolumeWei) / 1e18
-    const avgPriceEth = totalVolumeEth / sales.length
-
-    // Rough USD estimate (no live price — would need price oracle)
-    const ethUsd = 3200 // approximate; replace with live price if desired
+    const avgPriceEth    = totalVolumeEth / sales.length
+    const ethUsd         = 3200 // approximate — replace with live oracle if needed
     const totalVolumeUsd = Math.round(totalVolumeEth * ethUsd)
-    const avgPriceUsd = Math.round(avgPriceEth * ethUsd)
+    const avgPriceUsd    = Math.round(avgPriceEth * ethUsd)
 
     return {
-      totalSold: sales.length,
-      avgPriceEth: Math.round(avgPriceEth * 1000) / 1000,
+      totalSold:      sales.length,
+      avgPriceEth:    Math.round(avgPriceEth * 1000) / 1000,
       avgPriceUsd,
       totalVolumeEth: Math.round(totalVolumeEth * 100) / 100,
       totalVolumeUsd,
@@ -103,10 +106,14 @@ export async function getCreatedNFTs(address: string, limit = 5): Promise<NFTWor
   if (!ALCHEMY_KEY) return []
 
   try {
-    const res = await fetch(
-      `https://eth-mainnet.g.alchemy.com/nft/v3/${ALCHEMY_KEY}/getNFTsForOwner?owner=${address}&withMetadata=true&pageSize=${limit}`,
-      { next: { revalidate: 21600 } }
-    )
+    const url = new URL(`${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getNFTsForOwner`)
+    url.searchParams.set('owner', address)
+    url.searchParams.set('withMetadata', 'true')
+    url.searchParams.set('pageSize', String(Math.min(limit * 4, 50)))
+    url.searchParams.append('excludeFilters[]', 'SPAM')
+    url.searchParams.append('excludeFilters[]', 'AIRDROPS')
+
+    const res = await fetch(url.toString(), { next: { revalidate: 21600 } })
     if (!res.ok) return []
 
     const data = await res.json()
@@ -114,20 +121,32 @@ export async function getCreatedNFTs(address: string, limit = 5): Promise<NFTWor
       tokenId: string
       contract: { address: string }
       name: string
-      image: { cachedUrl?: string; originalUrl?: string }
-      raw: { metadata: { animation_url?: string; attributes?: Array<{ trait_type: string; value: string }> } }
+      image: { cachedUrl?: string; originalUrl?: string; thumbnailUrl?: string }
+      raw: { metadata: { animation_url?: string } }
       timeLastUpdated: string
+      tokenType: string
     }> = data.ownedNfts ?? []
 
-    return nfts.slice(0, limit).map(nft => ({
-      tokenId: nft.tokenId,
-      contractAddress: nft.contract?.address ?? '',
-      title: nft.name ?? 'Untitled',
-      imageUrl: nft.image?.cachedUrl ?? nft.image?.originalUrl ?? '',
-      animationUrl: nft.raw?.metadata?.animation_url ?? null,
-      mintDate: nft.timeLastUpdated ?? '',
-      edition: '1/1',
-    }))
+    // Filter out utility/non-art contracts
+    const SKIP_CONTRACTS = [
+      '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85', // ENS
+      '0x22c1f6050e56d2876009903609a2cc3fef83b415', // POAP
+    ]
+
+    return nfts
+      .filter(n => !SKIP_CONTRACTS.includes(n.contract?.address?.toLowerCase()))
+      .filter(n => n.image?.cachedUrl || n.image?.originalUrl)
+      .filter(n => n.name && n.name !== 'Unnamed')
+      .slice(0, limit)
+      .map(nft => ({
+        tokenId:         nft.tokenId,
+        contractAddress: nft.contract?.address ?? '',
+        title:           nft.name ?? 'Untitled',
+        imageUrl:        nft.image?.cachedUrl ?? nft.image?.thumbnailUrl ?? nft.image?.originalUrl ?? '',
+        animationUrl:    nft.raw?.metadata?.animation_url ?? null,
+        mintDate:        nft.timeLastUpdated ?? '',
+        edition:         nft.tokenType === 'ERC1155' ? 'Edition' : '1/1',
+      }))
   } catch (err) {
     console.error('getCreatedNFTs error:', err)
     return []
@@ -139,7 +158,7 @@ export async function checkMembership(address: string): Promise<boolean> {
 
   try {
     const res = await fetch(
-      `https://eth-mainnet.g.alchemy.com/nft/v3/${ALCHEMY_KEY}/isHolderOfContract?wallet=${address}&contractAddress=${MEMBERSHIP_CONTRACT}`,
+      `${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/isHolderOfContract?wallet=${address}&contractAddress=${MEMBERSHIP_CONTRACT}`,
       { next: { revalidate: 300 } }
     )
     if (!res.ok) return false
