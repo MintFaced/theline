@@ -66,7 +66,7 @@ export default function MembershipPage() {
               style={{ aspectRatio: '4/3' }}
             >
               <Image
-                src="/images/line1000-nft.png"
+                src="/images/gallery/line1000-nft.png"
                 alt="First 1,000 Artists on The Line NFT"
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
