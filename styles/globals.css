@@ -1,6 +1,9 @@
 /* styles/globals.css */
 /* Fonts loaded via next/font/google in app/layout.tsx — no font files needed */
 
+/* ── Stream Chat CSS ─────────────────────────────────────────────────────────── */
+@import 'stream-chat-react/dist/css/v2/index.css';
+
 /* ── Tailwind (must come first so our custom CSS wins) ──────────────────────── */
 @tailwind base;
 @tailwind components;
