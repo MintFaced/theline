@@ -1,329 +1,185 @@
-// app/page.tsx
-import Image from 'next/image'
+// app/collect/page.tsx
+import type { Metadata } from 'next'
 import Link from 'next/link'
-import { TheLineRail } from '@/components/TheLineRail'
-import { ArtistCard } from '@/components/ArtistCard'
 import { RevealSection } from '@/components/RevealSection'
 import artistsData from '@/data/artists.json'
 import type { Artist } from '@/types'
-import { CATEGORY_LABELS } from '@/types'
+
+export const metadata: Metadata = {
+  title: 'Collect — The Line',
+  description: 'How to collect cryptoart from Line Artists. Wallets, marketplaces, and everything you need to start.',
+}
 
 const artists = artistsData as Artist[]
+const featuredArtists = artists.filter(a => a.featured && a.galleryImage).slice(0, 3)
 
-const CATEGORY_IMAGES: Record<string, string> = {
-  'lens-based':   '/images/categories/lens-based.jpg',
-  'illustration': '/images/categories/illustration.jpg',
-  'glitch':       '/images/categories/glitch.jpg',
-  'ai':           '/images/categories/ai.jpg',
-  'generative':   '/images/categories/generative.jpg',
-  '3d':           '/images/categories/3d.jpg',
-  'painting':     '/images/categories/painting.jpg',
-}
-
-const CATEGORY_COUNTS: Record<string, number> = {}
-for (const a of artists) {
-  CATEGORY_COUNTS[a.category] = (CATEGORY_COUNTS[a.category] || 0) + 1
-}
-
-// Get fresh lines (highest line numbers first, with images)
-const freshLines = [...artists]
-  .filter(a => a.galleryImage)
-  .sort((a, b) => Math.max(...b.allLineNumbers) - Math.max(...a.allLineNumbers))
-  .slice(0, 4)
-
-// Featured artists for quotes
-const QUOTES = [
-  { text: "One of my favourite places to display art is The Line.", author: "Tylers Journey", line: 15 },
-  { text: "The Line metaverse gallery is pretty dope when you've got six years of work.", author: "Robness", line: 193 },
-  { text: "It really is the Matrix, but with art.", author: "Slowhed", line: 247 },
+const MARKETPLACES = [
+  {
+    name: 'OpenSea',
+    url: 'https://opensea.io',
+    chain: 'ETH / Base / Polygon',
+    description: 'The largest NFT marketplace. Best for Ethereum-based Line Artists.',
+  },
+  {
+    name: 'Objkt',
+    url: 'https://objkt.com',
+    chain: 'Tezos',
+    description: 'The primary marketplace for Tezos art. Around 40% of Line Artists sell here.',
+  },
+  {
+    name: 'Foundation',
+    url: 'https://foundation.app',
+    chain: 'ETH',
+    description: 'Curated platform focused on 1/1 Ethereum works. High-value single editions.',
+  },
+  {
+    name: 'Manifold',
+    url: 'https://manifold.xyz',
+    chain: 'ETH',
+    description: 'Artist-owned smart contracts. Many Line Artists self-publish here.',
+  },
 ]
 
-const MAIN_CATEGORIES = ['lens-based', 'illustration', 'glitch', 'ai', 'generative', '3d', 'painting']
+const STEPS = [
+  {
+    step: '01',
+    heading: 'Get a wallet',
+    body: 'Download MetaMask (Ethereum) or Temple (Tezos). Your wallet is your identity on-chain — it holds your art and proves ownership.',
+  },
+  {
+    step: '02',
+    heading: 'Fund your wallet',
+    body: 'Buy ETH or XTZ from an exchange like Coinbase or Kraken and send it to your wallet address. Most works on The Line sell for 0.01–1 ETH.',
+  },
+  {
+    step: '03',
+    heading: 'Find an artist',
+    body: 'Browse The Line\'s artist directory. Each profile shows the artist\'s work, sales history, and links to where their art is available to collect.',
+  },
+  {
+    step: '04',
+    heading: 'Make your first purchase',
+    body: 'Click through to the marketplace, connect your wallet, and place a bid or buy at the listed price. The artwork is transferred to your wallet instantly.',
+  },
+  {
+    step: '05',
+    heading: 'Your collection lives on-chain',
+    body: 'Connect your wallet on The Line to see your collection displayed alongside the artists you\'ve collected from. Provenance is permanent.',
+  },
+]
 
-export default function HomePage() {
-  const maxLine = Math.max(...artists.flatMap(a => a.allLineNumbers))
-
+export default function CollectPage() {
   return (
-    <div className="bg-line-bg">
+    <div className="bg-line-bg min-h-screen" style={{ paddingTop: 'var(--nav-height)' }}>
 
-      {/* ── Section 1: The Line Rail ──────────────────────────────────────── */}
-      <div className="pt-14"> {/* nav offset */}
-        <TheLineRail artists={artists} />
+      {/* ── Header ─────────────────────────────────────────────────────────── */}
+      <div className="border-b border-line-border">
+        <div className="max-w-content mx-auto px-6 py-16 md:py-24">
+          <div className="max-w-2xl">
+            <p className="label mb-4">Collecting</p>
+            <h1 className="font-display font-light text-5xl md:text-7xl text-line-text mb-6" style={{ letterSpacing: '-0.03em' }}>
+              How to collect<br />Line Artists
+            </h1>
+            <p className="font-sans text-sm text-line-muted leading-relaxed max-w-md">
+              Owning a work from The Line means holding a piece of digital art history. Here is everything you need to start collecting — no experience required.
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* ── Section 2: The Gallery ────────────────────────────────────────── */}
-      <RevealSection className="mt-24 md:mt-40 px-6">
-        <div className="max-w-content mx-auto">
+      <div className="max-w-content mx-auto px-6">
 
-          {/* Full-width gallery exterior */}
-          <div className="relative w-full overflow-hidden group" style={{ height: 'clamp(320px, 55vw, 640px)' }}>
-            <Image
-              src="/images/gallery/exterior.jpg"
-              alt="The Line Gallery, Napier New Zealand"
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-[1.01]"
-              priority
-            />
-            {/* Overlay */}
-            <div className="absolute inset-0"
-              style={{ background: 'linear-gradient(to bottom, transparent 30%, rgba(10,10,10,0.85))' }} />
-            <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12">
-              <p className="label text-line-accent mb-3">Physical Gallery</p>
-              <h2 className="font-display font-light text-line-text"
-                style={{ fontSize: 'clamp(1.8rem, 4vw, 3.5rem)', lineHeight: 1.05 }}>
-                THE LINE GALLERY
-              </h2>
-              <p className="font-mono text-xs text-line-muted tracking-widest mt-2">
-                318 EMERSON STREET · NAPIER · NEW ZEALAND
-              </p>
-            </div>
-          </div>
-
-          {/* Three gallery sub-features */}
-          <div className="grid md:grid-cols-3 gap-px mt-px bg-line-border">
-            {/* Artist Retreats */}
-            <div className="bg-line-bg p-8 md:p-10">
-              <div className="flex items-start justify-between mb-6">
-                <p className="label">Artist Retreats</p>
-                <TokenBadge />
+        {/* ── Steps ───────────────────────────────────────────────────────── */}
+        <RevealSection className="py-16 md:py-24 border-b border-line-border">
+          <p className="label mb-12">Getting started</p>
+          <div className="space-y-px bg-line-border">
+            {STEPS.map(({ step, heading, body }) => (
+              <div key={step} className="bg-line-bg p-8 md:p-10 grid md:grid-cols-[80px_1fr_2fr] gap-6 md:gap-12 items-start">
+                <span className="font-mono text-[10px] text-line-accent tracking-widest">{step}</span>
+                <h3 className="font-display font-light text-xl text-line-text" style={{ letterSpacing: '-0.01em' }}>{heading}</h3>
+                <p className="font-sans text-sm text-line-muted leading-relaxed">{body}</p>
               </div>
-              <p className="font-sans text-sm text-line-muted leading-relaxed">
-                The Line Gallery sits in Napier, New Zealand — one of the world's most
-                architecturally distinctive small cities. Coming here isn't a holiday.
-                It's a deliberate step away from the feed, the screen, the constant
-                noise of the market. Time and space to develop your practice without
-                distraction: to think about what you're making, why, and where it's going next.
-              </p>
-              <Link href="/gallery#retreats"
-                className="inline-flex items-center gap-2 font-mono text-[11px] text-line-accent tracking-widest uppercase mt-6 hover:gap-3 transition-all">
-                Learn more
-                <span>→</span>
-              </Link>
-            </div>
-
-            {/* Screen Takeovers */}
-            <div className="bg-line-bg p-8 md:p-10">
-              <div className="flex items-start justify-between mb-6">
-                <p className="label">Screen Takeovers</p>
-                <TokenBadge />
-              </div>
-              <p className="font-sans text-sm text-line-muted leading-relaxed">
-                The Line Gallery runs a programme of screen takeovers — dedicated
-                periods where a single artist's work fills every screen in the space,
-                24 hours a day. For a digital artist, this is genuine exhibition. Artists
-                who participate can add The Line Gallery, Napier, New Zealand to their
-                exhibition record. These aren't honorary listings — your work is in a
-                physical gallery, being seen.
-              </p>
-              <Link href="/gallery#takeovers"
-                className="inline-flex items-center gap-2 font-mono text-[11px] text-line-accent tracking-widest uppercase mt-6 hover:gap-3 transition-all">
-                Apply now
-                <span>→</span>
-              </Link>
-            </div>
-
-            {/* Current Exhibition */}
-            <div className="bg-line-bg p-8 md:p-10">
-              <p className="label mb-6">Current Exhibition</p>
-              {/* YouTube embed */}
-              <div className="relative w-full mb-4" style={{ aspectRatio: '16/9' }}>
-                <iframe
-                  src="https://www.youtube.com/embed/tBMgbXUv02A"
-                  title="The Line Gallery — Current Exhibition"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full"
-                  style={{ border: 'none' }}
-                />
-              </div>
-              <Link href="/gallery"
-                className="inline-flex items-center gap-2 font-mono text-[11px] text-line-accent tracking-widest uppercase mt-2 hover:gap-3 transition-all">
-                View gallery
-                <span>→</span>
-              </Link>
-            </div>
+            ))}
           </div>
+        </RevealSection>
 
-          {/* Gallery interior photo */}
-          <div className="mt-px relative overflow-hidden" style={{ height: 'clamp(400px, 60vw, 800px)' }}>
-            <Image
-              src="/images/gallery/interior.jpg"
-              alt="The Line Gallery opening night"
-              fill
-              className="object-cover"
-              style={{ objectPosition: 'center 47%' }}
-            />
-            <div className="absolute inset-0"
-              style={{ background: 'rgba(10,10,10,0.3)' }} />
-          </div>
-        </div>
-      </RevealSection>
-
-      {/* ── Section 3: Storyline ──────────────────────────────────────────── */}
-      <RevealSection className="mt-24 md:mt-40 px-6">
-        <div className="max-w-content mx-auto">
-          <div className="flex items-baseline justify-between mb-12">
-            <p className="label">Storyline</p>
-            <Link href="/storyline"
-              className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
-              All stories →
-            </Link>
-          </div>
-          {/* Placeholder article grid — populated from MDX in Phase 6 */}
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "The End of Gatekeepers",
-                date: "Oct 2025",
-                excerpt: "You can mint an artwork and sell it to anyone in the world without a gallery. You don't need to wait for permission.",
-                img: "https://theline1.wpenginepowered.com/wp-content/uploads/2025/10/IMG_2506-scaled.jpg"
-              },
-              {
-                title: "Roads and Rivers Exhibition",
-                date: "Sep 2025",
-                excerpt: "MintFace chose to photograph bridges that were the most beautiful or rarely seen. Most works were one-of-ones.",
-                img: "https://theline1.wpenginepowered.com/wp-content/uploads/2025/09/Screenshot-2025-09-05-at-10.16.23-AM.png"
-              },
-              {
-                title: "The Line Gallery Opens",
-                date: "Jul 2025",
-                excerpt: "The first art show at The Line is now open to the public in Napier, New Zealand.",
-                img: "https://theline1.wpenginepowered.com/wp-content/uploads/2025/07/gallery-scaled.jpg"
-              }
-            ].map((article, i) => (
-              <Link key={i} href="/storyline" className="group">
-                <div className="relative aspect-[4/3] overflow-hidden bg-line-surface mb-4">
-                  <Image src={article.img} alt={article.title} fill
-                    className="object-cover transition-all duration-500 group-hover:brightness-110 group-hover:scale-[1.02]" />
+        {/* ── Marketplaces ────────────────────────────────────────────────── */}
+        <RevealSection className="py-16 md:py-24 border-b border-line-border">
+          <p className="label mb-12">Where to buy</p>
+          <div className="grid md:grid-cols-2 gap-px bg-line-border">
+            {MARKETPLACES.map(({ name, url, chain, description }) => (
+              <a
+                key={name}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-line-bg p-8 md:p-10 block hover:bg-line-surface transition-colors duration-200"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <h3 className="font-display font-light text-2xl text-line-text group-hover:text-line-accent transition-colors duration-200">
+                    {name}
+                  </h3>
+                  <span className="font-mono text-[10px] text-line-muted tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-200">↗</span>
                 </div>
-                <p className="font-mono text-[10px] text-line-muted tracking-widest uppercase mb-2">{article.date}</p>
-                <h3 className="font-display font-light text-line-text text-xl mb-2 group-hover:text-line-hover transition-colors">
-                  {article.title}
-                </h3>
-                <p className="font-sans text-xs text-line-muted leading-relaxed line-clamp-2">
-                  {article.excerpt}
-                </p>
+                <p className="font-mono text-[10px] text-line-accent tracking-widest mb-4">{chain}</p>
+                <p className="font-sans text-sm text-line-muted leading-relaxed">{description}</p>
+              </a>
+            ))}
+          </div>
+        </RevealSection>
+
+        {/* ── Featured artists to collect ─────────────────────────────────── */}
+        {featuredArtists.length > 0 && (
+          <RevealSection className="py-16 md:py-24 border-b border-line-border">
+            <div className="flex items-end justify-between mb-12">
+              <p className="label">Artists to collect now</p>
+              <Link href="/artists" className="font-mono text-[10px] text-line-muted tracking-widest hover:text-line-accent transition-colors">
+                All artists →
               </Link>
-            ))}
-          </div>
-        </div>
-      </RevealSection>
-
-      {/* ── Section 4: Fresh Lines ────────────────────────────────────────── */}
-      <RevealSection className="mt-24 md:mt-40 px-6">
-        <div className="max-w-content mx-auto">
-          <div className="flex items-baseline justify-between mb-12">
-            <div>
-              <p className="label mb-1">Fresh Lines</p>
-              <p className="font-sans text-xs text-line-muted">Put your hippocampus into overdrive</p>
             </div>
-            <Link href="/artists?sort=recent"
-              className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
-              All artists →
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {freshLines.map(artist => (
-              <ArtistCard key={artist.slug} artist={artist} />
-            ))}
-          </div>
-        </div>
-      </RevealSection>
-
-      {/* ── Section 5: By Medium ──────────────────────────────────────────── */}
-      <RevealSection className="mt-24 md:mt-40 px-6">
-        <div className="max-w-content mx-auto">
-          <p className="label mb-12">By Medium</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-px bg-line-border">
-            {MAIN_CATEGORIES.map(cat => {
-              const count = CATEGORY_COUNTS[cat] || 0
-              // Find a representative artist image for this category
-              const repArtist = artists.find(a => a.category === cat && a.galleryImage && a.featured)
-                ?? artists.find(a => a.category === cat && a.galleryImage)
-              return (
-                <Link key={cat} href={`/category/${cat}`}
-                  className="group relative bg-line-bg overflow-hidden"
-                  style={{ aspectRatio: '2/3' }}>
-                  {repArtist?.galleryImage && (
-                    <Image
-                      src={repArtist.galleryImage}
-                      alt={CATEGORY_LABELS[cat]}
-                      fill
-                      sizes="200px"
-                      className="object-cover transition-all duration-500 group-hover:brightness-90 group-hover:scale-[1.03]"
-                      style={{ filter: 'brightness(0.5)' }}
+            <div className="grid md:grid-cols-3 gap-px bg-line-border">
+              {featuredArtists.map(artist => (
+                <Link
+                  key={artist.slug}
+                  href={`/artists/${artist.slug}`}
+                  className="group bg-line-bg block"
+                >
+                  <div className="relative overflow-hidden" style={{ aspectRatio: '1' }}>
+                    <img
+                      src={artist.galleryImage}
+                      alt={artist.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
-                  )}
-                  <div className="absolute inset-0 flex flex-col justify-end p-4">
-                    <p className="font-display font-light text-line-text group-hover:text-line-hover transition-colors"
-                      style={{ fontSize: 'clamp(0.85rem, 1.5vw, 1.1rem)', lineHeight: 1.2 }}>
-                      {CATEGORY_LABELS[cat]}
+                  </div>
+                  <div className="p-6">
+                    <p className="font-mono text-[10px] text-line-accent tracking-widest mb-1">
+                      THE LINE {artist.allLineNumbers[0]}
                     </p>
-                    <p className="font-mono text-[9px] text-line-muted tracking-wider mt-1">
-                      {count} artists
+                    <p className="font-display font-light text-xl text-line-text group-hover:text-line-accent transition-colors duration-200">
+                      {artist.name}
                     </p>
                   </div>
                 </Link>
-              )
-            })}
-          </div>
-        </div>
-      </RevealSection>
-
-      {/* ── Section 6: Pull Quotes ────────────────────────────────────────── */}
-      <RevealSection className="mt-32 md:mt-48">
-        {QUOTES.map((q, i) => (
-          <div key={i} className={`py-16 md:py-20 px-8 border-t border-line-border ${i === QUOTES.length - 1 ? 'border-b' : ''}`}>
-            <div className="max-w-4xl mx-auto text-center">
-              <p className="font-display font-light text-line-text"
-                style={{ fontSize: 'clamp(1.4rem, 3.5vw, 2.8rem)', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
-                "{q.text}"
-              </p>
-              <p className="font-mono text-xs text-line-muted tracking-widest uppercase mt-6">
-                {q.author} · The Line {q.line}
-              </p>
+              ))}
             </div>
-          </div>
-        ))}
-      </RevealSection>
+          </RevealSection>
+        )}
 
-      {/* ── Section 7: The Line Outro ─────────────────────────────────────── */}
-      <RevealSection className="mt-24 md:mt-40 px-6 pb-32">
-        <div className="max-w-content mx-auto text-center">
-          <div className="the-line mx-auto mb-16" style={{ maxWidth: '200px' }} />
-          <p className="font-mono text-[11px] text-line-muted tracking-[0.3em] uppercase mb-6">
-            The Line
+        {/* ── CTA ─────────────────────────────────────────────────────────── */}
+        <RevealSection className="py-16 md:py-24 text-center">
+          <p className="label mb-6">Ready to collect?</p>
+          <h2 className="font-display font-light text-4xl md:text-5xl text-line-text mb-8" style={{ letterSpacing: '-0.02em' }}>
+            Browse all 784 artists
+          </h2>
+          <p className="font-sans text-sm text-line-muted mb-10 max-w-sm mx-auto leading-relaxed">
+            Each artist profile shows their work, on-chain sales data, and direct links to collect.
           </p>
-          <div className="flex items-baseline justify-center gap-3">
-            <span className="font-display font-light text-line-accent"
-              style={{ fontSize: 'clamp(4rem, 12vw, 10rem)', lineHeight: 1, letterSpacing: '-0.03em' }}>
-              {artists.length}
-            </span>
-            <span className="font-display font-light text-line-muted"
-              style={{ fontSize: 'clamp(2rem, 6vw, 5rem)', lineHeight: 1 }}>
-              / 1,000
-            </span>
-          </div>
-          <p className="font-mono text-xs text-line-muted tracking-widest mt-4">
-            {1000 - maxLine - 1} positions remain on The Line
-          </p>
-          <div className="mt-12">
-            <Link href="/membership" className="btn-primary text-sm">
-              Apply for The Line
-            </Link>
-          </div>
-        </div>
-      </RevealSection>
+          <Link href="/artists" className="btn-primary">
+            Browse The Line →
+          </Link>
+        </RevealSection>
 
-    </div>
-  )
-}
-
-function TokenBadge() {
-  return (
-    <div className="flex items-center gap-1.5 shrink-0">
-      <div className="w-2 h-2 rounded-full bg-line-accent" />
-      <span className="font-mono text-[9px] text-line-muted tracking-widest">TOKEN</span>
+      </div>
     </div>
   )
 }
