@@ -17,8 +17,8 @@
     "@vercel/kv": "^3.0.0",
     "react-window": "^1.8.10",
     "@stream-io/video-react-sdk": "^0.7.0",
-    "stream-chat": "^8.40.0",
-    "stream-chat-react": "^12.2.0",
+    "stream-chat": "^8.0.0",
+    "stream-chat-react": "^11.0.0",
     "framer-motion": "^11.3.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0"
@@ -36,4 +36,3 @@
     "eslint-config-next": "14.2.5"
   }
 }
-
