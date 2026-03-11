@@ -2,6 +2,7 @@
 // components/LarpChat.tsx
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader } from 'stream-chat-react'
 
 export function LarpChat() {
   return <LarpChatInner />
@@ -84,13 +85,7 @@ function StreamChatRoom({ walletAddress, shortAddress }: { walletAddress: string
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [errorMsg, setErrorMsg] = useState('')
   const mountedRef = useRef(true)
-
-  // We render the Stream UI declaratively once we have a token
-  const [chatState, setChatState] = useState<{
-    client: any
-    channel: any
-    SC: any
-  } | null>(null)
+  const [chatData, setChatData] = useState<{ client: any; channel: any } | null>(null)
 
   useEffect(() => {
     mountedRef.current = true
@@ -112,11 +107,8 @@ function StreamChatRoom({ walletAddress, shortAddress }: { walletAddress: string
         }
         const { token } = await tokenRes.json()
 
-        // 2. Load Stream Chat
-        const [{ StreamChat }, SC] = await Promise.all([
-          import('stream-chat'),
-          import('stream-chat-react'),
-        ])
+        // 2. Load Stream Chat client only (react components are statically imported)
+        const { StreamChat } = await import('stream-chat')
 
         if (!mountedRef.current) return
 
@@ -134,7 +126,7 @@ function StreamChatRoom({ walletAddress, shortAddress }: { walletAddress: string
 
         if (!mountedRef.current) { client.disconnectUser(); return }
 
-        setChatState({ client, channel, SC })
+        setChatData({ client, channel })
         setStatus('ready')
       } catch (err: any) {
         console.error('Stream Chat error:', err)
@@ -147,7 +139,7 @@ function StreamChatRoom({ walletAddress, shortAddress }: { walletAddress: string
 
     return () => {
       mountedRef.current = false
-      chatState?.client?.disconnectUser()
+      chatData?.client?.disconnectUser()
     }
   }, [walletAddress, shortAddress])
 
@@ -160,11 +152,9 @@ function StreamChatRoom({ walletAddress, shortAddress }: { walletAddress: string
     )
   }
 
-  if (status === 'loading' || !chatState) {
+  if (status === 'loading' || !chatData) {
     return <Spinner label="Loading LARP chat…" />
   }
-
-  const { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader } = chatState.SC
 
   return (
     <>
@@ -186,13 +176,10 @@ function StreamChatRoom({ walletAddress, shortAddress }: { walletAddress: string
         .larp-chat .str-chat__date-separator-line { border-color: #1E1E1E; }
         .larp-chat .str-chat__date-separator-date { color: #666666; background: #0A0A0A; font-size: 10px; }
         .larp-chat .str-chat__send-button { color: #C8A96E; }
-        .larp-chat .str-chat__message-reactions-list { background: #111111; }
-        .larp-chat .str-chat__li--top .str-chat__message-simple,
-        .larp-chat .str-chat__li--single .str-chat__message-simple { margin-top: 12px; }
       `}</style>
       <div className="larp-chat h-full">
-        <Chat client={chatState.client} theme="str-chat__theme-dark">
-          <Channel channel={chatState.channel}>
+        <Chat client={chatData.client} theme="str-chat__theme-dark">
+          <Channel channel={chatData.channel}>
             <Window>
               <ChannelHeader />
               <MessageList />
