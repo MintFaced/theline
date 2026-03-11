@@ -6,14 +6,15 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import posts from '@/data/posts.json'
 
-type Props = { params: { slug: string } }
+type Props = { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {
   return posts.map(p => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = posts.find(p => p.slug === params.slug)
+  const { slug } = await params
+  const post = posts.find(p => p.slug === slug)
   if (!post) return {}
   return {
     title: `${post.title} — The Line Storyline`,
@@ -45,10 +46,11 @@ function cleanContent(html: string) {
 }
 
 export default async function ArticlePage({ params }: Props) {
-  const meta = posts.find(p => p.slug === params.slug)
+  const { slug } = await params
+  const meta = posts.find(p => p.slug === slug)
   if (!meta) notFound()
 
-  const content = await getContent(params.slug)
+  const content = await getContent(slug)
 
   const dateFormatted = new Date(meta.date).toLocaleDateString('en-NZ', {
     year: 'numeric', month: 'long', day: 'numeric'
