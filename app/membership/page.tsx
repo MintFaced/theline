@@ -17,7 +17,7 @@ export default function MembershipPage() {
       <div className="border-b border-line-border">
         <div className="max-w-content mx-auto px-6 py-16 md:py-24">
           <div className="max-w-2xl">
-            <p className="label mb-4">Chat</p>
+            <p className="label mb-4">LARP</p>
             <h1 className="font-display font-light text-5xl md:text-7xl text-line-text mb-6" style={{ letterSpacing: '-0.03em' }}>
               Line Artists<br />Rad Party
             </h1>
