@@ -106,18 +106,13 @@ export async function getCreatedNFTs(address: string, limit = 5): Promise<NFTWor
   if (!ALCHEMY_KEY) return []
 
   try {
-    const url = new URL(`${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getNFTsForOwner`)
-    url.searchParams.set('owner', address)
-    url.searchParams.set('withMetadata', 'true')
-    url.searchParams.set('pageSize', String(Math.min(limit * 4, 50)))
-    url.searchParams.append('excludeFilters[]', 'SPAM')
-    url.searchParams.append('excludeFilters[]', 'AIRDROPS')
+    const SKIP_CONTRACTS = [
+      '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85', // ENS
+      '0x22c1f6050e56d2876009903609a2cc3fef83b415', // POAP
+      '0x495f947276749ce646f68ac8c248420045cb7b5e', // OpenSea shared storefront
+    ]
 
-    const res = await fetch(url.toString(), { next: { revalidate: 21600 } })
-    if (!res.ok) return []
-
-    const data = await res.json()
-    const nfts: Array<{
+    type AlchemyNFT = {
       tokenId: string
       contract: { address: string }
       name: string
@@ -125,18 +120,56 @@ export async function getCreatedNFTs(address: string, limit = 5): Promise<NFTWor
       raw: { metadata: { animation_url?: string } }
       timeLastUpdated: string
       tokenType: string
-    }> = data.ownedNfts ?? []
+    }
 
-    // Filter out utility/non-art contracts
-    const SKIP_CONTRACTS = [
-      '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85', // ENS
-      '0x22c1f6050e56d2876009903609a2cc3fef83b415', // POAP
-    ]
+    let nfts: AlchemyNFT[] = []
+
+    // Step 1: Find contracts this address created/deployed
+    const contractsUrl = new URL(`${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getContractsForOwner`)
+    contractsUrl.searchParams.set('owner', address)
+    contractsUrl.searchParams.set('pageSize', '20')
+    const contractsRes = await fetch(contractsUrl.toString(), { next: { revalidate: 21600 } })
+    const contractsData = contractsRes.ok ? await contractsRes.json() : { contracts: [] }
+    const createdContracts: string[] = (contractsData.contracts ?? [])
+      .map((c: { address: string }) => c.address?.toLowerCase())
+      .filter((a: string) => a && !SKIP_CONTRACTS.includes(a))
+
+    // Step 2: Pull NFTs from their own contracts
+    if (createdContracts.length > 0) {
+      for (const contractAddr of createdContracts.slice(0, 3)) {
+        const nftsUrl = new URL(`${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getNFTsForContract`)
+        nftsUrl.searchParams.set('contractAddress', contractAddr)
+        nftsUrl.searchParams.set('withMetadata', 'true')
+        nftsUrl.searchParams.set('limit', String(limit))
+        const nftsRes = await fetch(nftsUrl.toString(), { next: { revalidate: 21600 } })
+        if (nftsRes.ok) {
+          const nftsData = await nftsRes.json()
+          nfts.push(...(nftsData.nfts ?? []))
+        }
+        if (nfts.length >= limit) break
+      }
+    }
+
+    // Step 3: Fallback — owned NFTs filtered to exclude spam/airdrops
+    if (nfts.length === 0) {
+      const ownedUrl = new URL(`${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getNFTsForOwner`)
+      ownedUrl.searchParams.set('owner', address)
+      ownedUrl.searchParams.set('withMetadata', 'true')
+      ownedUrl.searchParams.set('pageSize', '50')
+      ownedUrl.searchParams.append('excludeFilters[]', 'SPAM')
+      ownedUrl.searchParams.append('excludeFilters[]', 'AIRDROPS')
+      const ownedRes = await fetch(ownedUrl.toString(), { next: { revalidate: 21600 } })
+      if (ownedRes.ok) {
+        const ownedData = await ownedRes.json()
+        nfts = (ownedData.ownedNfts ?? []).filter((n: AlchemyNFT) =>
+          !SKIP_CONTRACTS.includes(n.contract?.address?.toLowerCase())
+        )
+      }
+    }
 
     return nfts
-      .filter(n => !SKIP_CONTRACTS.includes(n.contract?.address?.toLowerCase()))
-      .filter(n => n.image?.cachedUrl || n.image?.originalUrl)
-      .filter(n => n.name && n.name !== 'Unnamed')
+      .filter(n => n.image?.cachedUrl || n.image?.originalUrl || n.image?.thumbnailUrl)
+      .filter(n => n.name && n.name !== 'Unnamed' && !/^#?\d+$/.test(n.name))
       .slice(0, limit)
       .map(nft => ({
         tokenId:         nft.tokenId,
