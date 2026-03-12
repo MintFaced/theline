@@ -132,25 +132,6 @@ export default function StorylinePage() {
         </div>
       </RevealSection>
 
-      {/* ── Archive ── */}
-      <RevealSection className="max-w-content mx-auto px-6 py-16">
-        <div className="flex items-baseline justify-between mb-8">
-          <p className="label">Archive · {archive.length} more articles</p>
-          <span className="font-mono text-[10px] text-line-muted tracking-widest">{posts.length} total</span>
-        </div>
-        <div className="divide-y divide-line-border">
-          {archive.map((post: any) => (
-            <Link key={post.slug} href={`/storyline/${post.slug}`}
-              className="group flex items-baseline justify-between gap-4 py-3 hover:text-line-accent transition-colors">
-              <h3 className="font-display font-light text-sm text-line-text group-hover:text-line-accent transition-colors leading-snug" style={{ letterSpacing: '-0.01em' }}>
-                {post.title}
-              </h3>
-              <span className="font-mono text-[9px] text-line-muted tracking-widest shrink-0">{post.date}</span>
-            </Link>
-          ))}
-        </div>
-      </RevealSection>
-
       {/* ── Subscribe ── */}
       <RevealSection className="border-t border-line-border">
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-px bg-line-border">
@@ -218,6 +199,25 @@ export default function StorylinePage() {
             </p>
           </div>
 
+        </div>
+      </RevealSection>
+
+      {/* ── Archive ── */}
+      <RevealSection className="max-w-content mx-auto px-6 py-16">
+        <div className="flex items-baseline justify-between mb-8">
+          <p className="label">Archive · {archive.length} more articles</p>
+          <span className="font-mono text-[10px] text-line-muted tracking-widest">{posts.length} total</span>
+        </div>
+        <div className="divide-y divide-line-border">
+          {archive.map((post: any) => (
+            <Link key={post.slug} href={`/storyline/${post.slug}`}
+              className="group flex items-baseline justify-between gap-4 py-3 hover:text-line-accent transition-colors">
+              <h3 className="font-display font-light text-sm text-line-text group-hover:text-line-accent transition-colors leading-snug" style={{ letterSpacing: '-0.01em' }}>
+                {post.title}
+              </h3>
+              <span className="font-mono text-[9px] text-line-muted tracking-widest shrink-0">{post.date}</span>
+            </Link>
+          ))}
         </div>
       </RevealSection>
 
