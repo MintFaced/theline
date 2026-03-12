@@ -1,8 +1,10 @@
 'use client'
 // components/LarpChat.tsx
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
+
+import { usePrivy } from '@privy-io/react-auth'
 
 // Stream Chat React must be client-only — no SSR
 const StreamChatUI = dynamic(() => import('./StreamChatUI'), { ssr: false })
@@ -12,7 +14,6 @@ export function LarpChat() {
 }
 
 function LarpChatInner() {
-  const { usePrivy } = require('@privy-io/react-auth')
   const { ready, authenticated, login, user } = usePrivy()
 
   const [memberState, setMemberState] = useState<'idle' | 'checking' | 'member' | 'not-member'>('idle')
