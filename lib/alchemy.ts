@@ -150,23 +150,6 @@ export async function getCreatedNFTs(address: string, limit = 5): Promise<NFTWor
       }
     }
 
-    // Step 3: Fallback — owned NFTs filtered to exclude spam/airdrops
-    if (nfts.length === 0) {
-      const ownedUrl = new URL(`${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getNFTsForOwner`)
-      ownedUrl.searchParams.set('owner', address)
-      ownedUrl.searchParams.set('withMetadata', 'true')
-      ownedUrl.searchParams.set('pageSize', '50')
-      ownedUrl.searchParams.append('excludeFilters[]', 'SPAM')
-      ownedUrl.searchParams.append('excludeFilters[]', 'AIRDROPS')
-      const ownedRes = await fetch(ownedUrl.toString(), { next: { revalidate: 21600 } })
-      if (ownedRes.ok) {
-        const ownedData = await ownedRes.json()
-        nfts = (ownedData.ownedNfts ?? []).filter((n: AlchemyNFT) =>
-          !SKIP_CONTRACTS.includes(n.contract?.address?.toLowerCase())
-        )
-      }
-    }
-
     return nfts
       .filter(n => n.image?.cachedUrl || n.image?.originalUrl || n.image?.thumbnailUrl)
       .filter(n => n.name && n.name !== 'Unnamed' && !/^#?\d+$/.test(n.name))
