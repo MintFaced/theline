@@ -29,8 +29,8 @@ export async function GET(request: Request) {
     const token = serverClient.createToken(address)
 
     return NextResponse.json({ token })
-  } catch (err) {
+  } catch (err: any) {
     console.error('Stream token error:', err)
-    return NextResponse.json({ error: 'Token generation failed' }, { status: 500 })
+    return NextResponse.json({ error: err?.message ?? String(err) }, { status: 500 })
   }
 }
