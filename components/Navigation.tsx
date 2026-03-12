@@ -2,6 +2,7 @@
 // components/Navigation.tsx
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { LiveSearch } from './LiveSearch'
 import artistsData from '@/data/artists.json'
 import type { Artist } from '@/types'
@@ -9,13 +10,22 @@ import type { Artist } from '@/types'
 const artists = artistsData as Artist[]
 const maxOccupied = Math.max(...artists.flatMap((a: Artist) => a.allLineNumbers))
 const artistCount = artists.length
-const fillPct = Math.round((maxOccupied / 1000) * 100)
+
+// Load Privy button client-only — never SSR
+const PrivyButton = dynamic(() => import('./PrivyButton'), {
+  ssr: false,
+  loading: () => (
+    <button className="font-mono text-[11px] tracking-widest uppercase text-line-bg bg-line-accent px-4 py-1.5 opacity-50">
+      Connect Wallet
+    </button>
+  ),
+})
 
 const NAV_LINKS = [
-  { label: 'Artists',    href: '/artists' },
-  { label: 'Storyline',  href: '/storyline' },
-  { label: 'Gallery',    href: '/gallery' },
-  { label: 'Collect',    href: '/collect' },
+  { label: 'Artists',   href: '/artists' },
+  { label: 'Storyline', href: '/storyline' },
+  { label: 'Gallery',   href: '/gallery' },
+  { label: 'Collect',   href: '/collect' },
   { label: 'LARP',      href: '/membership' },
   { label: 'Chat',      href: '/members/chat' },
 ]
@@ -30,7 +40,6 @@ export function Navigation() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
 
   return (
     <>
@@ -48,8 +57,8 @@ export function Navigation() {
           <div className="hidden lg:flex items-center gap-3 text-line-muted">
             <span className="font-mono text-[10px] tracking-widest">0</span>
             <div className="relative w-32 h-px bg-line-border">
-              <div className="absolute top-1/2 -translate-y-1/2 w-px h-3 bg-line-accent" style={{ left: `${fillPct}%` }} />
-              <div className="absolute inset-0 bg-line-accent" style={{ width: `${fillPct}%`, height: '1px' }} />
+              <div className="absolute top-1/2 -translate-y-1/2 w-px h-3 bg-line-accent" style={{ left: `${Math.round((maxOccupied / 1000) * 100)}%` }} />
+              <div className="absolute inset-0 bg-line-accent" style={{ width: `${Math.round((maxOccupied / 1000) * 100)}%`, height: '1px' }} />
             </div>
             <span className="font-mono text-[10px] tracking-widest">1000</span>
             <span className="font-mono text-[10px] text-line-accent ml-1">· {maxOccupied}</span>
@@ -67,7 +76,7 @@ export function Navigation() {
             <button onClick={() => setSearchOpen(true)} className="text-line-muted hover:text-line-accent transition-colors p-1" aria-label="Search artists">
               <SearchIcon />
             </button>
-            <PrivyInner />
+            <PrivyButton />
             <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-line-muted hover:text-line-text transition-colors p-1" aria-label="Menu">
               {menuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
@@ -85,7 +94,7 @@ export function Navigation() {
             ))}
           </nav>
           <div className="border-t border-line-border pt-8">
-            <p className="font-mono text-xs text-line-muted tracking-widest uppercase">The Line · Napier, New Zealand</p>
+            <p className="font-mono text-xs text-line-muted tracking-widest uppercase">The Line · Hastings, New Zealand</p>
             <p className="font-mono text-xs text-line-muted mt-1">{artistCount} artists · 1,000 positions · {1000 - maxOccupied - 1} remain</p>
           </div>
         </div>
@@ -93,28 +102,6 @@ export function Navigation() {
 
       {searchOpen && <LiveSearch onClose={() => setSearchOpen(false)} />}
     </>
-  )
-}
-
-
-function PrivyInner() {
-  const { usePrivy } = require('@privy-io/react-auth')
-  const { ready, authenticated, login, logout, user } = usePrivy()
-  const walletAddress = user?.wallet?.address
-  const shortAddress = walletAddress ? `${walletAddress.slice(0, 6)}…${walletAddress.slice(-4)}` : null
-
-  if (authenticated && shortAddress) {
-    return (
-      <button onClick={logout} className="font-mono text-[11px] tracking-widest text-line-accent border border-line-accent px-3 py-1.5 hover:bg-line-accent hover:text-line-bg transition-all">
-        {shortAddress}
-      </button>
-    )
-  }
-
-  return (
-    <button onClick={login} className="font-mono text-[11px] tracking-widest uppercase text-line-bg bg-line-accent px-4 py-1.5 hover:opacity-85 transition-opacity">
-      Connect Wallet
-    </button>
   )
 }
 
