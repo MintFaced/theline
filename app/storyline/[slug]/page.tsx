@@ -143,6 +143,36 @@ export default async function ArticlePage({ params }: Props) {
 
       </div>
 
+      {/* ── Subscribe ── */}
+      <div className="border-t border-line-border mt-16">
+        <div className="max-w-2xl mx-auto px-6 py-16 text-center">
+          <p className="label mb-4">Storyline · The Newsletter</p>
+          <h2 className="font-display font-light text-3xl md:text-4xl text-line-text mb-4" style={{ letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+            Tokenized art in your inbox
+          </h2>
+          <p className="font-sans text-sm text-line-muted mb-8 max-w-sm mx-auto">
+            Artist features, new works, and essays on cryptoart — direct from The Line. Free, no spam.
+          </p>
+          <form
+            action="https://linestories.substack.com/api/v1/free?nojs=true"
+            method="post"
+            target="_blank"
+            className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto"
+          >
+            <input
+              type="email"
+              name="email"
+              placeholder="your@email.com"
+              required
+              className="flex-1 bg-line-bg border border-line-border px-4 py-3 font-mono text-sm text-line-text placeholder:text-line-muted focus:outline-none focus:border-line-accent transition-colors"
+            />
+            <button type="submit" className="btn-primary whitespace-nowrap">
+              Join on Substack →
+            </button>
+          </form>
+        </div>
+      </div>
+
       <style>{`
         .storyline-content { color: #A0998F; font-size: 0.9375rem; line-height: 1.8; }
         .storyline-content h1,.storyline-content h2,.storyline-content h3,.storyline-content h4 {
