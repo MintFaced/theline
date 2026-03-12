@@ -151,6 +151,77 @@ export default function StorylinePage() {
         </div>
       </RevealSection>
 
+      {/* ── Subscribe ── */}
+      <RevealSection className="border-t border-line-border">
+        <div className="max-w-content mx-auto grid md:grid-cols-2 gap-px bg-line-border">
+
+          {/* Left — why subscribe */}
+          <div className="bg-line-bg px-6 md:px-16 py-16 md:py-20">
+            <p className="label mb-6">Storyline · The Newsletter</p>
+            <h2 className="font-display font-light text-4xl md:text-5xl text-line-text mb-6" style={{ letterSpacing: '-0.03em', lineHeight: 1.05 }}>
+              Tokenized art<br />in your inbox
+            </h2>
+            <div className="space-y-4 font-sans text-sm text-line-muted leading-relaxed max-w-sm">
+              <p>Artist features, new works, and essays on what's happening at the intersection of art, ownership, and the blockchain — direct from The Line.</p>
+              <p>No algorithm. No noise. Just the artists and stories that matter.</p>
+            </div>
+            <div className="mt-10 space-y-3">
+              {[
+                'Artist features from inside The Line',
+                'New works and collections as they drop',
+                'Exhibition news from Hawke\'s Bay',
+                'Essays on cryptoart and culture',
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-3">
+                  <div className="w-1 h-1 bg-line-accent shrink-0" />
+                  <p className="font-sans text-xs text-line-muted">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right — Substack embed */}
+          <div className="bg-line-surface px-6 md:px-16 py-16 md:py-20 flex flex-col justify-center">
+            <p className="font-mono text-[10px] text-line-muted tracking-widest uppercase mb-2">Free · No spam · Unsubscribe anytime</p>
+            <p className="font-display font-light text-2xl text-line-text mb-8" style={{ letterSpacing: '-0.02em' }}>
+              Subscribe to Storyline
+            </p>
+
+            {/* Substack iframe embed — styled to match */}
+            <style>{`
+              .substack-embed-wrap iframe {
+                color-scheme: dark;
+              }
+            `}</style>
+            <div className="substack-embed-wrap">
+              <iframe
+                src="https://linestories.substack.com/embed"
+                width="100%"
+                height="150"
+                style={{ border: 'none', background: 'transparent' }}
+                frameBorder="0"
+                scrolling="no"
+              />
+            </div>
+
+            {/* Fallback direct link if iframe looks off */}
+            <a href="https://linestories.substack.com" target="_blank" rel="noopener noreferrer"
+              className="btn-primary mt-4 inline-block text-center">
+              Join on Substack →
+            </a>
+
+            <p className="font-mono text-[9px] text-line-muted tracking-widest mt-6">
+              Published on{' '}
+              <a href="https://linestories.substack.com" target="_blank" rel="noopener noreferrer"
+                className="text-line-accent hover:opacity-70 transition-opacity">
+                linestories.substack.com
+              </a>
+            </p>
+          </div>
+
+        </div>
+      </RevealSection>
+
     </div>
   )
 }
