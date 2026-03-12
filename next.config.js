@@ -94,6 +94,29 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.public.blob.vercel-storage.com',
       },
+      // Alchemy NFT CDN
+      {
+        protocol: 'https',
+        hostname: 'nft-cdn.alchemy.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.nft-cdn.alchemy.com',
+      },
+      // OpenSea CDN
+      {
+        protocol: 'https',
+        hostname: 'i.seadn.io',
+      },
+      // Substack / S3 media
+      {
+        protocol: 'https',
+        hostname: 'substackcdn.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.substack-post-media.s3.amazonaws.com',
+      },
     ],
   },
 
