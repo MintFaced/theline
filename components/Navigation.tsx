@@ -1,6 +1,6 @@
 'use client'
 // components/Navigation.tsx
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { LiveSearch } from './LiveSearch'
@@ -11,7 +11,6 @@ const artists = artistsData as Artist[]
 const maxOccupied = Math.max(...artists.flatMap((a: Artist) => a.allLineNumbers))
 const artistCount = artists.length
 
-// Load Privy button client-only — never SSR
 const PrivyButton = dynamic(() => import('./PrivyButton'), {
   ssr: false,
   loading: () => (
@@ -26,19 +25,38 @@ const NAV_LINKS = [
   { label: 'Storyline', href: '/storyline' },
   { label: 'Gallery',   href: '/gallery' },
   { label: 'Collect',   href: '/collect' },
-  { label: 'LARP',      href: '/membership' },
-  { label: 'Chat',      href: '/members/chat' },
+  {
+    label: 'About',
+    href: '/faq',
+    dropdown: [
+      { label: 'FAQ',    href: '/faq' },
+      { label: 'Vision', href: '/vision' },
+    ],
+  },
+  { label: 'Chat', href: '/members/chat' },
 ]
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    const onClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null)
+      }
+    }
+    document.addEventListener('mousedown', onClickOutside)
+    return () => document.removeEventListener('mousedown', onClickOutside)
   }, [])
 
   return (
@@ -64,12 +82,37 @@ export function Navigation() {
             <span className="font-mono text-[10px] text-line-accent ml-1">· {maxOccupied}</span>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map(({ label, href }) => (
-              <Link key={href} href={href} className="font-mono text-[11px] tracking-widest uppercase text-line-muted hover:text-line-text transition-colors">
-                {label}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center gap-8" ref={dropdownRef}>
+            {NAV_LINKS.map(({ label, href, dropdown }) =>
+              dropdown ? (
+                <div key={href} className="relative">
+                  <button
+                    onClick={() => setOpenDropdown(openDropdown === label ? null : label)}
+                    className="font-mono text-[11px] tracking-widest uppercase text-line-muted hover:text-line-text transition-colors flex items-center gap-1"
+                  >
+                    {label}
+                    <svg width="8" height="5" viewBox="0 0 8 5" fill="none" className={`transition-transform duration-200 ${openDropdown === label ? 'rotate-180' : ''}`}>
+                      <path d="M1 1L4 4L7 1" stroke="currentColor" strokeWidth="1.2"/>
+                    </svg>
+                  </button>
+                  {openDropdown === label && (
+                    <div className="absolute top-full left-0 mt-3 bg-line-bg border border-line-border min-w-[120px] z-50">
+                      {dropdown.map((item) => (
+                        <Link key={item.href} href={item.href}
+                          onClick={() => setOpenDropdown(null)}
+                          className="block px-4 py-3 font-mono text-[11px] tracking-widest uppercase text-line-muted hover:text-line-text hover:bg-line-surface transition-colors border-b border-line-border last:border-0">
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link key={href} href={href} className="font-mono text-[11px] tracking-widest uppercase text-line-muted hover:text-line-text transition-colors">
+                  {label}
+                </Link>
+              )
+            )}
           </nav>
 
           <div className="flex items-center gap-4 shrink-0">
@@ -84,13 +127,27 @@ export function Navigation() {
         </div>
       </header>
 
+      {/* Mobile menu */}
       {menuOpen && (
         <div className="fixed inset-0 z-40 bg-line-bg flex flex-col pt-24 pb-12 px-8">
-          <nav className="flex flex-col gap-8 flex-1">
-            {NAV_LINKS.map(({ label, href }) => (
-              <Link key={href} href={href} onClick={() => setMenuOpen(false)} className="font-display text-4xl font-light text-line-text hover:text-line-accent transition-colors">
-                {label}
-              </Link>
+          <nav className="flex flex-col gap-6 flex-1">
+            {NAV_LINKS.map(({ label, href, dropdown }) => (
+              <div key={href}>
+                <Link href={href} onClick={() => setMenuOpen(false)}
+                  className="font-display text-4xl font-light text-line-text hover:text-line-accent transition-colors block">
+                  {label}
+                </Link>
+                {dropdown && (
+                  <div className="flex gap-6 mt-2 ml-1">
+                    {dropdown.map((item) => (
+                      <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}
+                        className="font-mono text-[10px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
           <div className="border-t border-line-border pt-8">
