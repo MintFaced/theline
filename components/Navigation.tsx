@@ -102,7 +102,13 @@ function PrivyInner() {
   const { ready, authenticated, login, logout, user } = usePrivy()
   const walletAddress = user?.wallet?.address
   const shortAddress = walletAddress ? `${walletAddress.slice(0, 6)}…${walletAddress.slice(-4)}` : null
-  if (!ready) return null
+
+  if (!ready) return (
+    <button disabled className="font-mono text-[11px] tracking-widest uppercase text-line-bg bg-line-accent px-4 py-1.5 opacity-50">
+      Connect Wallet
+    </button>
+  )
+
   return authenticated && shortAddress ? (
     <button onClick={logout} className="font-mono text-[11px] tracking-widest text-line-accent border border-line-accent px-3 py-1.5 hover:bg-line-accent hover:text-line-bg transition-all">
       {shortAddress}
