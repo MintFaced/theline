@@ -1,7 +1,6 @@
 // app/api/members/chat-token/route.ts
-// Generates a Stream Chat user token for verified members
-
 import { NextResponse } from 'next/server'
+import { checkMembership } from '@/lib/alchemy'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -18,24 +17,20 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Stream not configured' }, { status: 500 })
   }
 
-  // Verify membership before issuing token
   try {
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
-    const memberRes = await fetch(`${appUrl}/api/membership/check?address=${address}`)
-    const memberData = memberRes.ok ? await memberRes.json() : { isMember: false }
-
-    if (!memberData.isMember) {
+    // Call checkMembership directly — no self-referencing HTTP call
+    const isMember = await checkMembership(address)
+    if (!isMember) {
       return NextResponse.json({ error: 'Not a member' }, { status: 403 })
     }
 
-    // Generate Stream token server-side (never expose STREAM_SECRET_KEY to client)
     const { StreamChat } = await import('stream-chat')
     const serverClient = StreamChat.getInstance(streamApiKey, streamSecret)
     const token = serverClient.createToken(address)
 
     return NextResponse.json({ token })
-  } catch (err) {
+  } catch (err: any) {
     console.error('Stream token error:', err)
-    return NextResponse.json({ error: 'Token generation failed' }, { status: 500 })
+    return NextResponse.json({ error: err?.message ?? String(err) }, { status: 500 })
   }
 }
