@@ -187,28 +187,27 @@ export default function StorylinePage() {
               Subscribe to Storyline
             </p>
 
-            {/* Substack iframe embed — styled to match */}
-            <style>{`
-              .substack-embed-wrap iframe {
-                color-scheme: dark;
-              }
-            `}</style>
-            <div className="substack-embed-wrap">
-              <iframe
-                src="https://linestories.substack.com/embed"
-                width="100%"
-                height="150"
-                style={{ border: 'none', background: 'transparent' }}
-                frameBorder="0"
-                scrolling="no"
+            {/* Custom email signup — posts to Substack */}
+            <form
+              action="https://linestories.substack.com/api/v1/free?nojs=true"
+              method="post"
+              target="_blank"
+              className="flex flex-col gap-3 mt-2"
+            >
+              <input
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                required
+                className="w-full bg-line-bg border border-line-border px-4 py-3 font-mono text-sm text-line-text placeholder:text-line-muted focus:outline-none focus:border-line-accent transition-colors"
               />
-            </div>
-
-            {/* Fallback direct link if iframe looks off */}
-            <a href="https://linestories.substack.com" target="_blank" rel="noopener noreferrer"
-              className="btn-primary mt-4 inline-block text-center">
-              Join on Substack →
-            </a>
+              <button
+                type="submit"
+                className="btn-primary w-full text-center"
+              >
+                Join on Substack →
+              </button>
+            </form>
 
             <p className="font-mono text-[9px] text-line-muted tracking-widest mt-6">
               Published on{' '}
