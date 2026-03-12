@@ -15,9 +15,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
           accentColor: '#C8A96E',
           logo: '/images/the-line-logo.png',
         },
-        loginMethods: ['wallet', 'email'],
+        loginMethods: ['wallet'],
         embeddedWallets: {
           createOnLogin: 'off',
+          noPromptOnSignature: true,
         },
       }}
     >
