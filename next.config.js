@@ -108,6 +108,8 @@ const nextConfig = {
       { source: '/articles',              destination: '/storyline',       permanent: true },
       { source: '/articles/',             destination: '/storyline',       permanent: true },
       { source: '/articles/:slug',        destination: '/storyline/:slug', permanent: true },
+      { source: '/membership',               destination: '/members/chat',    permanent: false },
+      { source: '/membership/',              destination: '/members/chat',    permanent: false },
       { source: '/listing/:slug',         destination: '/artists/:slug',   permanent: true },
       { source: '/categorylisting/:type', destination: '/category/:type',  permanent: true },
     ]
