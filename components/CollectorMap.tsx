@@ -50,14 +50,14 @@ function getCategoryColor(category: string): string {
   return CATEGORY_COLORS[category?.toLowerCase()] ?? '#555'
 }
 
-export function CollectorMap() {
+export function CollectorMap({ initialData }: { initialData: GraphData | null }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const animFrameRef = useRef<number>(0)
   const simulationRef = useRef<any>(null)
 
-  const [graphData, setGraphData] = useState<GraphData | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [graphData, setGraphData] = useState<GraphData | null>(initialData)
+  const [loading, setLoading] = useState(!initialData)
   const [error, setError] = useState<string | null>(null)
   const [hovered, setHovered] = useState<Node | null>(null)
   const [selected, setSelected] = useState<Node | null>(null)
@@ -80,33 +80,39 @@ export function CollectorMap() {
   const graphRef = useRef<GraphData | null>(null)
   graphRef.current = graphData
 
-  // Load graph data
+  // Load graph data — use initialData if passed from server, otherwise fetch
   useEffect(() => {
-    fetch('/data/graph.json')
+    function processData(data: GraphData) {
+      setGraphData(data)
+      const connectionCount: Record<string, number> = {}
+      for (const e of data.edges) {
+        const s = typeof e.source === 'string' ? e.source : e.source.id
+        const t = typeof e.target === 'string' ? e.target : e.target.id
+        connectionCount[s] = (connectionCount[s] || 0) + 1
+        connectionCount[t] = (connectionCount[t] || 0) + 1
+      }
+      const topId = Object.entries(connectionCount).sort((a, b) => b[1] - a[1])[0]?.[0]
+      const topNode = data.nodes.find(n => n.id === topId)
+      setStats({ connections: data.edgeCount, mostConnected: topNode?.name ?? '' })
+      setLoading(false)
+    }
+
+    if (initialData) {
+      processData(initialData)
+      return
+    }
+
+    fetch('/api/graph/data')
       .then(r => {
         if (!r.ok) throw new Error('Graph data not found')
         return r.json()
       })
-      .then((data: GraphData) => {
-        setGraphData(data)
-        // Find most connected node
-        const connectionCount: Record<string, number> = {}
-        for (const e of data.edges) {
-          const s = typeof e.source === 'string' ? e.source : e.source.id
-          const t = typeof e.target === 'string' ? e.target : e.target.id
-          connectionCount[s] = (connectionCount[s] || 0) + 1
-          connectionCount[t] = (connectionCount[t] || 0) + 1
-        }
-        const topId = Object.entries(connectionCount).sort((a, b) => b[1] - a[1])[0]?.[0]
-        const topNode = data.nodes.find(n => n.id === topId)
-        setStats({ connections: data.edgeCount, mostConnected: topNode?.name ?? '' })
-        setLoading(false)
-      })
+      .then(processData)
       .catch(() => {
-        setError('Graph data not yet available. Run the compute script first.')
+        setError('Graph not yet computed. Visit /api/graph/compute?secret=theline-cron-2026-ve3oe to generate it.')
         setLoading(false)
       })
-  }, [])
+  }, [initialData])
 
   // D3 simulation + canvas render
   useEffect(() => {
@@ -471,7 +477,7 @@ export function CollectorMap() {
             </p>
             <p className="font-sans text-sm text-line-muted mb-6">{error}</p>
             <code className="font-mono text-xs text-line-accent bg-line-surface px-4 py-2 block">
-              node scripts/compute-graph.mjs
+              /api/graph/compute?secret=theline-cron-2026-ve3oe
             </code>
           </div>
         </div>
