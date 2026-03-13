@@ -92,16 +92,15 @@ export function Navigation() {
           <nav className="hidden md:flex items-center gap-8" ref={dropdownRef}>
             {NAV_LINKS.map(({ label, href, dropdown }) =>
               dropdown ? (
-                <div key={href} className="relative">
-                  <button
-                    onClick={() => setOpenDropdown(openDropdown === label ? null : label)}
-                    className="font-mono text-[11px] tracking-widest uppercase text-line-muted hover:text-line-text transition-colors flex items-center gap-1"
+                <div key={href} className="relative"
+                  onMouseEnter={() => setOpenDropdown(label)}
+                  onMouseLeave={() => setOpenDropdown(null)}
+                >
+                  <Link href={href}
+                    className="font-mono text-[11px] tracking-widest uppercase text-line-muted hover:text-line-text transition-colors"
                   >
                     {label}
-                    <svg width="8" height="5" viewBox="0 0 8 5" fill="none" className={`transition-transform duration-200 ${openDropdown === label ? 'rotate-180' : ''}`}>
-                      <path d="M1 1L4 4L7 1" stroke="currentColor" strokeWidth="1.2"/>
-                    </svg>
-                  </button>
+                  </Link>
                   {openDropdown === label && (
                     <div className="absolute top-full left-0 mt-3 bg-line-bg border border-line-border min-w-[120px] z-50">
                       {dropdown.map((item) => (
