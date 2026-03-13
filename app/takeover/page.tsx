@@ -12,8 +12,8 @@ export default function TakeoverPage() {
     <div className="bg-line-bg min-h-screen" style={{ paddingTop: 'var(--nav-height)' }}>
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <div className="border-b border-line-border">
-        <div className="max-w-content mx-auto px-6 py-16 md:py-24">
+      <div className="border-b border-line-border relative overflow-hidden">
+        <div className="max-w-content mx-auto px-6 py-16 md:py-24 relative z-10">
           <div className="max-w-2xl">
             <p className="label mb-4">The Line Gallery</p>
             <h1 className="font-display font-light text-5xl md:text-7xl text-line-text mb-6" style={{ letterSpacing: '-0.03em' }}>
@@ -23,6 +23,9 @@ export default function TakeoverPage() {
               One week. One artist. Your work displayed full-screen in The Line Gallery window in Hastings, New Zealand — visible from the street, 24 hours a day.
             </p>
           </div>
+        </div>
+        <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+          <img src="/images/guardian-wave-1.png" alt="" className="w-full h-full object-cover" />
         </div>
       </div>
 
