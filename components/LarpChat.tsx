@@ -158,7 +158,7 @@ function LarpLanding({ login }: { login: () => void }) {
             target="_blank" rel="noopener noreferrer"
             className="block group relative overflow-hidden border border-line-border hover:border-line-accent transition-colors">
             <img
-              src="https://raw.githubusercontent.com/MintFaced/theline/main/public/images/line1000-nft.png"
+              src="https://arweave.net/_8JjGqYPBZAk6utMDass7Iv_zq_jsDtcHfVG0_pc-iA"
               alt="First 1,000 Artists on The Line NFT"
               className="w-full object-cover group-hover:opacity-90 transition-opacity"
             />
