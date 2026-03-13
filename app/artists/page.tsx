@@ -1,6 +1,7 @@
 // app/artists/page.tsx
 import artistsData from '@/data/artists.json'
 import type { Artist } from '@/types'
+import { Suspense } from 'react'
 import { ArtistDirectoryClient } from '@/components/ArtistDirectoryClient'
 
 const artists = artistsData as Artist[]
@@ -21,7 +22,9 @@ export default function ArtistsPage() {
             All Artists
           </h1>
         </div>
-        <ArtistDirectoryClient artists={artists} />
+        <Suspense fallback={<div className="font-mono text-xs text-line-muted py-16 text-center tracking-widest">Loading…</div>}>
+          <ArtistDirectoryClient artists={artists} />
+        </Suspense>
       </div>
     </div>
   )
