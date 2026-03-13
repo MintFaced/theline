@@ -159,7 +159,7 @@ function LarpLanding({ login }: { login: () => void }) {
             className="block group relative overflow-hidden border border-line-border hover:border-line-accent transition-colors">
             <img
               src="/images/line1000-nft.png"
-              alt="First 1,000 Artists on The Line NFT" className="w-full aspect-square object-cover group-hover:opacity-90 transition-opacity"
+              alt="First 1,000 Artists on The Line NFT"
               className="w-full aspect-square object-cover group-hover:opacity-90 transition-opacity"
               onError={(e) => {
                 const t = e.currentTarget
