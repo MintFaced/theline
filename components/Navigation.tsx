@@ -114,7 +114,8 @@ export function Navigation() {
                 </Link>
               )
             )}
-          </nav>
+            </nav>
+          </div>
 
           <div className="flex items-center gap-4 shrink-0">
             <button onClick={() => setSearchOpen(true)} className="text-line-muted hover:text-line-accent transition-colors p-1" aria-label="Search artists">
