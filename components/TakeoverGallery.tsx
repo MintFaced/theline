@@ -34,51 +34,42 @@ export function TakeoverGallery({ hideCta = false }: { hideCta?: boolean }) {
 
   const close = useCallback(() => setActive(null), [])
 
-  // Close on backdrop click
   const onBackdrop = useCallback((e: React.MouseEvent) => {
     if (e.target === e.currentTarget) close()
   }, [close])
 
-  // Close on Escape
-  const onKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') close()
-  }, [close])
-
   return (
     <>
-      {/* ── Thumbnail grid ── */}
-      <div className="max-w-content mx-auto px-6 py-16 md:py-24">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-line-border">
-          {VIDEOS.map((id) => (
-            <button
-              key={id}
-              onClick={() => setActive(id)}
-              className="group relative overflow-hidden bg-line-bg aspect-video block w-full focus:outline-none"
-              aria-label="Play takeover video"
-            >
-              {/* Thumbnail */}
-              <img
-                src={thumbUrl(id)}
-                alt=""
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-              />
-              {/* Dark overlay — lifts on hover */}
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors duration-500" />
-              {/* Play indicator — subtle, fades in on hover */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="w-12 h-12 rounded-full border border-white/60 flex items-center justify-center">
-                  <svg width="14" height="16" viewBox="0 0 14 16" fill="none" className="ml-0.5">
-                    <path d="M1 1L13 8L1 15V1Z" fill="white" fillOpacity="0.9" />
-                  </svg>
-                </div>
+      {/* Thumbnail grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-line-border">
+        {VIDEOS.map((id) => (
+          <button
+            key={id}
+            onClick={() => setActive(id)}
+            className="group relative overflow-hidden bg-line-bg aspect-video block w-full focus:outline-none"
+            aria-label="Play takeover video"
+          >
+            <img
+              src={thumbUrl(id)}
+              alt=""
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors duration-500" />
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="w-12 h-12 rounded-full border border-white/60 flex items-center justify-center">
+                <svg width="14" height="16" viewBox="0 0 14 16" fill="none" className="ml-0.5">
+                  <path d="M1 1L13 8L1 15V1Z" fill="white" fillOpacity="0.9" />
+                </svg>
               </div>
-            </button>
-          ))}
-        </div>
+            </div>
+          </button>
+        ))}
+      </div>
 
-        {/* Reserve spot CTA */}
-        {!hideCta && <div className="mt-16 md:mt-24 border-t border-line-border pt-12">
+      {/* Reserve spot CTA */}
+      {!hideCta && (
+        <div className="mt-16 md:mt-24 border-t border-line-border pt-12">
           <div className="max-w-lg">
             <p className="label mb-4">Your Turn</p>
             <h2 className="font-display font-light text-3xl text-line-text mb-4" style={{ letterSpacing: '-0.02em' }}>
@@ -88,19 +79,16 @@ export function TakeoverGallery({ hideCta = false }: { hideCta?: boolean }) {
               One week, every screen. Your work visible from the street in Hastings, New Zealand — 24 hours a day.
             </p>
             <a href="/takeover" className="btn-primary">Reserve spot →</a>
-          </div>}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* ── Lightbox ── */}
+      {/* Lightbox */}
       {active && (
         <div
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
           onClick={onBackdrop}
-          onKeyDown={onKeyDown}
-          tabIndex={-1}
         >
-          {/* Close button */}
           <button
             onClick={close}
             className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors font-mono text-[11px] tracking-widest uppercase flex items-center gap-2"
@@ -112,7 +100,6 @@ export function TakeoverGallery({ hideCta = false }: { hideCta?: boolean }) {
             </svg>
           </button>
 
-          {/* Prev / Next */}
           {VIDEOS.indexOf(active) > 0 && (
             <button
               onClick={() => setActive(VIDEOS[VIDEOS.indexOf(active!) - 1])}
@@ -124,6 +111,7 @@ export function TakeoverGallery({ hideCta = false }: { hideCta?: boolean }) {
               </svg>
             </button>
           )}
+
           {VIDEOS.indexOf(active) < VIDEOS.length - 1 && (
             <button
               onClick={() => setActive(VIDEOS[VIDEOS.indexOf(active!) + 1])}
@@ -136,7 +124,6 @@ export function TakeoverGallery({ hideCta = false }: { hideCta?: boolean }) {
             </button>
           )}
 
-          {/* Video */}
           <div className="w-full max-w-5xl mx-12 aspect-video">
             <iframe
               key={active}
