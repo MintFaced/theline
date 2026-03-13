@@ -140,15 +140,39 @@ function LarpLanding({ login }: { login: () => void }) {
             <div className="space-y-4 font-sans text-sm text-line-muted leading-relaxed mb-8">
               <p>All Line Artists have been airdropped a <em>'First 1,000 Artists on The Line'</em> NFT — a permanent on-chain record that you were here at the beginning.</p>
               <p>This token is your key to LARP Chat. It proves you're a Line Artist and grants access to the private community. Hold it, and the door is always open.</p>
+              <p>101 positions remain. Mint yours to join the community and lock in your place on The Line.</p>
             </div>
-            <a href="https://opensea.io/item/ethereum/0x269bc803c233620506c9d25d980e979bf8bcbbf6/8"
-              target="_blank" rel="noopener noreferrer" className="btn-outline">
-              View on OpenSea →
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <a href="https://app.manifold.xyz/c/theline"
+                target="_blank" rel="noopener noreferrer" className="btn-primary">
+                Mint on Manifold →
+              </a>
+              <a href="https://opensea.io/collection/first-1000-artists-on-the-line"
+                target="_blank" rel="noopener noreferrer" className="btn-outline">
+                View on OpenSea
+              </a>
+            </div>
           </div>
-          <div className="bg-line-surface aspect-video flex items-center justify-center">
-            <p className="font-mono text-[10px] text-line-muted tracking-widest">LARP NFT</p>
-          </div>
+          {/* NFT image — click through to OpenSea */}
+          <a href="https://opensea.io/collection/first-1000-artists-on-the-line"
+            target="_blank" rel="noopener noreferrer"
+            className="block group relative overflow-hidden border border-line-border hover:border-line-accent transition-colors">
+            <img
+              src="/images/line1000-nft.png"
+              alt="First 1,000 Artists on The Line NFT" className="w-full aspect-square object-cover group-hover:opacity-90 transition-opacity"
+              className="w-full aspect-square object-cover group-hover:opacity-90 transition-opacity"
+              onError={(e) => {
+                const t = e.currentTarget
+                t.style.display = 'none'
+                t.parentElement!.classList.add('aspect-square', 'bg-line-surface', 'flex', 'items-center', 'justify-center')
+                const p = document.createElement('p')
+                p.className = 'font-mono text-[10px] text-line-muted tracking-widest'
+                p.textContent = 'LARP NFT'
+                t.parentElement!.appendChild(p)
+              }}
+            />
+            <div className="absolute inset-0 bg-line-bg/0 group-hover:bg-line-bg/10 transition-colors" />
+          </a>
         </div>
 
         {/* ── How to get access ── */}
