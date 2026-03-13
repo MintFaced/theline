@@ -1,201 +1,211 @@
 // app/api/graph/compute/route.ts
-// Hit this URL once to build the graph data:
-// https://theline-j55m.vercel.app/api/graph/compute?secret=theline-cron-2026-ve3oe
-//
-// Takes 10-20 mins. Check progress at:
-// https://theline-j55m.vercel.app/api/graph/compute?secret=...&status=1
+// Step 1 — resolve ENS:  /api/graph/compute?secret=...&phase=ens  (hit until done)
+// Step 2 — compute:      /api/graph/compute?secret=...            (hit repeatedly ~25 batches)
+// Step 3 — finish:       /api/graph/compute?secret=...&finish=1
+// Status:                /api/graph/compute?secret=...&status=1
+// Reset:                 /api/graph/compute?secret=...&reset=1
 
 import { NextResponse } from 'next/server'
 import artistsData from '@/data/artists.json'
 import type { Artist } from '@/types'
+import { Redis } from '@upstash/redis'
 
 const artists = artistsData as Artist[]
-
 const ALCHEMY_KEY = process.env.ALCHEMY_API_KEY || 'v9UlBf_B4Oc0LKqLbD7KQ'
 const BASE = `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`
 const CRON_SECRET = process.env.CRON_SECRET || 'theline-cron-2026-ve3oe'
 
-// Use Upstash Redis to store progress + result
-import { Redis } from '@upstash/redis'
-
 function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)) }
 
-async function getTransfers(params: Record<string, string>) {
-  const res = await fetch(BASE, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      id: 1, jsonrpc: '2.0',
-      method: 'alchemy_getAssetTransfers',
-      params: [{ ...params, category: ['erc721', 'erc1155'], withMetadata: false, excludeZeroValue: true, maxCount: '0x64' }]
+async function resolveENS(name: string): Promise<string | null> {
+  try {
+    const res = await fetch(BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: 1, jsonrpc: '2.0',
+        method: 'alchemy_resolveName',
+        params: [name]
+      })
     })
-  })
-  const data = await res.json()
-  return data?.result?.transfers ?? []
+    const data = await res.json()
+    const addr = data?.result
+    return addr && addr.startsWith('0x') ? addr.toLowerCase() : null
+  } catch {
+    return null
+  }
+}
+
+async function getReceivedNFTs(toAddress: string): Promise<Array<{ from: string }>> {
+  try {
+    const res = await fetch(BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: 1, jsonrpc: '2.0',
+        method: 'alchemy_getAssetTransfers',
+        params: [{
+          fromBlock: '0x0',
+          toBlock: 'latest',
+          toAddress,
+          category: ['erc721', 'erc1155'],
+          withMetadata: false,
+          excludeZeroValue: true,
+          maxCount: '0xC8',
+        }]
+      })
+    })
+    const data = await res.json()
+    return (data?.result?.transfers ?? []).map((t: { from: string }) => ({
+      from: (t.from ?? '').toLowerCase(),
+    }))
+  } catch {
+    return []
+  }
 }
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const secret = searchParams.get('secret')
-  const statusOnly = searchParams.get('status')
-  const forceFinish = searchParams.get('finish')
-
-  if (secret !== CRON_SECRET) {
+  if (searchParams.get('secret') !== CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   const redis = Redis.fromEnv()
+  const ethArtists = artists.filter(a => a.walletAddress && a.blockchain !== 'tezos')
 
-  // Status check
-  if (statusOnly) {
-    const progress = await redis.get<Record<string, boolean>>('graph:progress') ?? {}
-    const result = await redis.get('graph:data')
+  // ── Reset ──
+  if (searchParams.get('reset')) {
+    await Promise.all([
+      redis.del('graph:progress'),
+      redis.del('graph:edges'),
+      redis.del('graph:data'),
+      redis.del('graph:resolved'),
+    ])
+    return NextResponse.json({ message: 'Reset. Start with ?phase=ens' })
+  }
+
+  // ── Status ──
+  if (searchParams.get('status')) {
+    const [progress, resolved, edges, done] = await Promise.all([
+      redis.get<Record<string, boolean>>('graph:progress') ?? {},
+      redis.get<Record<string, string>>('graph:resolved') ?? {},
+      redis.get<Record<string, number>>('graph:edges') ?? {},
+      redis.get('graph:data'),
+    ])
     return NextResponse.json({
-      processed: Object.keys(progress).length,
-      total: artists.filter(a => a.walletAddress && a.blockchain !== 'tezos').length,
-      complete: !!result,
+      ensResolved: Object.keys(resolved as object).length,
+      processed: Object.keys(progress as object).length,
+      total: ethArtists.length,
+      edgesFound: Object.keys(edges as object).length,
+      complete: !!done,
     })
   }
 
-  // Check if already complete
-  const existing = await redis.get('graph:data')
-  if (existing && !forceFinish) {
-    return NextResponse.json({ message: 'Graph already computed. Visit /map to view it.', done: true })
-  }
-
-  const ethArtists = artists.filter(a => a.walletAddress && a.blockchain !== 'tezos')
-
-  // Force finish — build graph with whatever edges we have so far
-  if (forceFinish) {
-    const edgeCounts = await redis.get<Record<string, number>>('graph:edges') ?? {}
-    const addrMap2: Record<string, Artist> = {}
-    for (const a of ethArtists) addrMap2[a.walletAddress!.toLowerCase()] = a
-
-    const nodes = ethArtists.map(a => ({
-      id: a.walletAddress!.toLowerCase(),
-      name: a.name,
-      slug: a.slug,
-      lineNumber: a.lineNumber,
-      allLineNumbers: a.allLineNumbers,
-      category: a.category,
-      image: a.galleryImage ?? null,
-      xHandle: a.xHandle ?? null,
-    }))
-
-    const edges = Object.entries(edgeCounts)
-      .filter(([, count]) => count > 0)
-      .map(([key, count]) => {
-        const [source, target] = key.split('|')
-        return { source, target, count }
-      })
-
-    const graph = {
-      generated: new Date().toISOString(),
-      nodeCount: nodes.length,
-      edgeCount: edges.length,
-      nodes,
-      edges,
+  // ── Phase: ENS resolution ──
+  if (searchParams.get('phase') === 'ens') {
+    const resolved = (await redis.get<Record<string, string>>('graph:resolved')) ?? {}
+    const toResolve = ethArtists.filter(a =>
+      !a.walletAddress!.startsWith('0x') && !resolved[a.walletAddress!.toLowerCase()]
+    )
+    let count = 0
+    for (const artist of toResolve.slice(0, 50)) {
+      const key = artist.walletAddress!.toLowerCase()
+      const addr = await resolveENS(artist.walletAddress!)
+      if (addr) { resolved[key] = addr; count++ }
+      await sleep(150)
     }
-
-    await redis.set('graph:data', JSON.stringify(graph), { ex: 60 * 60 * 24 * 30 })
-    await redis.del('graph:progress')
-    await redis.del('graph:edges')
-
-    return NextResponse.json({ message: 'Graph force-finished!', nodeCount: nodes.length, edgeCount: edges.length, done: true })
+    await redis.set('graph:resolved', resolved)
+    const remaining = toResolve.length - count
+    return NextResponse.json({
+      message: remaining > 0 ? `Resolved ${count}. ${remaining} remaining — hit again.` : `All ENS resolved! Now hit without ?phase to compute edges.`,
+      resolved: Object.keys(resolved).length, remaining,
+    })
   }
-  const addrMap: Record<string, Artist> = {}
-  for (const a of ethArtists) addrMap[a.walletAddress!.toLowerCase()] = a
-  const lineAddrs = new Set(Object.keys(addrMap))
 
-  // Load existing progress
-  const progress = await redis.get<Record<string, boolean>>('graph:progress') ?? {}
-  const edgeCounts = await redis.get<Record<string, number>>('graph:edges') ?? {}
+  // ── Build final graph ──
+  if (searchParams.get('finish')) {
+    const [edgeCounts, resolved] = await Promise.all([
+      redis.get<Record<string, number>>('graph:edges') ?? {},
+      redis.get<Record<string, string>>('graph:resolved') ?? {},
+    ])
 
-  let processed = Object.keys(progress).length
+    const nodes = ethArtists.map(a => {
+      const raw = a.walletAddress!.toLowerCase()
+      const id = raw.startsWith('0x') ? raw : ((resolved as Record<string,string>)[raw] ?? raw)
+      return { id, name: a.name, slug: a.slug, lineNumber: a.lineNumber, allLineNumbers: a.allLineNumbers, category: a.category, image: a.galleryImage ?? null, xHandle: a.xHandle ?? null }
+    })
+
+    const edges = Object.entries(edgeCounts as Record<string,number>)
+      .filter(([, c]) => c > 0)
+      .map(([key, count]) => { const [source, target] = key.split('|'); return { source, target, count } })
+      .sort((a, b) => b.count - a.count)
+
+    const graph = { generated: new Date().toISOString(), nodeCount: nodes.length, edgeCount: edges.length, nodes, edges }
+    await redis.set('graph:data', JSON.stringify(graph), { ex: 60 * 60 * 24 * 30 })
+    await Promise.all([redis.del('graph:progress'), redis.del('graph:edges')])
+    return NextResponse.json({ message: 'Graph built! Visit /map', nodeCount: nodes.length, edgeCount: edges.length })
+  }
+
+  // ── Main compute: who received NFTs from other Line artists ──
+  const [resolved, progress, edgeCounts] = await Promise.all([
+    redis.get<Record<string, string>>('graph:resolved') ?? {},
+    redis.get<Record<string, boolean>>('graph:progress') ?? {},
+    redis.get<Record<string, number>>('graph:edges') ?? {},
+  ])
+
+  // Build hex address set for all Line artists
+  const lineAddrs = new Set<string>()
+  for (const a of ethArtists) {
+    const raw = a.walletAddress!.toLowerCase()
+    const addr = raw.startsWith('0x') ? raw : ((resolved as Record<string,string>)[raw] ?? null)
+    if (addr) lineAddrs.add(addr)
+  }
+
   let batchCount = 0
-  const BATCH_SIZE = 30 // process 30 per invocation to stay within Vercel timeout
-
   for (const artist of ethArtists) {
-    if (batchCount >= BATCH_SIZE) break
-    const addr = artist.walletAddress!.toLowerCase()
-    if (progress[addr]) continue
+    if (batchCount >= 25) break
+    const raw = artist.walletAddress!.toLowerCase()
+    const addr = raw.startsWith('0x') ? raw : ((resolved as Record<string,string>)[raw] ?? null)
+    const progressKey = addr ?? raw
+
+    if ((progress as Record<string,boolean>)[progressKey]) continue
+    if (!addr) { (progress as Record<string,boolean>)[progressKey] = true; continue }
 
     try {
-      const [sent, received] = await Promise.all([
-        getTransfers({ fromBlock: '0x0', toBlock: 'latest', fromAddress: addr }),
-        getTransfers({ fromBlock: '0x0', toBlock: 'latest', toAddress: addr }),
-      ])
+      // For this artist's wallet: find all NFTs received from other Line artists
+      // sender = Line artist who sold/gifted → receiver = this artist
+      const received = await getReceivedNFTs(addr)
       await sleep(250)
 
-      for (const t of sent) {
-        const to = t.to?.toLowerCase()
-        if (to && lineAddrs.has(to) && to !== addr) {
-          const key = `${addr}|${to}`
-          edgeCounts[key] = (edgeCounts[key] ?? 0) + 1
-        }
-      }
       for (const t of received) {
-        const from = t.from?.toLowerCase()
-        if (from && lineAddrs.has(from) && from !== addr) {
-          const key = `${from}|${addr}`
-          edgeCounts[key] = (edgeCounts[key] ?? 0) + 1
-        }
+        const NULL_ADDR = '0x0000000000000000000000000000000000000000'
+        if (!t.from || t.from === NULL_ADDR || t.from === addr) continue
+        if (!lineAddrs.has(t.from)) continue
+        // Edge: from → addr (from sent NFT to this artist = a collector relationship)
+        const key = `${t.from}|${addr}`
+        ;(edgeCounts as Record<string,number>)[key] = ((edgeCounts as Record<string,number>)[key] ?? 0) + 1
       }
 
-      progress[addr] = true
-      processed++
+      ;(progress as Record<string,boolean>)[progressKey] = true
       batchCount++
     } catch {
-      // skip and continue
+      ;(progress as Record<string,boolean>)[progressKey] = true
     }
   }
 
-  // Save progress
-  await redis.set('graph:progress', progress)
-  await redis.set('graph:edges', edgeCounts)
+  await Promise.all([
+    redis.set('graph:progress', progress),
+    redis.set('graph:edges', edgeCounts),
+  ])
 
+  const processed = Object.keys(progress as object).length
   const total = ethArtists.length
-  const done = processed >= total
-
-  if (done) {
-    // Build final graph
-    const nodes = ethArtists.map(a => ({
-      id: a.walletAddress!.toLowerCase(),
-      name: a.name,
-      slug: a.slug,
-      lineNumber: a.lineNumber,
-      allLineNumbers: a.allLineNumbers,
-      category: a.category,
-      image: a.galleryImage ?? null,
-      xHandle: a.xHandle ?? null,
-    }))
-
-    const edges = Object.entries(edgeCounts)
-      .filter(([, count]) => count > 0)
-      .map(([key, count]) => {
-        const [source, target] = key.split('|')
-        return { source, target, count }
-      })
-
-    const graph = {
-      generated: new Date().toISOString(),
-      nodeCount: nodes.length,
-      edgeCount: edges.length,
-      nodes,
-      edges,
-    }
-
-    await redis.set('graph:data', JSON.stringify(graph), { ex: 60 * 60 * 24 * 30 }) // 30 days
-    await redis.del('graph:progress')
-    await redis.del('graph:edges')
-
-    return NextResponse.json({ message: 'Graph complete!', nodeCount: nodes.length, edgeCount: edges.length, done: true })
-  }
+  const edgeCount = Object.keys(edgeCounts as object).length
 
   return NextResponse.json({
-    message: `Processing... ${processed}/${total} done. Hit this URL again to continue.`,
-    processed,
-    total,
-    done: false,
+    message: processed >= total
+      ? `All done! ${edgeCount} connections. Hit ?finish=1 to build graph.`
+      : `${processed}/${total} — ${edgeCount} connections so far. Hit again to continue.`,
+    processed, total, edgeCount,
   })
 }
