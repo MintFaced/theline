@@ -15,7 +15,7 @@ const nextConfig = {
               "img-src * data: blob:",
               "media-src *",
               "connect-src * data:",
-              "frame-src 'self' https://*.privy.io https://privy.io https://*.oncyber.io https://oncyber.io https://*.substack.com https://substack.com",
+              "frame-src 'self' https://*.privy.io https://privy.io https://*.oncyber.io https://oncyber.io https://*.substack.com https://substack.com https://www.youtube.com https://youtube.com",
               "worker-src 'self' blob:",
             ].join('; '),
           },
