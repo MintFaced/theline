@@ -54,7 +54,7 @@ const STEPS = [
   {
     step: '03',
     heading: 'Find an artist',
-    body: 'Browse <a href="/artists" class="text-line-accent hover:opacity-70 transition-opacity">The Line\'s artist directory</a>. Each profile shows the artist\'s work, sales history, and links to where their art is available to collect.',
+    body: 'Browse <a href="/artists" class="text-line-accent hover:opacity-70 transition-opacity">The Line\'s artist directory</a>. Each profile shows the artist\'s work, sales history, and links to where their art is available to collect. Now you can also collect who artists are collecting with the <a href="/map" class="text-line-accent hover:opacity-70 transition-opacity">Networked Artists Map (NAP)</a>.',
   },
   {
     step: '04',
@@ -81,7 +81,8 @@ export default function CollectPage() {
               How to collect<br />Line Artists
             </h1>
             <p className="font-sans text-sm text-line-muted leading-relaxed max-w-md">
-              Owning a work from The Line means holding a piece of digital art history. Here is everything you need to start collecting — no experience required.
+              Owning a work from The Line means holding a piece of digital art history. Here is everything you need to start collecting — no experience required. Or see who artists rate on the{' '}
+              <a href="/map" className="text-line-accent hover:opacity-70 transition-opacity">Networked Artists Map (NAP)</a>.
             </p>
           </div>
         </div>
