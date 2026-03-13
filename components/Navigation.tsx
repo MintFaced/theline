@@ -36,11 +36,12 @@ const NAV_LINKS = [
     label: 'About',
     href: '/faq',
     dropdown: [
-      { label: 'FAQ',    href: '/faq' },
-      { label: 'Vision', href: '/vision' },
+      { label: 'FAQ',      href: '/faq' },
+      { label: 'Vision',   href: '/vision' },
     ],
   },
   { label: 'Chat', href: '/members/chat' },
+  { label: 'Edit', href: '/update' },
 ]
 
 export function Navigation() {
