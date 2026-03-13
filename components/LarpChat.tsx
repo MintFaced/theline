@@ -158,18 +158,9 @@ function LarpLanding({ login }: { login: () => void }) {
             target="_blank" rel="noopener noreferrer"
             className="block group relative overflow-hidden border border-line-border hover:border-line-accent transition-colors">
             <img
-              src="/images/line1000-nft.png"
+              src="https://raw.githubusercontent.com/MintFaced/theline/main/public/images/line1000-nft.png"
               alt="First 1,000 Artists on The Line NFT"
-              className="w-full aspect-square object-cover group-hover:opacity-90 transition-opacity"
-              onError={(e) => {
-                const t = e.currentTarget
-                t.style.display = 'none'
-                t.parentElement!.classList.add('aspect-square', 'bg-line-surface', 'flex', 'items-center', 'justify-center')
-                const p = document.createElement('p')
-                p.className = 'font-mono text-[10px] text-line-muted tracking-widest'
-                p.textContent = 'LARP NFT'
-                t.parentElement!.appendChild(p)
-              }}
+              className="w-full object-cover group-hover:opacity-90 transition-opacity"
             />
             <div className="absolute inset-0 bg-line-bg/0 group-hover:bg-line-bg/10 transition-colors" />
           </a>
@@ -183,14 +174,14 @@ function LarpLanding({ login }: { login: () => void }) {
               For Line Artists only
             </h2>
             <div className="space-y-4 font-sans text-sm text-line-muted leading-relaxed">
-              <p>LARP Chat is exclusively available to artists who hold a position on The Line. It is not available to collectors or general users.</p>
-              <p>If you are a Line Artist and do not yet hold a NFT, <a href="mailto:mintface@digitalartisteconomy.com" className="text-line-accent hover:opacity-70 transition-opacity">contact us directly</a>.</p>
+              <p>LARP Chat is exclusively available to artists who hold a position on The Line and Line Guardians. It is not generally available to collectors or general users.</p>
+              <p>If you are a Line Artist and do not yet hold an NFT, <a href="https://manifold.xyz/@mintfaced/id/3807920368" target="_blank" rel="noopener noreferrer" className="text-line-accent hover:opacity-70 transition-opacity">mint one now →</a></p>
             </div>
           </div>
           <div className="space-y-px bg-line-border">
             {[
-              { step: '01', text: 'Hold a position on The Line as a registered artist', link: null },
-              { step: '02', text: 'Contact The Line to request your NFT if you haven\'t received it', link: { label: 'mintface@digitalartisteconomy.com', href: 'mailto:mintface@digitalartisteconomy.com' } },
+              { step: '01', text: 'Mint The Line access NFT for artists', link: { label: 'Mint on Manifold →', href: 'https://manifold.xyz/@mintfaced/id/3807920368' } },
+              { step: '02', text: 'Hold a position on The Line as a registered artist', link: null },
               { step: '03', text: 'Verify ownership of your Line wallet address', link: null },
               { step: '04', text: 'Connect your wallet above to unlock LARP Chat', link: null },
             ].map(({ step, text, link }) => (
@@ -198,7 +189,7 @@ function LarpLanding({ login }: { login: () => void }) {
                 <span className="font-mono text-[10px] text-line-accent tracking-widest shrink-0 mt-0.5">{step}</span>
                 <div>
                   <p className="font-sans text-sm text-line-muted leading-relaxed">{text}</p>
-                  {link && <a href={link.href} className="font-mono text-[10px] text-line-accent tracking-widest hover:opacity-70 transition-opacity mt-2 block">{link.label}</a>}
+                  {link && <a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined} className="font-mono text-[10px] text-line-accent tracking-widest hover:opacity-70 transition-opacity mt-2 block">{link.label}</a>}
                 </div>
               </div>
             ))}
