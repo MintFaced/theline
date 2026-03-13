@@ -51,7 +51,7 @@ function LarpChatInner() {
             Wallet <span className="font-mono text-line-accent">{shortAddress}</span> doesn't hold a LARP token.
           </p>
           <p className="font-sans text-sm text-line-muted leading-relaxed mb-8">
-            LARP is for Line Artists only. Make sure you're connected with the right wallet.
+            LARP is for Line Artists and Line Guardians only. Make sure you're connected with the right wallet.
           </p>
           <div className="flex gap-3 justify-center">
             <Link href="/membership" className="btn-outline">Learn More</Link>
