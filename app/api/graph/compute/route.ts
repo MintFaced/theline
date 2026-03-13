@@ -38,6 +38,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const secret = searchParams.get('secret')
   const statusOnly = searchParams.get('status')
+  const forceFinish = searchParams.get('finish')
 
   if (secret !== CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -58,11 +59,50 @@ export async function GET(request: Request) {
 
   // Check if already complete
   const existing = await redis.get('graph:data')
-  if (existing) {
+  if (existing && !forceFinish) {
     return NextResponse.json({ message: 'Graph already computed. Visit /map to view it.', done: true })
   }
 
   const ethArtists = artists.filter(a => a.walletAddress && a.blockchain !== 'tezos')
+
+  // Force finish — build graph with whatever edges we have so far
+  if (forceFinish) {
+    const edgeCounts = await redis.get<Record<string, number>>('graph:edges') ?? {}
+    const addrMap2: Record<string, Artist> = {}
+    for (const a of ethArtists) addrMap2[a.walletAddress!.toLowerCase()] = a
+
+    const nodes = ethArtists.map(a => ({
+      id: a.walletAddress!.toLowerCase(),
+      name: a.name,
+      slug: a.slug,
+      lineNumber: a.lineNumber,
+      allLineNumbers: a.allLineNumbers,
+      category: a.category,
+      image: a.galleryImage ?? null,
+      xHandle: a.xHandle ?? null,
+    }))
+
+    const edges = Object.entries(edgeCounts)
+      .filter(([, count]) => count > 0)
+      .map(([key, count]) => {
+        const [source, target] = key.split('|')
+        return { source, target, count }
+      })
+
+    const graph = {
+      generated: new Date().toISOString(),
+      nodeCount: nodes.length,
+      edgeCount: edges.length,
+      nodes,
+      edges,
+    }
+
+    await redis.set('graph:data', JSON.stringify(graph), { ex: 60 * 60 * 24 * 30 })
+    await redis.del('graph:progress')
+    await redis.del('graph:edges')
+
+    return NextResponse.json({ message: 'Graph force-finished!', nodeCount: nodes.length, edgeCount: edges.length, done: true })
+  }
   const addrMap: Record<string, Artist> = {}
   for (const a of ethArtists) addrMap[a.walletAddress!.toLowerCase()] = a
   const lineAddrs = new Set(Object.keys(addrMap))
