@@ -143,7 +143,7 @@ function LarpLanding({ login }: { login: () => void }) {
               <p>101 positions remain. Mint yours to join the community and lock in your place on The Line.</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href="https://app.manifold.xyz/c/theline"
+              <a href="https://manifold.xyz/@mintfaced/id/3807920368"
                 target="_blank" rel="noopener noreferrer" className="btn-primary">
                 Mint on Manifold →
               </a>
