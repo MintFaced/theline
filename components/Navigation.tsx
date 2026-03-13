@@ -24,12 +24,10 @@ const NAV_LINKS = [
   { label: 'Artists',   href: '/artists' },
   { label: 'Storyline', href: '/storyline' },
   { label: 'Gallery',   href: '/gallery',  dropdown: [
-    { label: 'Gallery',   href: '/gallery' },
     { label: 'Retreat',   href: '/retreat' },
     { label: 'Takeover',  href: '/takeover' },
   ]},
   { label: 'Collect',   href: '/collect',  dropdown: [
-    { label: 'Collect',  href: '/collect' },
     { label: 'Map',      href: '/map' },
   ]},
   {
@@ -40,8 +38,9 @@ const NAV_LINKS = [
       { label: 'Vision',   href: '/vision' },
     ],
   },
-  { label: 'Chat', href: '/members/chat' },
-  { label: 'Edit', href: '/update' },
+  { label: 'Chat', href: '/members/chat', dropdown: [
+    { label: 'Edit',  href: '/update' },
+  ]},
 ]
 
 export function Navigation() {
@@ -93,15 +92,16 @@ export function Navigation() {
           <nav className="hidden md:flex items-center gap-8" ref={dropdownRef}>
             {NAV_LINKS.map(({ label, href, dropdown }) =>
               dropdown ? (
-                <div key={href} className="relative"
-                  onMouseEnter={() => setOpenDropdown(label)}
-                  onMouseLeave={() => setOpenDropdown(null)}
-                >
-                  <Link href={href}
-                    className="font-mono text-[11px] tracking-widest uppercase text-line-muted hover:text-line-text transition-colors"
+                <div key={href} className="relative">
+                  <button
+                    onClick={() => setOpenDropdown(openDropdown === label ? null : label)}
+                    className="font-mono text-[11px] tracking-widest uppercase text-line-muted hover:text-line-text transition-colors flex items-center gap-1"
                   >
                     {label}
-                  </Link>
+                    <svg width="8" height="5" viewBox="0 0 8 5" fill="none" className={`transition-transform duration-200 ${openDropdown === label ? 'rotate-180' : ''}`}>
+                      <path d="M1 1L4 4L7 1" stroke="currentColor" strokeWidth="1.2"/>
+                    </svg>
+                  </button>
                   {openDropdown === label && (
                     <div className="absolute top-full left-0 mt-3 bg-line-bg border border-line-border min-w-[120px] z-50">
                       {dropdown.map((item) => (
