@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: 'An interactive map of who has collected from who across all 784 artists on The Line.',
 }
 
-export const revalidate = 3600 // re-fetch graph every hour
+export const revalidate = 3600
 
 async function getGraphData() {
   try {
@@ -23,10 +23,5 @@ async function getGraphData() {
 
 export default async function MapPage() {
   const graphData = await getGraphData()
-
-  return (
-    <div className="bg-line-bg min-h-screen">
-      <CollectorMap initialData={graphData} />
-    </div>
-  )
+  return <CollectorMap initialData={graphData} />
 }
