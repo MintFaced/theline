@@ -28,7 +28,8 @@ const NAV_LINKS = [
     { label: 'Takeover',  href: '/takeover' },
   ]},
   { label: 'Collect',   href: '/collect',  dropdown: [
-    { label: 'Map',      href: '/map' },
+    { label: 'Map',       href: '/map' },
+    { label: 'Guardians', href: '/guardians' },
   ]},
   {
     label: 'About',
