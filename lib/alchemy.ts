@@ -171,13 +171,14 @@ export async function getCreatedNFTs(address: string, limit = 5): Promise<NFTWor
 
 const DEV_WALLETS = ['0xdd6b80649e8d472eb8fb52eb7eecfd2dc219ace7']
 
-export async function checkMembership(address: string): Promise<boolean> {
-  if (DEV_WALLETS.includes(address.toLowerCase())) return true
-  if (!ALCHEMY_KEY || !MEMBERSHIP_CONTRACT) return false
-
+// All contracts that grant LARP chat access
+// MEMBERSHIP_CONTRACT_ADDRESS = original LARP airdrop
+// MANIFOLD_LARP_CONTRACT      = new Manifold mint contract (set in Vercel env)
+async function holdsContract(address: string, contractAddress: string): Promise<boolean> {
+  if (!ALCHEMY_KEY) return false
   try {
     const res = await fetch(
-      `${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/isHolderOfContract?wallet=${address}&contractAddress=${MEMBERSHIP_CONTRACT}`,
+      `${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/isHolderOfContract?wallet=${address}&contractAddress=${contractAddress}`,
       { next: { revalidate: 300 } }
     )
     if (!res.ok) return false
@@ -186,4 +187,24 @@ export async function checkMembership(address: string): Promise<boolean> {
   } catch {
     return false
   }
+}
+
+export async function checkMembership(address: string): Promise<boolean> {
+  if (DEV_WALLETS.includes(address.toLowerCase())) return true
+  if (!ALCHEMY_KEY) return false
+
+  const contracts = [
+    process.env.MEMBERSHIP_CONTRACT_ADDRESS,          // The Line contract (original + new mints)
+  ].filter(Boolean) as string[]
+
+  const results = await Promise.all(contracts.map(c => holdsContract(address, c)))
+  return results.some(Boolean)
+}
+
+// Guardians contract: 0x36efbe5bfdd000a9149779f1c3f3adfba469b2ee
+export async function checkGuardian(address: string): Promise<boolean> {
+  if (DEV_WALLETS.includes(address.toLowerCase())) return true
+  if (!ALCHEMY_KEY) return false
+  const contract = process.env.MANIFOLD_GUARDIANS_CONTRACT_ADDRESS ?? '0x36efbe5bfdd000a9149779f1c3f3adfba469b2ee'
+  return holdsContract(address, contract)
 }
