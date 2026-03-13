@@ -72,13 +72,22 @@ export function Navigation() {
         }`}
         style={{ height: 'var(--nav-height)' }}
       >
-        <div className="max-w-content mx-auto h-full px-6 flex items-center justify-between gap-8">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="font-mono text-xs tracking-[0.3em] uppercase text-line-text hover:text-line-accent transition-colors shrink-0">
-              THE LINE
-            </Link>
+        <div className="max-w-content mx-auto h-full px-6 flex items-center justify-between gap-6">
+          <Link href="/" className="font-mono text-xs tracking-[0.3em] uppercase text-line-text hover:text-line-accent transition-colors shrink-0">
+            THE LINE
+          </Link>
 
-            <nav className="hidden md:flex items-center gap-8" ref={dropdownRef}>
+          <div className="hidden lg:flex items-center gap-3 text-line-muted">
+            <span className="font-mono text-[10px] tracking-widest">0</span>
+            <div className="relative w-32 h-px bg-line-border">
+              <div className="absolute top-1/2 -translate-y-1/2 w-px h-3 bg-line-accent" style={{ left: `${Math.round((maxOccupied / 1000) * 100)}%` }} />
+              <div className="absolute inset-0 bg-line-accent" style={{ width: `${Math.round((maxOccupied / 1000) * 100)}%`, height: '1px' }} />
+            </div>
+            <span className="font-mono text-[10px] tracking-widest">1000</span>
+            <span className="font-mono text-[10px] text-line-accent ml-1">· {maxOccupied}</span>
+          </div>
+
+          <nav className="hidden md:flex items-center gap-8" ref={dropdownRef}>
             {NAV_LINKS.map(({ label, href, dropdown }) =>
               dropdown ? (
                 <div key={href} className="relative"
@@ -114,8 +123,7 @@ export function Navigation() {
                 </Link>
               )
             )}
-            </nav>
-          </div>
+          </nav>
 
           <div className="flex items-center gap-4 shrink-0">
             <button onClick={() => setSearchOpen(true)} className="text-line-muted hover:text-line-accent transition-colors p-1" aria-label="Search artists">
