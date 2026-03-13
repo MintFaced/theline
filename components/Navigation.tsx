@@ -28,18 +28,14 @@ const NAV_LINKS = [
     { label: 'Takeover',  href: '/takeover' },
   ]},
   { label: 'Collect',   href: '/collect',  dropdown: [
-    { label: 'Map',       href: '/map' },
-    { label: 'Guardians', href: '/guardians' },
+    { label: 'Map',      href: '/map' },
   ]},
-  {
-    label: 'About',
-    href: '/faq',
-    dropdown: [
-      { label: 'FAQ',      href: '/faq' },
-      { label: 'Vision',   href: '/vision' },
-    ],
-  },
-  { label: 'Chat', href: '/members/chat', dropdown: [
+  { label: 'About',   href: '/vision',  dropdown: [
+    { label: 'Guardians', href: '/guardians' },
+    { label: 'Vision',    href: '/vision' },
+    { label: 'FAQ',       href: '/faq' },
+  ]},
+  { label: 'LARP Chat', href: '/members/chat', dropdown: [
     { label: 'Edit',  href: '/update' },
   ]},
 ]
@@ -95,9 +91,9 @@ export function Navigation() {
             {NAV_LINKS.map(({ label, href, dropdown }) =>
               dropdown ? (
                 <div key={href} className="relative"
-                  onMouseEnter={() => setOpenDropdown(label)}
+                  onMouseEnter={() => { if (closeTimer.current) clearTimeout(closeTimer.current); setOpenDropdown(label) }}
                   onMouseLeave={() => {
-                    closeTimer.current = setTimeout(() => setOpenDropdown(null), 300)
+                    closeTimer.current = setTimeout(() => setOpenDropdown(null), 1200)
                   }}
                 >
                   <Link href={href}
