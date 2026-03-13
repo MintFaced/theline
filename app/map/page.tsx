@@ -1,27 +1,25 @@
 // app/map/page.tsx
 import type { Metadata } from 'next'
 import { CollectorMap } from '@/components/CollectorMap'
-import { Redis } from '@upstash/redis'
+import fs from 'fs'
+import path from 'path'
 
 export const metadata: Metadata = {
   title: 'Collector Map — The Line',
   description: 'An interactive map of who has collected from who across all 784 artists on The Line.',
 }
 
-export const revalidate = 3600
-
-async function getGraphData() {
+function getGraphData() {
   try {
-    const redis = Redis.fromEnv()
-    const raw = await redis.get<string>('graph:data')
-    if (!raw) return null
-    return typeof raw === 'string' ? JSON.parse(raw) : raw
+    const filePath = path.join(process.cwd(), 'public', 'data', 'graph.json')
+    const raw = fs.readFileSync(filePath, 'utf8')
+    return JSON.parse(raw)
   } catch {
     return null
   }
 }
 
-export default async function MapPage() {
-  const graphData = await getGraphData()
+export default function MapPage() {
+  const graphData = getGraphData()
   return <CollectorMap initialData={graphData} />
 }
