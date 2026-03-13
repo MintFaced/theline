@@ -88,26 +88,49 @@ export default function RootLayout({
 function Footer() {
   return (
     <footer className="border-t border-line-border mt-32 py-12 px-6">
-      <div className="max-w-content mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+      <div className="max-w-content mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
         <div>
           <p className="font-mono text-xs text-line-muted tracking-widest uppercase">
-            THE LINE HAWKE'S BAY, NEW ZEALAND ·{' '}
-            <a href="https://www.hawkesbaynz.com/destinations/hastings-district" target="_blank" rel="noopener noreferrer" className="hover:text-line-accent transition-colors">
-              Hawke&apos;s Bay, New Zealand
-            </a>
+            THE LINE HAWKE&apos;S BAY, NEW ZEALAND
           </p>
           <p className="font-mono text-xs text-line-muted mt-1">
             {_artistCount} artists · 1,000 positions · {_remain} remain
           </p>
+          {/* Socials */}
+          <div className="flex items-center gap-5 mt-4">
+            <a
+              href="https://www.instagram.com/thelinegallery"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="text-line-muted/40 hover:text-line-muted transition-colors duration-300"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/>
+              </svg>
+            </a>
+            <a
+              href="https://x.com/thelinegallery"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X"
+              className="text-line-muted/40 hover:text-line-muted transition-colors duration-300"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.843L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+          </div>
         </div>
         <nav className="flex flex-wrap gap-6">
           {[
             ['Artists', '/artists'],
             ['Storyline', '/storyline'],
             ['Gallery', '/gallery'],
-            ['Membership', '/membership'],
             ['Collect', '/collect'],
-            ['About', '/about'],
+            ['Guardians', '/guardians'],
             ['FAQ', '/faq'],
           ].map(([label, href]) => (
             <a
