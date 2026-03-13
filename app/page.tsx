@@ -99,9 +99,9 @@ export default function HomePage() {
                 noise of the market. Time and space to develop your practice without
                 distraction: to think about what you're making, why, and where it's going next.
               </p>
-              <Link href="/gallery#retreats"
+              <Link href="/retreat"
                 className="inline-flex items-center gap-2 font-mono text-[11px] text-line-accent tracking-widest uppercase mt-6 hover:gap-3 transition-all">
-                Learn more
+                Join waitlist
                 <span>→</span>
               </Link>
             </div>
@@ -120,9 +120,9 @@ export default function HomePage() {
                 exhibition record. These aren't honorary listings — your work is in a
                 physical gallery, being seen.
               </p>
-              <Link href="/gallery#takeovers"
+              <Link href="/takeover"
                 className="inline-flex items-center gap-2 font-mono text-[11px] text-line-accent tracking-widest uppercase mt-6 hover:gap-3 transition-all">
-                Apply now
+                Reserve spot
                 <span>→</span>
               </Link>
             </div>
