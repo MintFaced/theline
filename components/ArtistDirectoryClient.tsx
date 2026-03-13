@@ -1,6 +1,7 @@
 'use client'
 // components/ArtistDirectoryClient.tsx
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import type { Artist } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 import { ArtistCard } from './ArtistCard'
@@ -18,8 +19,9 @@ const SORTS = [
 interface Props { artists: Artist[] }
 
 export function ArtistDirectoryClient({ artists }: Props) {
+  const searchParams = useSearchParams()
   const [query, setQuery]         = useState('')
-  const [category, setCategory]   = useState<string | null>(null)
+  const [category, setCategory]   = useState<string | null>(() => searchParams.get('category'))
   const [chain, setChain]         = useState<string | null>(null)
   const [lineRange, setLineRange] = useState<[number, number]>([0, 900])
   const [sort, setSort]           = useState('line')
