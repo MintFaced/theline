@@ -1,6 +1,7 @@
 // app/takeover/page.tsx
 import type { Metadata } from 'next'
 import { TakeoverForm } from '@/components/TakeoverForm'
+import { TakeoverGallery } from '@/components/TakeoverGallery'
 
 export const metadata: Metadata = {
   title: 'Screen Takeover — The Line',
@@ -58,12 +59,10 @@ export default function TakeoverPage() {
           ))}
         </div>
 
-        {/* ── Previous Takeovers placeholder ──────────────────────────────── */}
-        <div className="py-16 border-b border-line-border">
-          <p className="label mb-8">Previous takeovers</p>
-          <p className="font-sans text-sm text-line-muted">
-            No takeovers yet — be the first.
-          </p>
+        {/* ── Popular Takeovers ─────────────────────────────────────────── */}
+        <div className="py-16 md:py-24 border-b border-line-border">
+          <p className="label mb-12">Popular Takeovers</p>
+          <TakeoverGallery hideCta />
         </div>
 
         {/* ── Form ─────────────────────────────────────────────────────────── */}
