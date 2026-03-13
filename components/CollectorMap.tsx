@@ -426,7 +426,7 @@ export function CollectorMap({ initialData }: { initialData: GraphData | null })
   }).filter(c => c.other) : []
 
   return (
-    <div className="relative w-full" style={{ height: '100vh' }}>
+    <div ref={containerRef} className="relative w-full" style={{ height: 'calc(100vh - var(--nav-height))', marginTop: 'var(--nav-height)' }}>
 
       {/* Header overlay */}
       <div className="absolute top-0 left-0 right-0 z-10 px-6 py-5 flex items-start justify-between pointer-events-none">
