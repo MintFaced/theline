@@ -5,10 +5,15 @@ import { TheLineRail } from '@/components/TheLineRail'
 import { ArtistCard } from '@/components/ArtistCard'
 import { RevealSection } from '@/components/RevealSection'
 import artistsData from '@/data/artists.json'
+import postsData from '@/data/posts.json'
 import type { Artist } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 
 const artists = artistsData as Artist[]
+
+interface Post { title: string; slug: string; date: string; excerpt: string; featuredImage?: string; categories?: string[] }
+const allPosts = postsData as Post[]
+const latestPosts = [...allPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3)
 
 const CATEGORY_IMAGES: Record<string, string> = {
   'lens-based':   '/images/categories/lens-based.jpg',
@@ -74,7 +79,7 @@ export default function HomePage() {
                 THE LINE GALLERY
               </h2>
               <p className="font-mono text-xs text-line-muted tracking-widest mt-2">
-                318 EMERSON STREET · NAPIER · NEW ZEALAND
+                318 HERETAUNGA STREET W · HASTINGS · NEW ZEALAND
               </p>
             </div>
           </div>
@@ -169,34 +174,18 @@ export default function HomePage() {
               All stories →
             </Link>
           </div>
-          {/* Placeholder article grid — populated from MDX in Phase 6 */}
+          {/* Latest 3 articles from posts.json - always current */}
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "The End of Gatekeepers",
-                date: "Oct 2025",
-                excerpt: "You can mint an artwork and sell it to anyone in the world without a gallery. You don't need to wait for permission.",
-                img: "https://theline1.wpenginepowered.com/wp-content/uploads/2025/10/IMG_2506-scaled.jpg"
-              },
-              {
-                title: "Roads and Rivers Exhibition",
-                date: "Sep 2025",
-                excerpt: "MintFace chose to photograph bridges that were the most beautiful or rarely seen. Most works were one-of-ones.",
-                img: "https://theline1.wpenginepowered.com/wp-content/uploads/2025/09/Screenshot-2025-09-05-at-10.16.23-AM.png"
-              },
-              {
-                title: "The Line Gallery Opens",
-                date: "Jul 2025",
-                excerpt: "The first art show at The Line is now open to the public in Napier, New Zealand.",
-                img: "https://theline1.wpenginepowered.com/wp-content/uploads/2025/07/gallery-scaled.jpg"
-              }
-            ].map((article, i) => (
-              <Link key={i} href="/storyline" className="group">
+            {latestPosts.map((article, i) => (
+              <Link key={i} href={`/storyline/${article.slug}`} className="group">
                 <div className="relative aspect-[4/3] overflow-hidden bg-line-surface mb-4">
-                  <Image src={article.img} alt={article.title} fill
-                    className="object-cover transition-all duration-500 group-hover:brightness-110 group-hover:scale-[1.02]" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={article.featuredImage || ''} alt={article.title}
+                    className="w-full h-full object-cover transition-all duration-500 group-hover:brightness-110 group-hover:scale-[1.02]" />
                 </div>
-                <p className="font-mono text-[10px] text-line-muted tracking-widest uppercase mb-2">{article.date}</p>
+                <p className="font-mono text-[10px] text-line-muted tracking-widest uppercase mb-2">
+                  {new Date(article.date).toLocaleDateString('en-NZ', { month: 'short', year: 'numeric' })}
+                </p>
                 <h3 className="font-display font-light text-line-text text-xl mb-2 group-hover:text-line-hover transition-colors">
                   {article.title}
                 </h3>
@@ -214,7 +203,7 @@ export default function HomePage() {
         <div className="max-w-content mx-auto">
           <div className="flex items-baseline justify-between mb-12">
             <div>
-              <p className="label mb-1">Fresh Lines</p>
+              <p className="label mb-1">Hot Lines</p>
               <p className="font-sans text-xs text-line-muted">Put your hippocampus into overdrive</p>
             </div>
             <Link href="/artists?sort=recent"
@@ -241,7 +230,7 @@ export default function HomePage() {
               const repArtist = artists.find(a => a.category === cat && a.galleryImage && a.featured)
                 ?? artists.find(a => a.category === cat && a.galleryImage)
               return (
-                <Link key={cat} href={`/category/${cat}`}
+                <Link key={cat} href={`/artists?category=${cat}`}
                   className="group relative bg-line-bg overflow-hidden"
                   style={{ aspectRatio: '2/3' }}>
                   {repArtist?.galleryImage && (
