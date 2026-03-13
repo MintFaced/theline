@@ -63,6 +63,9 @@ export function CollectorMap({ initialData }: { initialData: GraphData | null })
   const [selected, setSelected] = useState<Node | null>(null)
   const [transform, setTransform] = useState({ x: 0, y: 0, k: 1 })
   const [stats, setStats] = useState({ connections: 0, mostConnected: '' })
+  const [search, setSearch] = useState('')
+  const [searchResults, setSearchResults] = useState<Node[]>([])
+  const [showSearch, setShowSearch] = useState(false)
 
   // Mouse state for pan/zoom
   const isDragging = useRef(false)
@@ -187,13 +190,16 @@ export function CollectorMap({ initialData }: { initialData: GraphData | null })
           if (!s.x || !t.x) continue
 
           const isHighlighted = hovNode && (s.id === hovNode.id || t.id === hovNode.id)
-          const weight = 0.5 + (e.count / maxCount) * 3.5 // 0.5px to 4px based on count
+          const weight = 0.5 + (e.count / maxCount) * 3.5
+          const hovColor = hovNode ? getCategoryColor(hovNode.category) : '#C8A96E'
           ctx.beginPath()
           ctx.moveTo(s.x!, s.y!)
           ctx.lineTo(t.x!, t.y!)
-          ctx.strokeStyle = isHighlighted ? 'rgba(200,169,110,0.8)' : `rgba(255,255,255,${0.04 + (e.count / maxCount) * 0.12})`
+          ctx.strokeStyle = isHighlighted ? hovColor : `rgba(255,255,255,${0.04 + (e.count / maxCount) * 0.12})`
           ctx.lineWidth = isHighlighted ? ((weight * 1.5) / k) : (weight / k)
+          ctx.globalAlpha = isHighlighted ? 0.9 : 1
           ctx.stroke()
+          ctx.globalAlpha = 1
         }
 
         // Draw nodes
@@ -429,6 +435,32 @@ export function CollectorMap({ initialData }: { initialData: GraphData | null })
     return { other, direction, count: e.count }
   }).filter(c => c.other) : []
 
+  // Search handler
+  const handleSearch = useCallback((query: string) => {
+    setSearch(query)
+    if (!query.trim() || !graphData) { setSearchResults([]); return }
+    const q = query.toLowerCase().trim()
+    const results = graphData.nodes.filter(n =>
+      n.name.toLowerCase().includes(q) ||
+      n.allLineNumbers.some(num => String(num).includes(q)) ||
+      (n.xHandle?.toLowerCase().includes(q))
+    ).slice(0, 8)
+    setSearchResults(results)
+  }, [graphData])
+
+  const focusNode = useCallback((node: Node) => {
+    setSelected(node)
+    setSearch('')
+    setSearchResults([])
+    setShowSearch(false)
+    // Pan to node
+    if (node.x && node.y && containerRef.current) {
+      const W = containerRef.current.clientWidth
+      const H = containerRef.current.clientHeight
+      setTransform({ x: W/2 - node.x, y: H/2 - node.y, k: 1.5 })
+    }
+  }, [])
+
   return (
     <div ref={containerRef} className="relative w-full" style={{ height: 'calc(100vh - var(--nav-height))', marginTop: 'var(--nav-height)' }}>
 
@@ -437,7 +469,7 @@ export function CollectorMap({ initialData }: { initialData: GraphData | null })
         <div>
           <p className="label mb-1">The Line</p>
           <h1 className="font-display font-light text-2xl text-line-text" style={{ letterSpacing: '-0.02em' }}>
-            Collector Map
+            Networked Artists Map
           </h1>
           {graphData && (
             <p className="font-mono text-[10px] text-line-muted tracking-widest mt-1">
@@ -446,9 +478,34 @@ export function CollectorMap({ initialData }: { initialData: GraphData | null })
           )}
         </div>
 
+        {/* Search */}
+        <div className="pointer-events-auto mt-3">
+          <div className="relative">
+            <input
+              type="text"
+              value={search}
+              onChange={e => handleSearch(e.target.value)}
+              onFocus={() => setShowSearch(true)}
+              placeholder="Search artist or line number..."
+              className="bg-line-bg/90 backdrop-blur border border-line-border px-3 py-2 font-mono text-xs text-line-text placeholder:text-line-muted focus:outline-none focus:border-line-accent transition-colors w-56"
+            />
+            {searchResults.length > 0 && (
+              <div className="absolute top-full left-0 right-0 bg-line-bg border border-line-border border-t-0 z-30">
+                {searchResults.map(n => (
+                  <button key={n.id} onClick={() => focusNode(n)}
+                    className="w-full text-left px-3 py-2 hover:bg-line-surface transition-colors border-b border-line-border last:border-0">
+                    <p className="font-sans text-xs text-line-text">{n.name}</p>
+                    <p className="font-mono text-[9px] text-line-muted">LINE {n.lineNumber}</p>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Legend */}
         <div className="pointer-events-auto bg-line-bg/80 backdrop-blur border border-line-border p-4 hidden md:block">
-          <p className="font-mono text-[9px] text-line-muted tracking-widest uppercase mb-3">Category</p>
+          <p className="font-mono text-[9px] text-line-muted tracking-widest uppercase mb-3">Art Medium</p>
           <div className="space-y-1.5">
             {Object.entries(CATEGORY_COLORS).map(([cat, color]) => (
               <div key={cat} className="flex items-center gap-2">
@@ -516,26 +573,46 @@ export function CollectorMap({ initialData }: { initialData: GraphData | null })
             <button onClick={() => setSelected(null)} className="text-line-muted hover:text-line-text transition-colors font-mono text-xs">✕</button>
           </div>
 
-          {selectedConnections.length > 0 ? (
-            <>
-              <p className="font-mono text-[10px] text-line-muted tracking-widest uppercase mb-3">
-                {selectedConnections.length} connection{selectedConnections.length !== 1 ? 's' : ''}
-              </p>
-              <div className="space-y-2">
-                {selectedConnections.slice(0, 10).map((c, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <Link href={`/artists/${c.other!.slug}`}
-                      className="font-sans text-xs text-line-text hover:text-line-accent transition-colors truncate">
-                      {c.other!.name}
-                    </Link>
-                    <span className="font-mono text-[9px] text-line-muted ml-2 shrink-0">
-                      {c.count} {c.count === 1 ? 'work' : 'works'}
-                    </span>
+          {selectedConnections.length > 0 ? (() => {
+            const ownsWork = selectedConnections.filter(c => c.direction === 'received from')
+            const ownedBy = selectedConnections.filter(c => c.direction === 'sent to')
+            return (
+              <div className="space-y-4">
+                {ownsWork.length > 0 && (
+                  <div>
+                    <p className="font-mono text-[9px] text-line-muted tracking-widest uppercase mb-2">Owns work by</p>
+                    <div className="space-y-1.5">
+                      {ownsWork.slice(0, 6).map((c, i) => (
+                        <div key={i} className="flex items-center justify-between">
+                          <Link href={`/artists/${c.other!.slug}`}
+                            className="font-sans text-xs text-line-text hover:text-line-accent transition-colors truncate">
+                            {c.other!.name}
+                          </Link>
+                          <span className="font-mono text-[9px] text-line-muted ml-2 shrink-0">{c.count}×</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
+                )}
+                {ownedBy.length > 0 && (
+                  <div>
+                    <p className="font-mono text-[9px] text-line-muted tracking-widest uppercase mb-2">Work owned by</p>
+                    <div className="space-y-1.5">
+                      {ownedBy.slice(0, 6).map((c, i) => (
+                        <div key={i} className="flex items-center justify-between">
+                          <Link href={`/artists/${c.other!.slug}`}
+                            className="font-sans text-xs text-line-text hover:text-line-accent transition-colors truncate">
+                            {c.other!.name}
+                          </Link>
+                          <span className="font-mono text-[9px] text-line-muted ml-2 shrink-0">{c.count}×</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            </>
-          ) : (
+            )
+          })() : (
             <p className="font-sans text-xs text-line-muted">No connections with other Line artists yet.</p>
           )}
 
@@ -551,7 +628,7 @@ export function CollectorMap({ initialData }: { initialData: GraphData | null })
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 bg-line-bg/90 backdrop-blur border border-line-border px-4 py-2 pointer-events-none">
           <p className="font-mono text-xs text-line-text">{hovered.name}</p>
           <p className="font-mono text-[10px] text-line-muted">
-            LINE {hovered.lineNumber} · {hovered.category}
+            LINE {hovered.lineNumber} · {hovered.category?.replace(/-/g, ' ')}
           </p>
         </div>
       )}
