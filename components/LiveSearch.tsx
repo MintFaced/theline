@@ -48,7 +48,7 @@ export function LiveSearch({ onClose }: { onClose: () => void }) {
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder="Search artists, genres, Line numbers…"
-          className="flex-1 bg-transparent font-sans text-lg text-line-text placeholder-line-muted outline-none"
+          className="flex-1 bg-transparent text-lg text-line-text placeholder-line-muted outline-none" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
         />
         <button
           onClick={onClose}
