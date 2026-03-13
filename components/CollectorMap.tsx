@@ -180,17 +180,19 @@ export function CollectorMap({ initialData }: { initialData: GraphData | null })
         const hovNode = hoveredRef.current
         const selNode = selected
 
+        const maxCount = Math.max(...edges.map(e => e.count), 1)
         for (const e of edges) {
           const s = e.source as Node
           const t = e.target as Node
           if (!s.x || !t.x) continue
 
           const isHighlighted = hovNode && (s.id === hovNode.id || t.id === hovNode.id)
+          const weight = 0.5 + (e.count / maxCount) * 3.5 // 0.5px to 4px based on count
           ctx.beginPath()
           ctx.moveTo(s.x!, s.y!)
           ctx.lineTo(t.x!, t.y!)
-          ctx.strokeStyle = isHighlighted ? 'rgba(200,169,110,0.6)' : 'rgba(255,255,255,0.06)'
-          ctx.lineWidth = isHighlighted ? (1.5 / k) : (0.5 / k)
+          ctx.strokeStyle = isHighlighted ? 'rgba(200,169,110,0.8)' : `rgba(255,255,255,${0.04 + (e.count / maxCount) * 0.12})`
+          ctx.lineWidth = isHighlighted ? ((weight * 1.5) / k) : (weight / k)
           ctx.stroke()
         }
 
@@ -266,16 +268,18 @@ export function CollectorMap({ initialData }: { initialData: GraphData | null })
         ctx.translate(x, y)
         ctx.scale(k, k)
 
+        const maxCount2 = Math.max(...edges.map((e: Edge) => e.count), 1)
         for (const e of edges) {
           const s = e.source as Node
           const t = e.target as Node
           if (!s.x || !t.x) continue
           const isHighlighted = hovNode && (s.id === hovNode.id || t.id === hovNode.id)
+          const weight = 0.5 + (e.count / maxCount2) * 3.5
           ctx.beginPath()
           ctx.moveTo(s.x!, s.y!)
           ctx.lineTo(t.x!, t.y!)
-          ctx.strokeStyle = isHighlighted ? 'rgba(200,169,110,0.6)' : 'rgba(255,255,255,0.06)'
-          ctx.lineWidth = isHighlighted ? (1.5 / k) : (0.5 / k)
+          ctx.strokeStyle = isHighlighted ? 'rgba(200,169,110,0.8)' : `rgba(255,255,255,${0.04 + (e.count / maxCount2) * 0.12})`
+          ctx.lineWidth = isHighlighted ? ((weight * 1.5) / k) : (weight / k)
           ctx.stroke()
         }
 
