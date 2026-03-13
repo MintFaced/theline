@@ -127,9 +127,9 @@ export function TakeoverGallery({ hideCta = false }: { hideCta?: boolean }) {
           <div className="w-full max-w-5xl mx-12 aspect-video">
             <iframe
               key={active}
-              src={`https://www.youtube.com/embed/${active}?autoplay=1&rel=0&modestbranding=1&color=white`}
+              src={`https://www.youtube.com/embed/${active}?autoplay=1&rel=0&modestbranding=1&color=white&enablejsapi=1`}
               className="w-full h-full"
-              allow="autoplay; fullscreen"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
               allowFullScreen
             />
           </div>
