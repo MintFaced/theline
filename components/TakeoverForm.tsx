@@ -25,12 +25,18 @@ export function TakeoverForm() {
     if (!form.name || !form.email || !form.workDescription) return
     setStatus('sending')
     try {
-      const res = await fetch('https://formspree.io/f/theline-takeover', {
+      const res = await fetch('https://formspree.io/f/xpqyrkkk', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({ ...form, _subject: `Screen takeover application: ${form.name}` }),
       })
-      setStatus(res.ok ? 'sent' : 'error')
+      if (res.ok) {
+        setStatus('sent')
+      } else {
+        const data = await res.json().catch(() => ({}))
+        console.error('Formspree error:', res.status, data)
+        setStatus('error')
+      }
     } catch {
       setStatus('sent')
     }
@@ -120,7 +126,7 @@ export function TakeoverForm() {
 
       {status === 'error' && (
         <p className="font-mono text-[10px] text-red-400 tracking-widest">
-          Something went wrong. Email us directly at hello@theline.nz
+          Something went wrong. Email us directly at mintface@digitalartisteconomy.com
         </p>
       )}
     </div>
