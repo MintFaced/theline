@@ -34,6 +34,8 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   }
 }
 
+
+
 export default async function ArtistPage(props: { params: Promise<{ slug: string }> }) {
   const { slug } = await props.params
   const artist = artists.find(a => a.slug === slug)
@@ -71,8 +73,8 @@ export default async function ArtistPage(props: { params: Promise<{ slug: string
           style={{ background: 'linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, transparent 40%, transparent 50%, rgba(10,10,10,0.92) 100%)' }}
         />
 
-        {/* Bottom-left: name + line number */}
-        <div className="absolute bottom-10 left-8 md:bottom-14 md:left-12 z-10">
+        {/* Name + line number — top on mobile, bottom on desktop */}
+        <div className="absolute top-20 left-8 right-8 md:top-auto md:bottom-14 md:left-12 md:right-auto z-10">
           <p className="label mb-3">
             {artist.allLineNumbers.map((n, i) => (
               <span key={n}>
@@ -142,10 +144,13 @@ export default async function ArtistPage(props: { params: Promise<{ slug: string
               {/* Social links */}
               <div className="flex flex-wrap gap-4 mt-10">
                 {artist.xHandle && (
-                  <a href={`https://x.com/${artist.xHandle}`} target="_blank" rel="noopener noreferrer"
-                    className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase flex items-center gap-1.5">
-                    𝕏 @{artist.xHandle}
-                  </a>
+                  <div className="flex flex-col gap-1">
+                    <a href={`https://x.com/${artist.xHandle}`} target="_blank" rel="noopener noreferrer"
+                      className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase flex items-center gap-1.5">
+                      𝕏 @{artist.xHandle}
+                    </a>
+
+                  </div>
                 )}
                 {artist.purchaseUrl && (
                   <a href={artist.purchaseUrl} target="_blank" rel="noopener noreferrer"
