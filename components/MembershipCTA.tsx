@@ -16,7 +16,7 @@ export function MembershipCTA({ artist }: { artist: Artist }) {
         ) : (
           <div>
             <Link href="/update" className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
-              Update {artist.name} Profile →
+              Update your profile →
             </Link>
             <p className="font-sans text-xs text-line-muted/60 mt-3 leading-relaxed">
               Let collectors meet the 2026 you.
@@ -70,7 +70,7 @@ function PrivyMembershipPanel({ artistName }: { artistName: string }) {
     return (
       <div>
         <Link href="/update" className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
-          Update {artistName} Profile →
+          Update your profile →
         </Link>
         <p className="font-sans text-xs text-line-muted/60 mt-3 leading-relaxed">
           Let collectors meet the 2026 you.
