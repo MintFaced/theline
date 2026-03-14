@@ -52,12 +52,12 @@ export default function HomePage() {
     <div className="bg-line-bg">
 
       {/* ── Section 1: The Line Rail ──────────────────────────────────────── */}
-      <div className="pt-14"> {/* nav offset */}
+      <div style={{ paddingTop: "var(--nav-height)" }}> {/* nav offset */}
         <TheLineRail artists={artists} />
       </div>
 
       {/* ── Section 2: The Gallery ────────────────────────────────────────── */}
-      <RevealSection className="mt-24 md:mt-40 px-6">
+      <RevealSection className="mt-12 md:mt-40 px-6">
         <div className="max-w-content mx-auto">
 
           {/* Full-width gallery exterior */}
@@ -165,7 +165,7 @@ export default function HomePage() {
       </RevealSection>
 
       {/* ── Section 3: Storyline ──────────────────────────────────────────── */}
-      <RevealSection className="mt-24 md:mt-40 px-6">
+      <RevealSection className="mt-12 md:mt-40 px-6">
         <div className="max-w-content mx-auto">
           <div className="flex items-baseline justify-between mb-12">
             <p className="label">Storyline</p>
@@ -199,7 +199,7 @@ export default function HomePage() {
       </RevealSection>
 
       {/* ── Section 4: Fresh Lines ────────────────────────────────────────── */}
-      <RevealSection className="mt-24 md:mt-40 px-6">
+      <RevealSection className="mt-12 md:mt-40 px-6">
         <div className="max-w-content mx-auto">
           <div className="flex items-baseline justify-between mb-12">
             <div>
@@ -220,7 +220,7 @@ export default function HomePage() {
       </RevealSection>
 
       {/* ── Section 5: By Medium ──────────────────────────────────────────── */}
-      <RevealSection className="mt-24 md:mt-40 px-6">
+      <RevealSection className="mt-12 md:mt-40 px-6">
         <div className="max-w-content mx-auto">
           <p className="label mb-12">By Medium</p>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-px bg-line-border">
