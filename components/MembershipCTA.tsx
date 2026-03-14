@@ -11,18 +11,12 @@ export function MembershipCTA({ artist }: { artist: Artist }) {
     <div className="grid md:grid-cols-2 gap-px bg-line-border">
       <div className="bg-line-bg p-8 md:p-10">
         <p className="label mb-6">Profile</p>
-        {hasPrivy ? (
-          <PrivyMembershipPanel artistName={artist.name} />
-        ) : (
-          <div>
-            <Link href="/update" className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
-              Update your profile →
-            </Link>
-            <p className="font-sans text-xs text-line-muted/60 mt-3 leading-relaxed">
-              Let collectors meet the 2026 you.
-            </p>
-          </div>
-        )}
+        <Link href="/update" className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
+          Update your profile →
+        </Link>
+        <p className="font-sans text-xs text-line-muted/60 mt-3 leading-relaxed">
+          Let collectors meet the 2026 you.
+        </p>
       </div>
       <div className="bg-line-bg p-8 md:p-10 flex flex-col justify-between">
         <div>
