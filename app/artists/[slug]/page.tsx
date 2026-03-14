@@ -73,8 +73,8 @@ export default async function ArtistPage(props: { params: Promise<{ slug: string
           style={{ background: 'linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, transparent 40%, transparent 50%, rgba(10,10,10,0.92) 100%)' }}
         />
 
-        {/* Name + line number — top on mobile, bottom on desktop */}
-        <div className="absolute top-20 left-8 right-8 md:top-auto md:bottom-14 md:left-12 md:right-auto z-10">
+        {/* Name + line number — above Enter button on mobile, bottom-left on desktop */}
+        <div className="absolute bottom-24 left-8 right-8 md:bottom-14 md:left-12 md:right-auto z-10">
           <p className="label mb-3">
             {artist.allLineNumbers.map((n, i) => (
               <span key={n}>
@@ -97,9 +97,9 @@ export default async function ArtistPage(props: { params: Promise<{ slug: string
           )}
         </div>
 
-        {/* Bottom-right: Enter The Line button */}
+        {/* Bottom-right: Enter The Line button — desktop only */}
         {artist.oncyberUrls.length > 0 && (
-          <div className="absolute bottom-10 right-8 md:bottom-14 md:right-12 z-10">
+          <div className="hidden md:block absolute bottom-14 right-12 z-10">
             <a
               href={artist.oncyberUrls[0]}
               target="_blank"
