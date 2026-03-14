@@ -1,31 +1,291 @@
-// app/artists/page.tsx
+// app/artists/[slug]/page.tsx
+import type { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import artistsData from '@/data/artists.json'
 import type { Artist } from '@/types'
-import { Suspense } from 'react'
-import { ArtistDirectoryClient } from '@/components/ArtistDirectoryClient'
+import { CATEGORY_LABELS } from '@/types'
+import { StickyIdentityBar } from '@/components/StickyIdentityBar'
+import { CollectorStatsPanel } from '@/components/CollectorStatsPanel'
+import { RecentWorksSection } from '@/components/RecentWorksSection'
+import { LinePositionStrip } from '@/components/LinePositionStrip'
+import { MembershipCTA } from '@/components/MembershipCTA'
+import { ArtistCard } from '@/components/ArtistCard'
+import { RevealSection } from '@/components/RevealSection'
+import { getBio } from '@/lib/bio'
 
 const artists = artistsData as Artist[]
 
-export const metadata = {
-  title: 'All Artists',
-  description: 'Browse all 821 artists on The Line — from Line 0 to Line 899.',
+export async function generateStaticParams() {
+  return artists.map(a => ({ slug: a.slug }))
 }
 
-export default function ArtistsPage() {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await props.params
+  const artist = artists.find(a => a.slug === slug)
+  if (!artist) return {}
+  return {
+    title: `${artist.name} — The Line ${artist.allLineNumbers.join(', ')}`,
+    description: artist.description ?? `${artist.name} is a ${CATEGORY_LABELS[artist.category] ?? artist.category} artist on The Line.`,
+    openGraph: {
+      images: artist.galleryImage ? [{ url: artist.galleryImage }] : [],
+    },
+  }
+}
+
+
+function XActivityBadge({ date }: { date: string }) {
+  const lastActive = new Date(date)
+  const monthsAgo = (Date.now() - lastActive.getTime()) / (1000 * 60 * 60 * 24 * 30)
+  const inactive = monthsAgo >= 12
+  const label = inactive
+    ? 'Inactive on X'
+    : `Active ${lastActive.toLocaleDateString('en-NZ', { month: 'short', year: 'numeric' })}`
   return (
-    <div className="bg-line-bg pt-28 pb-32 px-6">
-      <div className="max-w-content mx-auto">
-        <div className="mb-12">
-          <p className="label mb-3">The Line</p>
+    <span className={`font-mono text-[9px] tracking-widest ${inactive ? 'text-line-muted/50' : 'text-line-muted'}`}>
+      {label}
+    </span>
+  )
+}
+
+export default async function ArtistPage(props: { params: Promise<{ slug: string }> }) {
+  const { slug } = await props.params
+  const artist = artists.find(a => a.slug === slug)
+  if (!artist) notFound()
+
+  const bio = await getBio(artist)
+  const primaryLine = artist.allLineNumbers[0]
+
+  // Related artists — same category, different artist
+  const related = artists
+    .filter(a => a.slug !== artist.slug && a.category === artist.category && a.galleryImage)
+    .slice(0, 4)
+
+  return (
+    <div className="bg-line-bg">
+
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="relative w-full" style={{ height: '100vh', minHeight: '600px' }}>
+        {/* Full-bleed artwork */}
+        {artist.galleryImage ? (
+          <Image
+            src={artist.heroImage ?? artist.galleryImage}
+            alt={artist.name}
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-line-surface" />
+        )}
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0"
+          style={{ background: 'linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, transparent 40%, transparent 50%, rgba(10,10,10,0.92) 100%)' }}
+        />
+
+        {/* Name + line number — top on mobile, bottom on desktop */}
+        <div className="absolute top-20 left-8 right-8 md:top-auto md:bottom-14 md:left-12 md:right-auto z-10">
+          <p className="label mb-3">
+            {artist.allLineNumbers.map((n, i) => (
+              <span key={n}>
+                {i > 0 && <span className="mx-2 text-line-border">·</span>}
+                THE LINE {n}
+              </span>
+            ))}
+            {' '}·{' '}
+            {CATEGORY_LABELS[artist.category] ?? artist.category}
+          </p>
           <h1 className="font-display font-light text-line-text"
-            style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '-0.02em' }}>
-            All Artists
+            style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)', lineHeight: 1.0, letterSpacing: '-0.02em' }}>
+            {artist.name}
           </h1>
+          {artist.verified && (
+            <div className="flex items-center gap-2 mt-3">
+              <div className="w-1.5 h-1.5 rounded-full bg-line-accent" />
+              <span className="font-mono text-[10px] text-line-muted tracking-widest uppercase">Verified Artist</span>
+            </div>
+          )}
         </div>
-        <Suspense fallback={<div className="font-mono text-xs text-line-muted py-16 text-center tracking-widest">Loading…</div>}>
-          <ArtistDirectoryClient artists={artists} />
-        </Suspense>
-      </div>
+
+        {/* Bottom-right: Enter The Line button */}
+        {artist.oncyberUrls.length > 0 && (
+          <div className="absolute bottom-10 right-8 md:bottom-14 md:right-12 z-10">
+            <a
+              href={artist.oncyberUrls[0]}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline text-xs"
+            >
+              Enter The Line {primaryLine} by {artist.name} →
+            </a>
+          </div>
+        )}
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 animate-scroll-hint">
+          <div className="w-px h-12 mx-auto" style={{ background: 'linear-gradient(to bottom, transparent, #C8A96E)' }} />
+        </div>
+      </section>
+
+      {/* ── Sticky Identity Bar ───────────────────────────────────────────── */}
+      <StickyIdentityBar artist={artist} />
+
+      {/* ── Bio + Stats ───────────────────────────────────────────────────── */}
+      <RevealSection className="px-6 py-20 md:py-28">
+        <div className="max-w-content mx-auto">
+          <div className="grid md:grid-cols-5 gap-16 md:gap-20">
+
+            {/* Bio — 3/5 width */}
+            <div className="md:col-span-3">
+              <p className="label mb-8">Artist</p>
+              {bio ? (
+                <div className="font-sans text-line-text leading-relaxed space-y-6"
+                  style={{ fontSize: 'clamp(0.95rem, 1.2vw, 1.1rem)' }}>
+                  {bio.split('\n\n').map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
+                </div>
+              ) : (
+                <p className="font-sans text-line-muted leading-relaxed">
+                  {artist.description ?? `${artist.name} is an artist on The Line.`}
+                </p>
+              )}
+
+              {/* Social links */}
+              <div className="flex flex-wrap gap-4 mt-10">
+                {artist.xHandle && (
+                  <div className="flex flex-col gap-1">
+                    <a href={`https://x.com/${artist.xHandle}`} target="_blank" rel="noopener noreferrer"
+                      className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase flex items-center gap-1.5">
+                      𝕏 @{artist.xHandle}
+                    </a>
+                    {artist.lastActiveX && (
+                      <XActivityBadge date={artist.lastActiveX} />
+                    )}
+                  </div>
+                )}
+                {artist.purchaseUrl && (
+                  <a href={artist.purchaseUrl} target="_blank" rel="noopener noreferrer"
+                    className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
+                    View Collection →
+                  </a>
+                )}
+                {artist.walletAddress && (
+                  <span className="font-mono text-[11px] text-line-muted tracking-wider">
+                    {artist.walletAddress.length > 20
+                      ? `${artist.walletAddress.slice(0, 8)}…${artist.walletAddress.slice(-6)}`
+                      : artist.walletAddress}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Stats — 2/5 width */}
+            <div className="md:col-span-2">
+              <p className="label mb-8">Collector Data</p>
+              <CollectorStatsPanel artist={artist} />
+            </div>
+          </div>
+        </div>
+      </RevealSection>
+
+      {/* ── Recent Works ──────────────────────────────────────────────────── */}
+      {artist.walletAddress && (
+        <RevealSection className="px-6 pb-24">
+          <div className="max-w-content mx-auto">
+            <div className="the-line mb-12" />
+            <p className="label mb-10">Recent Works</p>
+            <RecentWorksSection artist={artist} />
+          </div>
+        </RevealSection>
+      )}
+
+      {/* ── Line Position Strip ───────────────────────────────────────────── */}
+      <RevealSection className="px-6 pb-24">
+        <div className="max-w-content mx-auto">
+          <div className="the-line mb-12" />
+          <p className="label mb-10">
+            {artist.allLineNumbers.length > 1 ? 'Their Lines' : 'Position on The Line'}
+          </p>
+          <LinePositionStrip artist={artist} allArtists={artists} />
+        </div>
+      </RevealSection>
+
+      {/* ── The Gallery (oncyber) ─────────────────────────────────────────── */}
+      <RevealSection className="pb-24">
+        <div className="px-6 max-w-content mx-auto mb-6">
+          <div className="the-line mb-12" />
+          <p className="label">
+            Enter The Line {primaryLine} by {artist.name}
+          </p>
+        </div>
+        {artist.oncyberUrls.length > 0 && (
+          <>
+            {/* Desktop: iframe */}
+            <div className="hidden md:block">
+              <iframe
+                src={artist.oncyberUrls[0]}
+                title={`The Line ${primaryLine} by ${artist.name}`}
+                className="oncyber-embed"
+                allow="xr-spatial-tracking; gyroscope; accelerometer"
+                allowFullScreen
+              />
+            </div>
+            {/* Mobile: button */}
+            <div className="md:hidden px-6">
+              <a
+                href={artist.oncyberUrls[0]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-outline w-full justify-center py-4 text-center text-sm"
+              >
+                Enter The Gallery →
+              </a>
+            </div>
+            {/* Multiple lines: show all */}
+            {artist.oncyberUrls.length > 1 && (
+              <div className="px-6 mt-4 flex flex-wrap gap-3 max-w-content mx-auto">
+                {artist.oncyberUrls.map((url, i) => (
+                  <a key={i} href={url} target="_blank" rel="noopener noreferrer"
+                    className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase border border-line-border px-3 py-1.5">
+                    LINE {artist.allLineNumbers[i]} →
+                  </a>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </RevealSection>
+
+      {/* ── Membership CTA ────────────────────────────────────────────────── */}
+      <RevealSection className="px-6 pb-24">
+        <div className="max-w-content mx-auto">
+          <div className="the-line mb-12" />
+          <MembershipCTA artist={artist} />
+        </div>
+      </RevealSection>
+
+      {/* ── Related Artists ───────────────────────────────────────────────── */}
+      {related.length > 0 && (
+        <RevealSection className="px-6 pb-32">
+          <div className="max-w-content mx-auto">
+            <div className="the-line mb-12" />
+            <div className="flex items-baseline justify-between mb-10">
+              <p className="label">More {CATEGORY_LABELS[artist.category]} Artists</p>
+              <Link href={`/category/${artist.category}`}
+                className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
+                View all →
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {related.map(a => <ArtistCard key={a.slug} artist={a} />)}
+            </div>
+          </div>
+        </RevealSection>
+      )}
     </div>
   )
 }
