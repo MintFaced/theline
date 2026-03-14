@@ -124,31 +124,41 @@ export async function getCreatedNFTs(address: string, limit = 5): Promise<NFTWor
 
     let nfts: AlchemyNFT[] = []
 
-    // Step 1: Find contracts this address created/deployed
-    const contractsUrl = new URL(`${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getContractsForOwner`)
-    contractsUrl.searchParams.set('owner', address)
-    contractsUrl.searchParams.set('pageSize', '20')
-    const contractsRes = await fetch(contractsUrl.toString(), { next: { revalidate: 21600 } })
-    const contractsData = contractsRes.ok ? await contractsRes.json() : { contracts: [] }
-    const createdContracts: string[] = (contractsData.contracts ?? [])
-      .map((c: { address: string }) => c.address?.toLowerCase())
-      .filter((a: string) => a && !SKIP_CONTRACTS.includes(a))
+    // Step 1: Get all NFTs owned by this address
+    const ownedUrl = new URL(`${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getNFTsForOwner`)
+    ownedUrl.searchParams.set('owner', address)
+    ownedUrl.searchParams.set('withMetadata', 'true')
+    ownedUrl.searchParams.set('pageSize', '50')
+    ownedUrl.searchParams.set('excludeFilters[]', 'SPAM')
+    const ownedRes = await fetch(ownedUrl.toString(), { next: { revalidate: 21600 } })
+    const ownedData = ownedRes.ok ? await ownedRes.json() : { ownedNfts: [] }
+    const allOwned: AlchemyNFT[] = ownedData.ownedNfts ?? []
 
-    // Step 2: Pull NFTs from their own contracts
-    if (createdContracts.length > 0) {
-      for (const contractAddr of createdContracts.slice(0, 3)) {
-        const nftsUrl = new URL(`${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getNFTsForContract`)
-        nftsUrl.searchParams.set('contractAddress', contractAddr)
-        nftsUrl.searchParams.set('withMetadata', 'true')
-        nftsUrl.searchParams.set('limit', String(limit))
-        const nftsRes = await fetch(nftsUrl.toString(), { next: { revalidate: 21600 } })
-        if (nftsRes.ok) {
-          const nftsData = await nftsRes.json()
-          nfts.push(...(nftsData.nfts ?? []))
+    // Step 2: Check each contract to find ones where this wallet is the deployer
+    const contractsChecked = new Map<string, boolean>()
+    for (const nft of allOwned) {
+      const contractAddr = nft.contract?.address?.toLowerCase()
+      if (!contractAddr || SKIP_CONTRACTS.includes(contractAddr)) continue
+      if (contractsChecked.has(contractAddr)) continue
+
+      try {
+        const metaUrl = `${ALCHEMY_BASE}/nft/v3/${ALCHEMY_KEY}/getContractMetadata?contractAddress=${contractAddr}`
+        const metaRes = await fetch(metaUrl, { next: { revalidate: 86400 } })
+        if (metaRes.ok) {
+          const meta = await metaRes.json()
+          const deployer = meta.contractDeployer?.toLowerCase()
+          contractsChecked.set(contractAddr, deployer === address.toLowerCase())
         }
-        if (nfts.length >= limit) break
+      } catch {
+        contractsChecked.set(contractAddr, false)
       }
     }
+
+    // Step 3: Keep only NFTs from contracts the artist deployed
+    nfts = allOwned.filter(nft => {
+      const addr = nft.contract?.address?.toLowerCase()
+      return addr && contractsChecked.get(addr) === true
+    })
 
     return nfts
       .filter(n => n.image?.cachedUrl || n.image?.originalUrl || n.image?.thumbnailUrl)
