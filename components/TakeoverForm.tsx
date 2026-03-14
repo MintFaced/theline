@@ -25,16 +25,16 @@ export function TakeoverForm() {
     if (!form.name || !form.email || !form.workDescription) return
     setStatus('sending')
     try {
-      const res = await fetch('https://formspree.io/f/xpqyrkkk', {
+      const res = await fetch('/api/forms/takeover', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ ...form, _subject: `Screen takeover application: ${form.name}` }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
       })
       if (res.ok) {
         setStatus('sent')
       } else {
         const data = await res.json().catch(() => ({}))
-        console.error('Formspree error:', res.status, data)
+        console.error('Form error:', res.status, data)
         setStatus('error')
       }
     } catch {
