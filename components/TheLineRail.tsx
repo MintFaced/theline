@@ -98,7 +98,7 @@ const RailSlot = memo(({ index, style, data }: {
 
             {/* Hover label */}
             {isHovered && (
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-center pointer-events-none z-20">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-center pointer-events-none z-20 hidden md:block">
                 <p className="font-sans text-[10px] text-line-text truncate max-w-[100px]">
                   {artist.name}
                 </p>
@@ -236,7 +236,7 @@ export function TheLineRail({ artists }: Props) {
       </div>
 
       {/* Bottom info */}
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center z-10 pointer-events-none">
+      <div className="absolute bottom-4 md:bottom-8 left-0 right-0 flex justify-center z-10 pointer-events-none">
         <p className="font-mono text-[10px] text-line-muted tracking-[0.2em] italic">
           {artists.length} artists · 1,000 positions · {LINE_MAX - maxOccupied - 1} remain
         </p>
