@@ -22,6 +22,7 @@ export interface Artist {
   bioOverride: string | null
   bioLocked: boolean
   heroImage: string | null
+  lastActiveX?: string | null
 }
 
 export interface CollectorStats {
