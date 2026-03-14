@@ -10,21 +10,17 @@ export function MembershipCTA({ artist }: { artist: Artist }) {
   return (
     <div className="grid md:grid-cols-2 gap-px bg-line-border">
       <div className="bg-line-bg p-8 md:p-10">
-        <p className="label mb-2">Membership</p>
-        <p className="font-display font-light text-line-text text-xl mb-6">
-          Line Artists Rad Party (LARP)
-        </p>
+        <p className="label mb-6">Profile</p>
         {hasPrivy ? (
-          <PrivyMembershipPanel />
+          <PrivyMembershipPanel artistName={artist.name} />
         ) : (
           <div>
-            <p className="font-sans text-sm text-line-muted mb-6 leading-relaxed">
-              LARP Membership is token gated for Line Artists only.
-              <br />Connect your wallet to LARP.
-            </p>
-            <Link href="/membership" className="btn-outline">
-              Connect Wallet
+            <Link href="/update" className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
+              Update {artist.name} Profile →
             </Link>
+            <p className="font-sans text-xs text-line-muted/60 mt-3 leading-relaxed">
+              Let collectors meet the 2026 you.
+            </p>
           </div>
         )}
       </div>
@@ -51,7 +47,7 @@ export function MembershipCTA({ artist }: { artist: Artist }) {
   )
 }
 
-function PrivyMembershipPanel() {
+function PrivyMembershipPanel({ artistName }: { artistName: string }) {
   const { usePrivy } = require('@privy-io/react-auth')
   const { ready, authenticated, login, user } = usePrivy()
   const [isMember, setIsMember] = useState<boolean | null>(null)
@@ -73,11 +69,12 @@ function PrivyMembershipPanel() {
   if (!authenticated) {
     return (
       <div>
-        <p className="font-sans text-sm text-line-muted mb-6 leading-relaxed">
-          LARP Membership is token gated for Line Artists only.
-          <br />Connect your wallet to LARP.
+        <Link href="/update" className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
+          Update {artistName} Profile →
+        </Link>
+        <p className="font-sans text-xs text-line-muted/60 mt-3 leading-relaxed">
+          Let collectors meet the 2026 you.
         </p>
-        <button onClick={login} className="btn-outline">Connect Wallet</button>
       </div>
     )
   }
@@ -99,11 +96,12 @@ function PrivyMembershipPanel() {
 
   return (
     <div>
-      <p className="font-sans text-sm text-line-muted mb-6 leading-relaxed">
-        LARP Membership is token gated for Line Artists only.
-        <br />Connect your wallet to LARP.
+      <Link href="/update" className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
+        Update your profile →
+      </Link>
+      <p className="font-sans text-xs text-line-muted/60 mt-3 leading-relaxed">
+        Let collectors meet the 2026 you.
       </p>
-      <button onClick={login} className="btn-outline">Connect Wallet</button>
     </div>
   )
 }
