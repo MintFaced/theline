@@ -5,7 +5,7 @@ import { appendRow } from '@/lib/sheets'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { name, email, lineNumber, xHandle, bio, walletAddress, collectUrl, availableWorks, notes } = body
+    const { name, email, lineNumber, xHandle, bio, walletAddress, collectUrl, availableWorks, notes, selfVerified } = body
 
     if (!name || !email || !lineNumber) {
       return NextResponse.json({ error: 'Name, email and line number required' }, { status: 400 })
@@ -24,6 +24,7 @@ export async function POST(request: Request) {
       collectUrl      || '',
       availableWorks  || '',
       notes           || '',
+      selfVerified ? 'SELF-VERIFIED ✓' : '',
     ])
 
     return NextResponse.json({ ok: true })
