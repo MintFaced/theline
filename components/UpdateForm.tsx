@@ -1,24 +1,38 @@
 'use client'
 // components/UpdateForm.tsx
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 
-export function UpdateForm() {
-  const [status, setStatus] = useState<Status>('idle')
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    lineNumber: '',
-    xHandle: '',
-    bio: '',
-    walletAddress: '',
-    collectUrl: '',
-    availableWorks: '',
-    notes: '',
-  })
+interface FormData {
+  name: string
+  email: string
+  lineNumber: string
+  xHandle: string
+  bio: string
+  walletAddress: string
+  collectUrl: string
+  availableWorks: string
+  notes: string
+}
 
-  const set = (k: keyof typeof form) =>
+const DEFAULT_FORM: FormData = {
+  name: '', email: '', lineNumber: '', xHandle: '',
+  bio: '', walletAddress: '', collectUrl: '', availableWorks: '', notes: '',
+}
+
+// Inner form — receives pre-filled data and selfVerified flag
+function UpdateFormInner({ prefill, selfVerified }: { prefill: Partial<FormData>, selfVerified: boolean }) {
+  const [status, setStatus] = useState<Status>('idle')
+  const [form, setForm] = useState<FormData>({ ...DEFAULT_FORM, ...prefill })
+
+  // Re-fill if prefill changes (wallet connects after mount)
+  useEffect(() => {
+    setForm(prev => ({ ...prev, ...prefill }))
+  }, [JSON.stringify(prefill)])
+
+  const set = (k: keyof FormData) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
       setForm(prev => ({ ...prev, [k]: e.target.value }))
 
@@ -29,7 +43,7 @@ export function UpdateForm() {
       const res = await fetch('/api/forms/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, selfVerified }),
       })
       if (res.ok) {
         setStatus('sent')
@@ -57,11 +71,22 @@ export function UpdateForm() {
   }
 
   const inputClass = "w-full bg-line-surface border border-line-border px-4 py-3 font-sans text-sm text-line-text placeholder:text-line-muted focus:outline-none focus:border-line-accent transition-colors"
+  const lockedClass = "w-full bg-line-bg border border-line-border/50 px-4 py-3 font-sans text-sm text-line-muted cursor-not-allowed"
   const labelClass = "font-mono text-[10px] text-line-muted tracking-widest uppercase mb-2 block"
   const hintClass = "font-mono text-[9px] text-line-muted tracking-wide mt-1.5 block"
 
   return (
     <div className="space-y-8">
+
+      {/* Verified badge */}
+      {selfVerified && (
+        <div className="flex items-center gap-3 border border-line-accent/20 bg-line-accent/5 px-4 py-3">
+          <div className="w-1.5 h-1.5 rounded-full bg-line-accent shrink-0" />
+          <p className="font-mono text-[10px] text-line-accent tracking-widest uppercase">
+            Wallet verified — profile pre-filled from your Line data
+          </p>
+        </div>
+      )}
 
       {/* Identity */}
       <div>
@@ -70,7 +95,11 @@ export function UpdateForm() {
           <div className="grid md:grid-cols-2 gap-5">
             <div>
               <label className={labelClass}>Name *</label>
-              <input type="text" value={form.name} onChange={set('name')} placeholder="Your name" className={inputClass} />
+              {selfVerified ? (
+                <div className={lockedClass}>{form.name}</div>
+              ) : (
+                <input type="text" value={form.name} onChange={set('name')} placeholder="Your name" className={inputClass} />
+              )}
             </div>
             <div>
               <label className={labelClass}>Email *</label>
@@ -79,8 +108,8 @@ export function UpdateForm() {
           </div>
           <div className="grid md:grid-cols-2 gap-5">
             <div>
-              <label className={labelClass}>Line Number *</label>
-              <input type="text" value={form.lineNumber} onChange={set('lineNumber')} placeholder="e.g. 147" className={inputClass} />
+              <label className={labelClass}>Line Number</label>
+              <div className={lockedClass}>{form.lineNumber || '—'}</div>
             </div>
             <div>
               <label className={labelClass}>X / Twitter handle</label>
@@ -98,7 +127,7 @@ export function UpdateForm() {
           <textarea
             value={form.bio}
             onChange={set('bio')}
-            placeholder="Write your bio here — 2–4 sentences works best. Describes who you are, what you make, and where people can find your work."
+            placeholder="Write your bio here — 2–4 sentences works best."
             rows={5}
             className={inputClass + " resize-none"}
           />
@@ -106,7 +135,7 @@ export function UpdateForm() {
         </div>
       </div>
 
-      {/* Wallet */}
+      {/* Wallet & Collection */}
       <div className="border-t border-line-border pt-8">
         <p className="font-mono text-[10px] text-line-accent tracking-widest uppercase mb-5">Wallet &amp; Collection</p>
         <div className="space-y-5">
@@ -174,7 +203,81 @@ export function UpdateForm() {
           Something went wrong. Email us directly at mintface@digitalartisteconomy.com
         </p>
       )}
-
     </div>
   )
+}
+
+// Privy wallet detector — wraps the form
+function UpdateFormWithWallet() {
+  const { usePrivy } = require('@privy-io/react-auth')
+  const { ready, authenticated, login, user } = usePrivy()
+  const [prefill, setPrefill] = useState<Partial<FormData>>({})
+  const [selfVerified, setSelfVerified] = useState(false)
+  const [checking, setChecking] = useState(false)
+
+  useEffect(() => {
+    const wallet = user?.wallet?.address
+    if (!authenticated || !wallet) {
+      setPrefill({})
+      setSelfVerified(false)
+      return
+    }
+    setChecking(true)
+    fetch(`/api/artists/by-wallet?address=${wallet}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data) {
+          setPrefill(data)
+          setSelfVerified(true)
+        }
+        setChecking(false)
+      })
+      .catch(() => setChecking(false))
+  }, [authenticated, user?.wallet?.address])
+
+  return (
+    <div>
+      {/* Wallet connect prompt */}
+      {!authenticated && (
+        <div className="mb-8 border border-line-border p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <p className="font-mono text-[10px] text-line-accent tracking-widest uppercase mb-1">Line Artist?</p>
+            <p className="font-sans text-sm text-line-muted">
+              Connect your wallet and we&apos;ll pre-fill this form from your profile.
+            </p>
+          </div>
+          <button onClick={login} className="btn-outline shrink-0">
+            Connect wallet →
+          </button>
+        </div>
+      )}
+
+      {checking && (
+        <p className="font-mono text-[10px] text-line-muted tracking-widest mb-8">Checking wallet…</p>
+      )}
+
+      {authenticated && !selfVerified && !checking && (
+        <div className="mb-8 border border-line-border/50 p-6">
+          <p className="font-mono text-[10px] text-line-muted tracking-widest uppercase mb-1">Wallet not matched</p>
+          <p className="font-sans text-sm text-line-muted">
+            This wallet isn&apos;t linked to a Line artist profile. Fill in your details below.
+          </p>
+        </div>
+      )}
+
+      <UpdateFormInner prefill={prefill} selfVerified={selfVerified} />
+    </div>
+  )
+}
+
+// Top-level export — uses dynamic import to avoid SSR issues with Privy
+const UpdateFormWithWalletDynamic = dynamic(
+  () => Promise.resolve(UpdateFormWithWallet),
+  { ssr: false, loading: () => <UpdateFormInner prefill={{}} selfVerified={false} /> }
+)
+
+export function UpdateForm() {
+  const hasPrivy = !!process.env.NEXT_PUBLIC_PRIVY_APP_ID
+  if (!hasPrivy) return <UpdateFormInner prefill={{}} selfVerified={false} />
+  return <UpdateFormWithWalletDynamic />
 }
