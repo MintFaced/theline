@@ -31,7 +31,8 @@ export function RetreatForm() {
       if (res.ok) {
         setStatus('sent')
       } else {
-        console.error('Form error:', res.status)
+        const data = await res.json().catch(() => ({}))
+        console.error('Form error:', res.status, data)
         setStatus('error')
       }
     } catch {
