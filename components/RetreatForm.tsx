@@ -23,16 +23,15 @@ export function RetreatForm() {
     if (!form.name || !form.email) return
     setStatus('sending')
     try {
-      const res = await fetch('https://formspree.io/f/xeerkvvl', {
+      const res = await fetch('/api/forms/retreat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ ...form, _subject: `Retreat interest: ${form.name}` }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
       })
       if (res.ok) {
         setStatus('sent')
       } else {
-        const data = await res.json().catch(() => ({}))
-        console.error('Formspree error:', res.status, data)
+        console.error('Form error:', res.status)
         setStatus('error')
       }
     } catch {

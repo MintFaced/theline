@@ -26,19 +26,15 @@ export function UpdateForm() {
     if (!form.name || !form.email || !form.lineNumber) return
     setStatus('sending')
     try {
-      const res = await fetch('https://formspree.io/f/mnjgvlka', {
+      const res = await fetch('/api/forms/update', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          _subject: `Artist update request: ${form.name} — Line ${form.lineNumber}`,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
       })
       if (res.ok) {
         setStatus('sent')
       } else {
-        const data = await res.json().catch(() => ({}))
-        console.error('Formspree error:', res.status, data)
+        console.error('Form error:', res.status)
         setStatus('error')
       }
     } catch {
