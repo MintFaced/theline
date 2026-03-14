@@ -7,7 +7,12 @@
 
 const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID
 const CLIENT_EMAIL   = process.env.GOOGLE_SHEETS_CLIENT_EMAIL
-const PRIVATE_KEY    = process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n')
+const PRIVATE_KEY    = (() => {
+  const key = process.env.GOOGLE_SHEETS_PRIVATE_KEY
+  if (!key) return undefined
+  // Handle both literal \n and already-newlined versions
+  return key.includes('\\n') ? key.replace(/\\n/g, '\n') : key
+})()
 
 // ── JWT auth ──────────────────────────────────────────────────────────────────
 
