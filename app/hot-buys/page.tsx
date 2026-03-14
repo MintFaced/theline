@@ -192,7 +192,10 @@ export default function HotBuysPage() {
               Hot Buys
             </h1>
             <p className="font-sans text-sm text-line-muted leading-relaxed max-w-md mb-8">
-              Recent acquisitions from the digital art scene. Curated by The Line.
+              Recent BSY acquisitions from the digital art scene. Curated by{' '}
+              <a href="https://x.com/musicalnetta" target="_blank" rel="noopener noreferrer"
+                className="text-line-accent hover:opacity-70 transition-opacity">@musicalnetta</a>{' '}
+              and displayed by The Line.
             </p>
             {/* Summary bar */}
             <div className="flex items-center gap-8">
@@ -208,7 +211,7 @@ export default function HotBuysPage() {
               </div>
               <a href={ETHERSCAN} target="_blank" rel="noopener noreferrer"
                 className="font-mono text-[10px] text-line-muted tracking-widest uppercase hover:text-line-accent transition-colors self-end pb-1">
-                Etherscan →
+                Etherscan Receipt →
               </a>
             </div>
           </div>
@@ -219,8 +222,8 @@ export default function HotBuysPage() {
       <div className="max-w-content mx-auto px-6 py-12 md:py-20">
 
         {/* Column headers */}
-        <div className="hidden md:grid grid-cols-[2fr_3fr_1.5fr_1fr_1fr_1fr] gap-4 pb-4 border-b border-line-border mb-px">
-          {['Artist', 'Piece', 'Date', 'USD', 'ETH', 'Links'].map(h => (
+        <div className="hidden md:grid grid-cols-[2fr_3fr_1.5fr_1fr_1fr] gap-4 pb-4 border-b border-line-border mb-px">
+          {['Artist', 'Piece', 'Date', 'Ξ ETH', 'Links'].map(h => (
             <p key={h} className="font-mono text-[9px] text-line-muted tracking-widest uppercase">{h}</p>
           ))}
         </div>
@@ -261,14 +264,9 @@ export default function HotBuysPage() {
                 {sale.date || '—'}
               </p>
 
-              {/* USD */}
-              <p className="font-mono text-[11px] text-line-text">
-                {sale.priceUsd ? `$${sale.priceUsd.toLocaleString()}` : '—'}
-              </p>
-
               {/* ETH */}
-              <p className="font-mono text-[11px] text-line-muted">
-                {sale.priceEth ? `Ξ${sale.priceEth}` : '—'}
+              <p className="font-mono text-[11px] text-line-accent">
+                {sale.priceEth ? `Ξ${sale.priceEth}` : sale.priceUsd ? `$${sale.priceUsd.toLocaleString()}` : '—'}
               </p>
 
               {/* Links */}
@@ -291,11 +289,8 @@ export default function HotBuysPage() {
 
         {/* Footer note */}
         <div className="mt-16 pt-8 border-t border-line-border flex flex-col md:flex-row gap-4 md:items-center justify-between">
-          <p className="font-mono text-[10px] text-line-muted tracking-widest">
-            Artists marked LINE are on The Line. Not on The Line yet?
-          </p>
-          <Link href="/members/chat" className="btn-outline text-xs">
-            Apply to join →
+          <Link href="/artists" className="btn-outline text-xs">
+            Join The Line →
           </Link>
         </div>
 
