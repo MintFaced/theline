@@ -23,6 +23,7 @@ export interface Artist {
   bioLocked: boolean
   heroImage: string | null
   lastActiveX?: string | null
+  curations?: Array<{ key: string; label: string; url: string }>
 }
 
 export interface CollectorStats {
