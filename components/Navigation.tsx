@@ -22,7 +22,9 @@ const PrivyButton = dynamic(() => import('./PrivyButton'), {
 
 const NAV_LINKS = [
   { label: 'Artists',   href: '/artists' },
-  { label: 'Storyline', href: '/storyline' },
+  { label: 'Storyline', href: '/storyline', dropdown: [
+    { label: 'Cryptoart', href: '/cryptoart' },
+  ]},
   { label: 'Gallery',   href: '/gallery',  dropdown: [
     { label: 'Retreat',   href: '/retreat' },
     { label: 'Takeover',  href: '/takeover' },
