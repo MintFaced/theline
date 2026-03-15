@@ -11,6 +11,7 @@ import { CollectorStatsPanel } from '@/components/CollectorStatsPanel'
 import { RecentWorksSection } from '@/components/RecentWorksSection'
 import { LinePositionStrip } from '@/components/LinePositionStrip'
 import { MembershipCTA } from '@/components/MembershipCTA'
+import { IdentityBadge } from '@/components/IdentityBadge'
 import { ArtistCard } from '@/components/ArtistCard'
 import { RevealSection } from '@/components/RevealSection'
 import { getBio } from '@/lib/bio'
@@ -89,12 +90,15 @@ export default async function ArtistPage(props: { params: Promise<{ slug: string
             style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)', lineHeight: 1.0, letterSpacing: '-0.02em' }}>
             {artist.name}
           </h1>
-          {artist.verified && (
-            <div className="flex items-center gap-2 mt-3">
-              <div className="w-1.5 h-1.5 rounded-full bg-line-accent" />
-              <span className="font-mono text-[10px] text-line-muted tracking-widest uppercase">Verified Artist</span>
-            </div>
-          )}
+          <div className="flex items-center gap-3 mt-3 flex-wrap">
+            {artist.verified && (
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-line-accent" />
+                <span className="font-mono text-[10px] text-line-muted tracking-widest uppercase">Verified Artist</span>
+              </div>
+            )}
+            <IdentityBadge slug={artist.slug} />
+          </div>
         </div>
 
         {/* Bottom-right: Enter The Line button — desktop only */}
