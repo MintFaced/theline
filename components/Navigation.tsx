@@ -36,7 +36,8 @@ const NAV_LINKS = [
     { label: 'Vision',    href: '/vision' },
     { label: 'FAQ',       href: '/faq' },
   ]},
-  { label: 'LARP Chat', href: '/members/chat', dropdown: [
+  { label: 'Join', href: '/join', dropdown: [
+    { label: 'LARP Chat',  href: '/members/chat' },
     { label: 'Update Bio', href: '/update' },
   ]},
 ]
@@ -78,7 +79,7 @@ export function Navigation() {
             THE LINE
           </Link>
 
-          <div className="hidden lg:flex items-center gap-3 text-line-muted">
+          <div className="hidden md:flex items-center gap-3 text-line-muted">
             <span className="font-mono text-[10px] tracking-widest">0</span>
             <div className="relative w-32 h-px bg-line-border">
               <div className="absolute top-1/2 -translate-y-1/2 w-px h-3 bg-line-accent" style={{ left: `${Math.round((maxOccupied / 1000) * 100)}%` }} />
