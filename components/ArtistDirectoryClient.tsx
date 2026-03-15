@@ -26,6 +26,7 @@ export function ArtistDirectoryClient({ artists }: Props) {
   const [lineRange, setLineRange] = useState<[number, number]>([0, 900])
   const [sort, setSort]           = useState('line')
   const [page, setPage]           = useState(1)
+  const [verification, setVerification] = useState<string | null>(null)
 
   const filtered = useMemo(() => {
     let result = artists
@@ -47,6 +48,10 @@ export function ArtistDirectoryClient({ artists }: Props) {
     // Chain
     if (chain) result = result.filter(a => a.blockchain === chain)
 
+    // Verification
+    if (verification === 'mintface') result = result.filter(a => a.verified)
+    if (verification === '6529') result = result.filter(a => !!a.identity6529)
+
     // Line range
     result = result.filter(a =>
       a.allLineNumbers.some(n => n >= lineRange[0] && n <= lineRange[1])
@@ -61,14 +66,14 @@ export function ArtistDirectoryClient({ artists }: Props) {
     }
 
     return result
-  }, [artists, query, category, chain, lineRange, sort])
+  }, [artists, query, category, chain, lineRange, sort, verification])
 
   const visible = filtered.slice(0, page * PAGE_SIZE)
   const hasMore = visible.length < filtered.length
 
   const reset = useCallback(() => {
     setQuery(''); setCategory(null); setChain(null)
-    setLineRange([0, 900]); setSort('line'); setPage(1)
+    setLineRange([0, 900]); setSort('line'); setPage(1); setVerification(null)
   }, [])
 
   return (
@@ -108,6 +113,22 @@ export function ArtistDirectoryClient({ artists }: Props) {
                 }`}
               >{CATEGORY_LABELS[cat]}</button>
             ))}
+          </div>
+
+          {/* Verification */}
+          <div className="flex gap-1.5">
+            <button
+              onClick={() => { setVerification(verification === 'mintface' ? null : 'mintface'); setPage(1) }}
+              className={`font-mono text-[10px] tracking-widest uppercase px-3 py-1.5 border transition-all ${
+                verification === 'mintface' ? 'bg-line-accent text-line-bg border-line-accent' : 'border-line-border text-line-muted hover:border-line-text'
+              }`}
+            >✓ Verified</button>
+            <button
+              onClick={() => { setVerification(verification === '6529' ? null : '6529'); setPage(1) }}
+              className={`font-mono text-[10px] tracking-widest uppercase px-3 py-1.5 border transition-all ${
+                verification === '6529' ? 'bg-line-accent text-line-bg border-line-accent' : 'border-line-border text-line-muted hover:border-line-text'
+              }`}
+            >6529 Identities</button>
           </div>
 
           {/* Chain */}
