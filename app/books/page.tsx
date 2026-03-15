@@ -108,7 +108,7 @@ export default function BooksPage() {
               </p>
             </div>
             <a
-              href="https://www.amazon.com/s?i=stripbooks&rh=p_27%3AMint+Face&s=relevancerank&text=Mint+Face"
+              href="https://www.amazon.com/stores/Mint-Face/author/B0B1WF3MLF"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-outline shrink-0"
@@ -216,7 +216,7 @@ export default function BooksPage() {
             <p className="font-mono text-[10px] text-line-muted/60 tracking-widest">The publishing house of MintFace</p>
           </div>
           <a
-            href="https://www.amazon.com/s?i=stripbooks&rh=p_27%3AMint+Face&s=relevancerank&text=Mint+Face"
+            href="https://www.amazon.com/stores/Mint-Face/author/B0B1WF3MLF"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-outline"
