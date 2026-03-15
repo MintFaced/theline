@@ -31,12 +31,12 @@ const NAV_LINKS = [
   ]},
   { label: 'Collect',   href: '/collect',  dropdown: [
     { label: 'Map',       href: '/map' },
+    { label: 'Books',     href: '/books' },
     { label: 'Hot Buys',  href: '/hot-buys' },
   ]},
   { label: 'About',   href: '/vision',  dropdown: [
     { label: 'Guardians', href: '/guardians' },
     { label: 'Vision',    href: '/vision' },
-    { label: 'Books',     href: '/books' },
     { label: 'FAQ',       href: '/faq' },
   ]},
   { label: 'Join', href: '/join', dropdown: [
