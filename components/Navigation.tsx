@@ -36,6 +36,7 @@ const NAV_LINKS = [
   { label: 'About',   href: '/vision',  dropdown: [
     { label: 'Guardians', href: '/guardians' },
     { label: 'Vision',    href: '/vision' },
+    { label: 'Books',     href: '/books' },
     { label: 'FAQ',       href: '/faq' },
   ]},
   { label: 'Join', href: '/join', dropdown: [
