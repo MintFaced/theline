@@ -75,6 +75,15 @@ export function ArtistCard({ artist, size = 'md' }: Props) {
               : `LINE ${primaryLine}`}
           </span>
         </div>
+        {artist.curations && artist.curations.length > 0 && (
+          <div className="flex gap-1 mt-1.5 flex-wrap">
+            {artist.curations.map(c => (
+              <span key={c.key} className="font-mono text-[8px] tracking-widest text-line-muted/50 uppercase">
+                {c.key}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   )
