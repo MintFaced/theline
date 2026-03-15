@@ -30,23 +30,23 @@ export function JoinButtons({ manifoldUrl }: { manifoldUrl: string }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Fiat — Stripe */}
+      {/* Fiat - Stripe */}
       <button
         onClick={handleStripe}
         disabled={loading}
         className="btn-primary text-center disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? 'Redirecting…' : 'Subscribe $10 / month →'}
+        {loading ? 'Redirecting-' : 'Subscribe $10 / month -'}
       </button>
 
-      {/* ETH — Manifold */}
+      {/* ETH - Manifold */}
       <a
         href={manifoldUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="btn-outline text-center"
       >
-        Mint with ETH on Manifold →
+        Mint with ETH on Manifold -
       </a>
 
       {error && (
