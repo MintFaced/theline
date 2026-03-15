@@ -15,7 +15,7 @@ export default function JoinPage() {
   return (
     <div className="bg-line-bg min-h-screen" style={{ paddingTop: 'var(--nav-height)' }}>
 
-      {/* ── Header ── */}
+      {/* -- Header -- */}
       <div className="border-b border-line-border relative overflow-hidden">
         <div className="max-w-content mx-auto px-6 py-16 md:py-24">
           <div className="max-w-2xl relative z-10">
@@ -24,7 +24,7 @@ export default function JoinPage() {
               Join<br />The Line
             </h1>
             <p className="font-sans text-sm text-line-muted leading-relaxed max-w-lg">
-              The Line is a permanent home for digital artists. Join as an artist or support the platform as a Guardian. All members get access to a tokenized chat — free from bots and AI.
+              The Line is a permanent home for digital artists. Join as an artist or support the platform as a Guardian. All members get access to a tokenized chat - free from bots and AI.
             </p>
           </div>
         </div>
@@ -33,11 +33,11 @@ export default function JoinPage() {
         </div>
       </div>
 
-      {/* ── Plans ── */
+      {/* -- Plans -- */
       <div className="max-w-content mx-auto px-6 py-16 md:py-24">
         <div className="grid md:grid-cols-2 gap-px bg-line-border">
 
-          {/* Plan 1 — Join The Line (Artist) */}
+          {/* Plan 1 - Join The Line (Artist) */}
           <div className="bg-line-bg p-8 md:p-12 flex flex-col">
             <div className="flex-1">
               <p className="label mb-4">For Artists</p>
@@ -65,11 +65,11 @@ export default function JoinPage() {
 
               <div className="space-y-px bg-line-border mb-8">
                 {[
-                  'Dedicated Line Artist bio — written by The Line',
-                  'Your unique Line number — permanent on-chain identity',
+                  'Dedicated Line Artist bio - written by The Line',
+                  'Your unique Line number - permanent on-chain identity',
                   'A feature article written about you and your work',
                   'Featured artist profile on The Line',
-                  'Access to LARP Chat — free from bots and AI',
+                  'Access to LARP Chat - free from bots and AI',
                   'Identity Verification via 6529 Protocol',
                 ].map((text, i) => (
                   <div key={i} className="bg-line-bg px-6 py-4 flex items-start gap-5">
@@ -80,11 +80,11 @@ export default function JoinPage() {
               </div>
             </div>
 
-            {/* CTA buttons — client component for Stripe */}
+            {/* CTA buttons - client component for Stripe */}
             <JoinButtons manifoldUrl={MANIFOLD_LARP} />
           </div>
 
-          {/* Plan 2 — Support The Line (Guardian) */}
+          {/* Plan 2 - Support The Line (Guardian) */}
           <div className="bg-line-surface p-8 md:p-12 flex flex-col">
             <div className="flex-1">
               <div className="flex items-start justify-between mb-4">
@@ -109,11 +109,11 @@ export default function JoinPage() {
 
               <div className="space-y-px bg-line-border mb-8">
                 {[
-                  'Line Guardians NFT — permanent on-chain record of your support',
+                  'Line Guardians NFT - permanent on-chain record of your support',
                   'Access to LARP Chat alongside the artists you collect',
                   'Support exhibitions and artist retreats in New Zealand',
                   'Early access to new Line positions and events',
-                  'Token is tradeable — Guardian benefits transfer with it',
+                  'Token is tradeable - Guardian benefits transfer with it',
                 ].map((text, i) => (
                   <div key={i} className="bg-line-bg px-6 py-4 flex items-start gap-5">
                     <span className="font-mono text-[10px] text-line-accent tracking-widest shrink-0 mt-0.5">{String(i+1).padStart(2,'0')}</span>
@@ -125,7 +125,7 @@ export default function JoinPage() {
 
             <div className="flex flex-col gap-3">
               <a href={OPENSEA_GUARDIANS} target="_blank" rel="noopener noreferrer" className="btn-primary text-center">
-                Acquire Guardian NFT →
+                Acquire Guardian NFT -
               </a>
               <p className="font-mono text-[9px] text-line-muted tracking-widest text-center">
                 101 spots &middot; Exclusive to Line supporters
@@ -135,7 +135,7 @@ export default function JoinPage() {
 
         </div>
 
-        {/* ── LARP Chat callout ── */}
+        {/* -- LARP Chat callout -- */}
         <div className="mt-px bg-line-border">
           <div className="bg-line-bg p-8 md:p-10">
             <div className="max-w-content mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
@@ -149,18 +149,18 @@ export default function JoinPage() {
                 </p>
               </div>
               <Link href="/members/chat" className="btn-outline shrink-0">
-                Enter LARP Chat →
+                Enter LARP Chat -
               </Link>
             </div>
           </div>
         </div>
 
-        {/* ── Recent joinoors ── */}
+        {/* -- Recent joinoors -- */}
         <div className="mt-16 text-center">
           <p className="font-mono text-[10px] text-line-muted tracking-widest">
-            Recent joinoors —{' '}
+            Recent joinoors -{' '}
             <Link href="/members/chat" className="text-line-accent hover:opacity-70 transition-opacity">
-              Enter LARP Chat →
+              Enter LARP Chat -
             </Link>
           </p>
         </div>
