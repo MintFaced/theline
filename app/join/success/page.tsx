@@ -21,7 +21,7 @@ export default function JoinSuccessPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link href="/members/chat" className="btn-primary">
-            Enter LARP Chat →
+            Enter LARP Chat -
           </Link>
           <Link href="/artists" className="btn-ghost">
             Browse artists
