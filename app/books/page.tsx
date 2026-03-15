@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Cryptoart Books — The Line',
+  title: 'Cryptoart Books - The Line',
   description: 'Cryptoart books published by UmPrint Publishing, the publishing house of MintFace. MINTED, Nouns Almanac, Pebbles, !Seized, and The Magic Internet Points Handbook.',
 }
 
@@ -18,7 +18,7 @@ const BOOKS = [
     published: 'February 28, 2022',
     amazonUrl: 'https://www.amazon.com/Minted-Mint-Face/dp/0473608170',
     image: 'https://theline.wtf/wp-content/uploads/2024/11/minted-book-hardcover-1024x1024.png',
-    description: 'The first crypto book to document the 2021 explosion in artists minting on the blockchain. MINTED captures the energy, the artists, and the movement that redefined digital ownership. Crypto books get you into the mindset of a crypto native art collectooor — explore the wealth of art available in a traditional printed format.',
+    description: 'The first crypto book to document the 2021 explosion in artists minting on the blockchain. MINTED captures the energy, the artists, and the movement that redefined digital ownership. Crypto books get you into the mindset of a crypto native art collectooor - explore the wealth of art available in a traditional printed format.',
     tag: 'Minted Book',
     tagHref: '/artists?curation=MINTED',
   },
@@ -46,7 +46,7 @@ const BOOKS = [
     published: 'June 30, 2024',
     amazonUrl: 'https://www.amazon.com/Pebbles-MintFace-Generative-Art-Guide/dp/1067025707/',
     image: 'https://theline.wtf/wp-content/uploads/2024/11/Pebbles-book.png',
-    description: 'Our lives continue on an arc towards more digitisation, not less, making ownership of our own digital lives central to our digital being. Each Pebble is the first generative output built on a smart contract that acknowledged the sovereignty of individual identities. Over the course of the Pebbles book you will learn how to spot all the Pebble traits — from the obvious to those hidden in plain sight.',
+    description: 'Our lives continue on an arc towards more digitisation, not less, making ownership of our own digital lives central to our digital being. Each Pebble is the first generative output built on a smart contract that acknowledged the sovereignty of individual identities. Over the course of the Pebbles book you will learn how to spot all the Pebble traits - from the obvious to those hidden in plain sight.',
     tag: null,
     tagHref: null,
   },
@@ -60,7 +60,7 @@ const BOOKS = [
     published: 'September 5, 2024',
     amazonUrl: 'https://www.amazon.com/Seized-Own-be-Pwned/dp/1067025723',
     image: 'https://theline.wtf/wp-content/uploads/2024/11/seized-1024x944.png',
-    description: '!Seized documents the first four Seasons of Memes that power a new Digital Nation. Over 10,000 residents own digital property in the form of memes. Over 150 memes across 12 meme thematics are published as a reference guide — use it wen considering what you might build on top of a meme card, or simply marvel at the rich texture of memetic culture tokenized for a collective purpose.',
+    description: '!Seized documents the first four Seasons of Memes that power a new Digital Nation. Over 10,000 residents own digital property in the form of memes. Over 150 memes across 12 meme thematics are published as a reference guide - use it wen considering what you might build on top of a meme card, or simply marvel at the rich texture of memetic culture tokenized for a collective purpose.',
     tag: '6529 Memes',
     tagHref: '/artists?curation=6529',
   },
@@ -92,7 +92,7 @@ export default function BooksPage() {
   return (
     <div className="bg-line-bg min-h-screen" style={{ paddingTop: 'var(--nav-height)' }}>
 
-      {/* ── Header ── */}
+      {/* -- Header -- */}
       <div className="border-b border-line-border">
         <div className="max-w-content mx-auto px-6 py-16 md:py-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
@@ -104,7 +104,7 @@ export default function BooksPage() {
               <p className="font-sans text-sm text-line-muted leading-relaxed max-w-lg">
                 Published by{' '}
                 <span className="text-line-text">UmPrint Publishing</span>
-                {' '}— the publishing house of MintFace. Physical books for the crypto-native collector.
+                {' '}- the publishing house of MintFace. Physical books for the crypto-native collector.
               </p>
             </div>
             <a
@@ -113,13 +113,13 @@ export default function BooksPage() {
               rel="noopener noreferrer"
               className="btn-outline shrink-0"
             >
-              All books on Amazon →
+              All books on Amazon -
             </a>
           </div>
         </div>
       </div>
 
-      {/* ── Books ── */}
+      {/* -- Books -- */}
       <div className="max-w-content mx-auto px-6 py-16 md:py-24 space-y-px">
         {BOOKS.map((book, i) => (
           <div key={book.id} className="bg-line-surface border-b border-line-border">
@@ -185,7 +185,7 @@ export default function BooksPage() {
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pt-6 border-t border-line-border">
                   <div className="space-y-1">
                     <p className="font-mono text-[9px] text-line-muted/60 tracking-widest">
-                      {book.pages} pages · {book.published}
+                      {book.pages} pages - {book.published}
                     </p>
                     <p className="font-mono text-[9px] text-line-muted/40 tracking-widest">
                       ISBN {book.isbn}
@@ -197,7 +197,7 @@ export default function BooksPage() {
                     rel="noopener noreferrer"
                     className="btn-primary"
                   >
-                    Buy on Amazon →
+                    Buy on Amazon -
                   </a>
                 </div>
               </div>
@@ -207,7 +207,7 @@ export default function BooksPage() {
         ))}
       </div>
 
-      {/* ── UmPrint footer ── */}
+      {/* -- UmPrint footer -- */}
       <div className="border-t border-line-border">
         <div className="max-w-content mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
@@ -221,7 +221,7 @@ export default function BooksPage() {
             rel="noopener noreferrer"
             className="btn-outline"
           >
-            View all on Amazon →
+            View all on Amazon -
           </a>
         </div>
       </div>
