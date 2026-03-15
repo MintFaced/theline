@@ -50,7 +50,7 @@ export function ArtistDirectoryClient({ artists }: Props) {
 
     // Verification
     if (verification === 'mintface') result = result.filter(a => a.verified)
-    if (verification === '6529') result = result.filter(a => !!a.identity6529)
+    if (verification === '6529') result = result.filter(a => a.curations?.some(cu => cu.key === '6529'))
 
     // Line range
     result = result.filter(a =>
