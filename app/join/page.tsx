@@ -70,6 +70,7 @@ export default function JoinPage() {
                   'A feature article written about you and your work',
                   'Featured artist profile on The Line',
                   'Access to LARP Chat — free from bots and AI',
+                  'Identity Verification via 6529 Protocol',
                 ].map((text, i) => (
                   <div key={i} className="bg-line-bg px-6 py-4 flex items-start gap-5">
                     <span className="font-mono text-[10px] text-line-accent tracking-widest shrink-0 mt-0.5">{String(i+1).padStart(2,'0')}</span>
@@ -100,7 +101,7 @@ export default function JoinPage() {
                 <div className="bg-line-bg px-6 py-4 flex items-center justify-between">
                   <div>
                     <p className="font-mono text-[11px] text-line-text tracking-widest uppercase mb-1">Guardian NFT</p>
-                    <p className="font-sans text-xs text-line-muted">Buy once · Access forever</p>
+                    <p className="font-sans text-xs text-line-muted">Buy once &middot; Access forever</p>
                   </div>
                   <span className="font-display font-light text-2xl text-line-accent" style={{ letterSpacing: '-0.02em' }}>0.1 ETH</span>
                 </div>
@@ -127,7 +128,7 @@ export default function JoinPage() {
                 Acquire Guardian NFT →
               </a>
               <p className="font-mono text-[9px] text-line-muted tracking-widest text-center">
-                101 spots · Exclusive to Line supporters
+                101 spots &middot; Exclusive to Line supporters
               </p>
             </div>
           </div>
