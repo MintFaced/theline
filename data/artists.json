@@ -242,7 +242,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       },
       {
         "key": "6529",
@@ -2195,7 +2195,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       },
       {
         "key": "CC",
@@ -2478,7 +2478,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       },
       {
         "key": "6529",
@@ -2630,7 +2630,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       },
       {
         "key": "6529",
@@ -2700,7 +2700,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       }
     ]
   },
@@ -2846,7 +2846,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       }
     ]
   },
@@ -3201,7 +3201,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       }
     ]
   },
@@ -3717,7 +3717,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       }
     ]
   },
@@ -4856,7 +4856,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       },
       {
         "key": "6529",
@@ -5099,7 +5099,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       },
       {
         "key": "CC",
@@ -5674,7 +5674,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       }
     ]
   },
@@ -6017,7 +6017,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       }
     ]
   },
@@ -7025,7 +7025,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       }
     ]
   },
@@ -9698,7 +9698,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       }
     ]
   },
@@ -12669,7 +12669,7 @@
       {
         "key": "MINTED",
         "label": "Minted Book",
-        "url": "https://www.themintedbook.com"
+        "url": "/books"
       }
     ]
   },
