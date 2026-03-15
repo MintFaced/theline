@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Cryptoart ''' A New Era',
+  title: 'Cryptoart - A New Era',
   description: '2,500 years of art history leading to the Crypto Art era. From Classical antiquity to blockchain-native digital art.',
 }
 
@@ -64,9 +64,9 @@ const ERAS = [
     period: 'c. 1800 1880',
     title: 'Romanticism',
     subtitle: 'and Realism',
-    count: '80,000+ artworks at Musee d\'Orsay',
+    count: '80,000+ artworks at Musee d Orsay',
     style: 'Romanticism embraced emotion, nature, and sublime landscapes, while Realism depicted ordinary life and social issues.',
-    gallery: "Musee d'Orsay",
+    gallery: 'Musee d Orsay',
     galleryHref: 'https://www.musee-orsay.fr',
     galleryLocation: 'Paris, France',
     galleryDetail: 'Houses works by Delacroix, Courbet, and Millet.',
@@ -258,7 +258,7 @@ export default function CryptoartPage() {
                           </div>
                           <div className="bg-line-bg px-6 py-4">
                             <p className="font-mono text-[9px] text-line-muted tracking-widest uppercase mb-1">Gallery</p>
-                            <p className="font-mono text-xs text-line-text">{era.gallery} ''' {era.galleryLocation}</p>
+                            <p className="font-mono text-xs text-line-text">{era.gallery}  - {era.galleryLocation}</p>
                           </div>
                         </div>
                         <div className="mt-8">
