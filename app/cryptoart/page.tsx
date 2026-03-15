@@ -36,7 +36,7 @@ const ERAS = [
     galleryHref: 'https://www.tate.org.uk',
     galleryLocation: 'London, UK',
     galleryDetail: 'Iconic for Warhol, Hockney, and installation art.',
-    image: 'https://theline.wtf/wp-content/uploads/2024/11/Screenshot-2024-11-20-at-12.42.59 PM-1536x1086.png',
+    image: 'https://theline.wtf/wp-content/uploads/2024/11/Screenshot-2024-11-20-at-12.42.59%20PM-1536x1086.png',
     imageCredit: 'Photo: Noah Kalina',
     accent: '#8B9EB7',
     isFeatured: false,
@@ -154,7 +154,7 @@ export default function CryptoartPage() {
         {/* Background: the 2500 years image */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://theline.wtf/wp-content/uploads/2024/11/2500-years-of-art-eras.png"
+            src="/images/wave-hero.png"
             alt="2500 years of art"
             className="w-full h-full object-cover object-center opacity-30"
           />
