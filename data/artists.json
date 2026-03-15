@@ -74,7 +74,7 @@
     "artworksDisplayed": 50,
     "purchaseUrl": null,
     "description": "Creator in NFT and digital art.",
-    "walletAddress": null,
+    "walletAddress": "0x0998fc77b101e4c538f57bc7616c5ecd77deab5a",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -86,7 +86,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line2"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 9,
+    "_6529Rep": 421
   },
   {
     "lineNumber": 3,
@@ -161,7 +163,7 @@
     "artworksDisplayed": 20,
     "purchaseUrl": null,
     "description": "Art that does a hit &amp; run with your emotion // multi media style blender // hard to define /",
-    "walletAddress": null,
+    "walletAddress": "0x3e0914fc2b3b67a476142020b7d6990d01ad234e",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -184,7 +186,9 @@
         "label": "SuperRare",
         "url": "https://superrare.com/rocketgirl"
       }
-    ]
+    ],
+    "_6529Level": 34,
+    "_6529Rep": 204530
   },
   {
     "lineNumber": 6,
@@ -199,7 +203,7 @@
     "artworksDisplayed": 200,
     "purchaseUrl": null,
     "description": "Web3 builder, possibly tech-focused.",
-    "walletAddress": null,
+    "walletAddress": "0xaed8e151086a85d39166b80bb4b4cec2f6328a7a",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Self-taught multidisciplinary artist working in photography, film, painting, and more; featured in collections like Medici Emerging and Beeple Studios, she shares GM shots, loves vibrant street and travel-inspired work, and engages actively with the NFT community.",
@@ -211,7 +215,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line6"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 8,
+    "_6529Rep": 4105
   },
   {
     "lineNumber": 7,
@@ -226,7 +232,7 @@
     "artworksDisplayed": 35,
     "purchaseUrl": null,
     "description": "Performance Art Imagemaker | Founder @Casa_NUA",
-    "walletAddress": null,
+    "walletAddress": "0x47d539d4dd9b6f21ccabc5c96bbbf7071290938e",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Performance art imagemaker and founder of @Casa_NUA and @TeatroPombagira; he creates bold, expressive visuals blending activism, futurism, and cultural commentary with a focus on LGBTQ+ themes and global perspectives.",
@@ -249,7 +255,9 @@
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
       }
-    ]
+    ],
+    "_6529Level": 78,
+    "_6529Rep": 1305549
   },
   {
     "lineNumber": 8,
@@ -264,7 +272,7 @@
     "artworksDisplayed": 85,
     "purchaseUrl": null,
     "description": "Photographer. Artist. Human.",
-    "walletAddress": null,
+    "walletAddress": "0x344a4c67ee8ae84b89bcde443f982c07ae5b1358",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -276,7 +284,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line8"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 8,
+    "_6529Rep": 4368
   },
   {
     "lineNumber": 9,
@@ -345,7 +355,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "Photographer specializing in surreal landscapes.",
-    "walletAddress": null,
+    "walletAddress": "0x56bdc5fe7f9752e7f5a381e394acfe72a724462b",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Composite landscape photographer exhibited at Christie's, Sotheby's, SuperRare, and more; she blends real-world photography with imaginative editing to create surreal, emotive scenes of nature, often sharing her travels and available works.",
@@ -373,7 +383,9 @@
         "label": "SuperRare",
         "url": "https://superrare.com/cathsimard"
       }
-    ]
+    ],
+    "_6529Level": 40,
+    "_6529Rep": 166988
   },
   {
     "lineNumber": 12,
@@ -417,7 +429,7 @@
     "artworksDisplayed": 200,
     "purchaseUrl": null,
     "description": "Photographer, focuses on nature.",
-    "walletAddress": null,
+    "walletAddress": "0xa7efbb4a06a680f3b65c5861ec387408ceafbec8",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Photographer and web geek who creates generative/infinite art by blending his own photos with code and math; he posts interactive WIP pieces, meme card art (as official 6529 artist), and family-focused creative experiments.",
@@ -435,7 +447,9 @@
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
       }
-    ]
+    ],
+    "_6529Level": 26,
+    "_6529Rep": 113416
   },
   {
     "lineNumber": 14,
@@ -450,7 +464,7 @@
     "artworksDisplayed": 100,
     "purchaseUrl": null,
     "description": "Landscape and wildlife photographer.",
-    "walletAddress": null,
+    "walletAddress": "0x2968da8a29d342e35dab40315638f22f425078ea",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Wildlife and nature photographer who travels by RV and boat to capture birds, animals, and wild places; she shares serene bird portraits with soft backgrounds, motivational writing about chasing dreams, and engages warmly with fellow photographers.",
@@ -462,7 +476,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line14"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 12,
+    "_6529Rep": 14488
   },
   {
     "lineNumber": 15,
@@ -477,7 +493,7 @@
     "artworksDisplayed": 200,
     "purchaseUrl": null,
     "description": "Digital artist and photographer.",
-    "walletAddress": null,
+    "walletAddress": "0x391a3699f430a4563097aec735b3c242108350ca",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -489,7 +505,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line15"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 9,
+    "_6529Rep": 7208
   },
   {
     "lineNumber": 16,
@@ -504,7 +522,7 @@
     "artworksDisplayed": 101,
     "purchaseUrl": null,
     "description": "I am Underscore",
-    "walletAddress": null,
+    "walletAddress": "0x257984b6b5bcfd665532649450242d4df1eb304f",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -518,7 +536,9 @@
       "https://oncyber.io/line16",
       "https://oncyber.io/line511"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 22,
+    "_6529Rep": 86573
   },
   {
     "lineNumber": 17,
@@ -560,7 +580,7 @@
     "artworksDisplayed": 250,
     "purchaseUrl": null,
     "description": "\"Inspired by movements such as Surrealism, Dadism, Flemish painting and Baroque, I work the image in a way in which the aesthetic is no less important than the concept itself with which I play.\" Ada Crow",
-    "walletAddress": null,
+    "walletAddress": "0x91cb1ff4322559a5c5c67dba075ab081c255ba1f",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Art historian and multidisciplinary artist behind \"The Motion Bestiary\" project; she engages thoughtfully with digital art discussions, supports fellow creators, and shares occasional visuals while focusing on historical and contemporary art contexts.",
@@ -572,7 +592,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line18"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 10,
+    "_6529Rep": 9505
   },
   {
     "lineNumber": 19,
@@ -587,7 +609,7 @@
     "artworksDisplayed": 10,
     "purchaseUrl": null,
     "description": "NFT and digital artist.",
-    "walletAddress": null,
+    "walletAddress": "0x31f8e9b0c3da5ea19f06c6df7e88f3c60fdda1b4",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -599,7 +621,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line19"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 16,
+    "_6529Rep": 8721
   },
   {
     "lineNumber": 20,
@@ -614,7 +638,7 @@
     "artworksDisplayed": 100,
     "purchaseUrl": null,
     "description": "NFT creator.",
-    "walletAddress": null,
+    "walletAddress": "0xeeaf3bd19ebe8823abcc994538a930ee37a6dd3b",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Photographer and pilot (U.S. veteran) who captures aerial views, community moments, and personal stories; he shares scenic flight shots, motivational reflections on life and transitions, and supports other artists in the space.",
@@ -626,7 +650,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line20"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 10,
+    "_6529Rep": 7977
   },
   {
     "lineNumber": 21,
@@ -668,7 +694,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "Photographer and NFT artist.",
-    "walletAddress": null,
+    "walletAddress": "0xc99360f97475dcd02cbaa1940e0e6a2cb67186c8",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Award-winning photographer and artist specializing in architecture, fine art, and landscape; she travels widely, posts stunning travel-inspired images (like waterfalls and scenic spots), and celebrates fellow creators' sales and work with supportive comments.",
@@ -680,7 +706,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line22"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 35,
+    "_6529Rep": 83595
   },
   {
     "lineNumber": 23,
@@ -722,7 +750,7 @@
     "artworksDisplayed": 100,
     "purchaseUrl": null,
     "description": "Digital artist.",
-    "walletAddress": null,
+    "walletAddress": "0xa55bae6554a08576d7cc77c05348f3cee97beb14",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Photographer who humorously claims \"Photographer of the year 2032\"; his posts mix witty, irreverent commentary on life, nostalgia (like 90s vibes), and occasional visuals in a bold, edgy style.",
@@ -734,7 +762,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line24"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 8,
+    "_6529Rep": 4222
   },
   {
     "lineNumber": 25,
@@ -749,7 +779,7 @@
     "artworksDisplayed": 100,
     "purchaseUrl": null,
     "description": "Digital artist in NFT space.",
-    "walletAddress": null,
+    "walletAddress": "0x7b50b1f2634fa38d078eb067a4f8f22a666b49a2",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Self-taught abstract artist and doctor featured on OpenSea, NFT_NYC, Ultra DAO, and more; she creates calm, emotive collections like \"Fifty Shades of Blue\" and \"Breaking The Night,\" sharing mint announcements and serene blue-toned pieces focused on depth and quiet stories.",
@@ -761,7 +791,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line25"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 35,
+    "_6529Rep": 74664
   },
   {
     "lineNumber": 26,
@@ -803,7 +835,7 @@
     "artworksDisplayed": 15,
     "purchaseUrl": null,
     "description": "Illustrator and digital artist.",
-    "walletAddress": null,
+    "walletAddress": "0xd0d8a0dcacf34cb87eb5836c3e484154e4142da3",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Artist and mother who works with AI; she shares supportive replies to fellow creators, appreciates abstract and emotional art (like broken structures or nature scenes), and focuses on heartfelt, connective digital works.",
@@ -830,7 +862,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "Photographer, known for light-based landscapes.",
-    "walletAddress": null,
+    "walletAddress": "0xceae4ca7d082856d140f3672780029d6e90c3dcd",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Visual artist and National Geographic photographer known for innovative landscape work; he shares quick morning sketches over coffee, hiking adventures (like frozen lakes in Alberta), and occasional crypto nods while emphasizing creative process and exploration.",
@@ -863,7 +895,9 @@
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
       }
-    ]
+    ],
+    "_6529Level": 36,
+    "_6529Rep": 53978
   },
   {
     "lineNumber": 29,
@@ -905,7 +939,7 @@
     "artworksDisplayed": 100,
     "purchaseUrl": null,
     "description": "NFT artist and creator.",
-    "walletAddress": null,
+    "walletAddress": "0xf22f5a1769080c59ce09016ba7561219cb88a17f",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Artist who shares GM messages, engages with meme culture (like COCO memes and frog-themed art), and responds supportively to fellow creators in the NFT space.",
@@ -917,7 +951,8 @@
     "oncyberUrls": [
       "https://oncyber.io/line31"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Rep": 1
   },
   {
     "lineNumber": 32,
@@ -932,7 +967,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "Photographer, digital artist.",
-    "walletAddress": null,
+    "walletAddress": "0xe23e0bd6e320c87367b0e4b797b42dc9b4fe7ca0",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Entrepreneur, photographer, and NFT artist building with @theburrownft; he posts GM replies, supports community events, and focuses on photography and digital art drops.",
@@ -944,7 +979,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line32"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 23,
+    "_6529Rep": 70021
   },
   {
     "lineNumber": 33,
@@ -1040,7 +1077,7 @@
     "artworksDisplayed": 6,
     "purchaseUrl": null,
     "description": "Digital artist and NFT creator.",
-    "walletAddress": null,
+    "walletAddress": "0xb579160db92b6e9f92791ed3003625d97a4951cc",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -1052,7 +1089,8 @@
     "oncyberUrls": [
       "https://oncyber.io/line36"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Rep": 1
   },
   {
     "lineNumber": 37,
@@ -1094,7 +1132,7 @@
     "artworksDisplayed": 200,
     "purchaseUrl": null,
     "description": "NFT artist.",
-    "walletAddress": null,
+    "walletAddress": "0xd6d8e393824aac8ecaf4e1f689717bc001064abc",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Photographer, designer, and 6529 meme artist/card creator (#431); he builds interactive projects like meme memory games for @6529Collections, shares his submissions, and supports fellow artists.",
@@ -1112,7 +1150,9 @@
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
       }
-    ]
+    ],
+    "_6529Level": 44,
+    "_6529Rep": 401290
   },
   {
     "lineNumber": 39,
@@ -1127,7 +1167,7 @@
     "artworksDisplayed": 100,
     "purchaseUrl": null,
     "description": "Photographer.",
-    "walletAddress": null,
+    "walletAddress": "0x6191c173e855202083455859e670ac16a669788d",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Photographer published in National Geographic, known for travel and impressionistic shots (like vibrant Vietnam series); he shares high-engagement photo threads of locations and cultures, with available works on SuperRare.",
@@ -1139,7 +1179,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line39"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 37,
+    "_6529Rep": 134451
   },
   {
     "lineNumber": 40,
@@ -1262,7 +1304,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "Photographer, focuses on digital art.",
-    "walletAddress": null,
+    "walletAddress": "0xcedc341308903051b8b117d62f9c51ec4c180fc5",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Master portrait photographer (Keri) who passionately creates Liquid Art Sculptures with no limits; she shares GM posts featuring her colorful, abstract liquid pieces and engages warmly with the photography community.",
@@ -1372,7 +1414,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "Photographer and artist.",
-    "walletAddress": null,
+    "walletAddress": "0x2cd22313443210fd7924953c84a9ad23b1e23414",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Landscape and astro photographer capturing vibrant Earth images with uncontainable creative fire; he shares thoughtful replies on topics like AI, taxes, and photography ethics, while posting scenic or humorous visuals tied to his work.",
@@ -1384,7 +1426,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line47"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 13,
+    "_6529Rep": 21000
   },
   {
     "lineNumber": 49,
@@ -1399,7 +1443,7 @@
     "artworksDisplayed": 10,
     "purchaseUrl": null,
     "description": "Digital artist.",
-    "walletAddress": null,
+    "walletAddress": "0xcedc341308903051b8b117d62f9c51ec4c180fc5",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Fine artist and illustrator capturing beauty with watercolor and acrylic, based in Valencia with original art and custom commissions welcome; she shares ethereal digital pieces like mermaids (\"Orange underwater,\" \"Sirena\") and engages in community shoutouts for her Tezos works.",
@@ -1534,7 +1578,7 @@
     "artworksDisplayed": 300,
     "purchaseUrl": null,
     "description": "NFT artist.",
-    "walletAddress": null,
+    "walletAddress": "0x2cb3338f518b2d61470b4d1d503bdc84c1a04ecd",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Painter transitioned to digital with a focus on surreal themes; he shares supportive replies to fellow artists, appreciates retro/vibrant visuals, and engages in community discussions about art sharing and creativity.",
@@ -1546,7 +1590,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line53"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 13,
+    "_6529Rep": 12199
   },
   {
     "lineNumber": 54,
@@ -1615,7 +1661,7 @@
     "artworksDisplayed": 100,
     "purchaseUrl": null,
     "description": "Digital artist.",
-    "walletAddress": null,
+    "walletAddress": "0xeada9f56fa738ac662fc4b742e711d3891640069",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -1627,7 +1673,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line56"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 20,
+    "_6529Rep": 57632
   },
   {
     "lineNumber": 57,
@@ -1669,7 +1717,7 @@
     "artworksDisplayed": 27,
     "purchaseUrl": null,
     "description": "Photographer, visual artist.",
-    "walletAddress": null,
+    "walletAddress": "0x078430ebd8db8288fd056d137e0e11cf67fb8fc1",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Collector of digital artifacts, multidisciplinary artist, and meme maxi who tells stories through shared experiences; he shares humorous visuals, GM replies, and appreciative comments on fine art photography like northern lights or scenic shots.",
@@ -1689,7 +1737,9 @@
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
       }
-    ]
+    ],
+    "_6529Level": 12,
+    "_6529Rep": 16529
   },
   {
     "lineNumber": 59,
@@ -1704,7 +1754,7 @@
     "artworksDisplayed": 40,
     "purchaseUrl": null,
     "description": "NFT creator or collector",
-    "walletAddress": null,
+    "walletAddress": "0x9c31993be9e616139a4f07092a3e1ff523a85f3c",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Artist who visualizes concepts through digital work, often participating in meme and glitch-inspired communities like The Memes by 6529; he shares supportive replies, appreciates standout pieces, and engages in on-chain art discussions and submissions.",
@@ -1716,7 +1766,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line59"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 27,
+    "_6529Rep": 132821
   },
   {
     "lineNumber": 60,
@@ -1731,7 +1783,7 @@
     "artworksDisplayed": 82,
     "purchaseUrl": null,
     "description": "NFT artist, likely Spanish-speaking",
-    "walletAddress": null,
+    "walletAddress": "0xa0dd260fcd1b260b544d1645be68f97f396186de",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -1758,7 +1810,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "NFT creator.",
-    "walletAddress": null,
+    "walletAddress": "0xcedc341308903051b8b117d62f9c51ec4c180fc5",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -1812,7 +1864,7 @@
     "artworksDisplayed": 20,
     "purchaseUrl": null,
     "description": "Digital artist working with NFTs",
-    "walletAddress": null,
+    "walletAddress": "0x7021fcd14815f00b0e89841c458829739c05b00d",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Maker of things with love, often featuring frog/Pepe themes and community vibes; she shares joyful replies, celebrates fellow creators' work, collects and highlights pieces like \"The Art Of CommYOUnity,\" and spreads positive energy in digital art circles.",
@@ -1824,7 +1876,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line63"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 7,
+    "_6529Rep": 1
   },
   {
     "lineNumber": 64,
@@ -1839,7 +1893,7 @@
     "artworksDisplayed": 120,
     "purchaseUrl": null,
     "description": "NFT artist focused on digital art",
-    "walletAddress": null,
+    "walletAddress": "0x21339e2ce5ce1d7a19a28e774513619c0c6259da",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Physical abstract NFT artist creating with global, peaceful themes (links to Tezos, Ethereum, and other platforms); she posts mint updates, thanks collectors for editions, and engages warmly in the abstract/digital art community with celebratory and grateful replies.",
@@ -1851,7 +1905,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line64"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 13,
+    "_6529Rep": 9058
   },
   {
     "lineNumber": 65,
@@ -1893,7 +1949,7 @@
     "artworksDisplayed": 1,
     "purchaseUrl": null,
     "description": "Digital artist, active in NFTs",
-    "walletAddress": null,
+    "walletAddress": "0x261b89e16244fa9a1288e75d06544992a7d63768",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Artist painting worlds of nostalgia, irony, and desert dust; she shares morning posts with her evocative works (available on SuperRare), engages supportively with fellow creators, and highlights personal chapters in her ongoing series.",
@@ -1911,7 +1967,9 @@
         "label": "Fake Rare",
         "url": "https://opensea.io/collection/fake-rares-curated"
       }
-    ]
+    ],
+    "_6529Level": 26,
+    "_6529Rep": 37031
   },
   {
     "lineNumber": 67,
@@ -1926,7 +1984,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "NFT artist.",
-    "walletAddress": null,
+    "walletAddress": "0x35837d1f64e15e537bdc4adf151f20ea624632a9",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Digital art enthusiast, collector, travel/nature/wildlife photographer always seeking beauty and human connection; he shares appreciative replies to stunning visuals, celebrates others' collections, and reflects on art's role in capturing the world's wonders.",
@@ -1938,7 +1996,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line67"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 11,
+    "_6529Rep": 5496
   },
   {
     "lineNumber": 68,
@@ -1980,7 +2040,7 @@
     "artworksDisplayed": 6,
     "purchaseUrl": null,
     "description": "Landscape photographer.",
-    "walletAddress": null,
+    "walletAddress": "0x1423d7ba74817a2617fa3e69b609a54e4daf6f79",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Founder of @wildalpsfreedom focused on meditation, mindfulness, and contemplative art; he shares supportive, meditative replies to fellow creators and posts about transformation, freedom, and peaceful impulses through his work.",
@@ -1992,7 +2052,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line69"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 8,
+    "_6529Rep": 3150
   },
   {
     "lineNumber": 70,
@@ -2007,7 +2069,7 @@
     "artworksDisplayed": 200,
     "purchaseUrl": null,
     "description": "Digital artist.",
-    "walletAddress": null,
+    "walletAddress": "0x3ac61447a75149ba67639100ecc92c76fb20941c",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "PFP artist known for Paladin Punks series, with pieces in the Medici Emerging Collection; he engages in heartfelt community conversations about burnout, real connections in web3, and the evolving dynamics of platforms like Farcaster and 6529.",
@@ -2019,7 +2081,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line70"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 28,
+    "_6529Rep": 64177
   },
   {
     "lineNumber": 71,
@@ -2034,7 +2098,7 @@
     "artworksDisplayed": 1,
     "purchaseUrl": null,
     "description": "NFT creator.",
-    "walletAddress": null,
+    "walletAddress": "0x91e8be20d0dfb2293b97317e906223c1fa833a48",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Photographer and 6529 Meme Card creator (#347) who brings NFTs into the real world; he shares minimal, thoughtful visuals (like outdoor minting scenes), celebrates project milestones, and supports community wins with a positive, grounded vibe.",
@@ -2046,7 +2110,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line71"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 60,
+    "_6529Rep": 951751
   },
   {
     "lineNumber": 72,
@@ -2115,7 +2181,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "Landscape photographer.",
-    "walletAddress": null,
+    "walletAddress": "0x369ca4895fb76ec5a5fbb1becf5df7339bf78606",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Creator of compelling photos, mountain adventures, and meaningful self-portraits inspired by nature therapy; he documents personal journeys through stunning alpine and outdoor scenes, shares motivational stories of overcoming challenges, and connects deeply with nature's beauty.",
@@ -2127,7 +2193,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line75"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 19,
+    "_6529Rep": 54207
   },
   {
     "lineNumber": 76,
@@ -2169,7 +2237,7 @@
     "artworksDisplayed": 15,
     "purchaseUrl": null,
     "description": "Digital artist.",
-    "walletAddress": null,
+    "walletAddress": "0x774a34da2ee2e2d242180819f1ee88783215f7b9",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -2202,7 +2270,9 @@
         "label": "Click Create",
         "url": "https://opensea.io/collection/clickcreate"
       }
-    ]
+    ],
+    "_6529Level": 61,
+    "_6529Rep": 158561
   },
   {
     "lineNumber": 78,
@@ -2217,7 +2287,7 @@
     "artworksDisplayed": 18,
     "purchaseUrl": null,
     "description": "Photographer specializing in landscapes or nature",
-    "walletAddress": null,
+    "walletAddress": "0x3e7c4e28b934545a681c4225e40878a35cc25741",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -2229,7 +2299,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line78"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 45,
+    "_6529Rep": 74
   },
   {
     "lineNumber": 79,
@@ -2244,7 +2316,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "Nature and landscape photographer.",
-    "walletAddress": null,
+    "walletAddress": "0x6c0040bda93e4cf433c0aa8498bd624397aece30",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Landscape and nature photographer who captures overlooked beauty in places like Death Valley with themes of gratitude, quiet connection, and simplicity; he shares serene photos of sand dunes, water reflections, and twilight scenes, often with motivational captions like \"Follow your light.\"",
@@ -2256,7 +2328,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line79"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 8,
+    "_6529Rep": 819
   },
   {
     "lineNumber": 80,
@@ -2298,7 +2372,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "Photographer.",
-    "walletAddress": null,
+    "walletAddress": "0x9adad55e915e7cd14bfed93dadbadee464b1bc57",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -2310,7 +2384,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line81"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 11,
+    "_6529Rep": 3000
   },
   {
     "lineNumber": 82,
@@ -2408,7 +2484,7 @@
     "artworksDisplayed": 60,
     "purchaseUrl": null,
     "description": "NFT project account, part of an early collectible project",
-    "walletAddress": null,
+    "walletAddress": "0xd64642f1737fe041b1ed6c37773bac6da1a12962",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Iconic Ethereum project showcasing EtherRock collectibles as classic digital artifacts; the account posts regular floor price updates, sales announcements (like high-value trades in ETH), and multi-image galleries highlighting top rocks and market stats.",
@@ -2500,7 +2576,7 @@
     "artworksDisplayed": 20,
     "purchaseUrl": null,
     "description": "Photographer.",
-    "walletAddress": null,
+    "walletAddress": "0x7fc53dfff734d7cb9f533154344e4d569a34f8e8",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -2512,7 +2588,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line88"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 25,
+    "_6529Rep": 93368
   },
   {
     "lineNumber": 89,
@@ -2614,7 +2692,7 @@
     "artworksDisplayed": 15,
     "purchaseUrl": null,
     "description": "NFT thought leader, 6529 Museum.",
-    "walletAddress": null,
+    "walletAddress": "0x7ba3e8f17582462676c44dd143388ed4b6b20655",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -2637,7 +2715,9 @@
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
       }
-    ]
+    ],
+    "_6529Level": 84,
+    "_6529Rep": 1292522
   },
   {
     "lineNumber": 93,
@@ -2771,7 +2851,7 @@
     "artworksDisplayed": 35,
     "purchaseUrl": null,
     "description": "Photographer focused on landscapes or fine art",
-    "walletAddress": null,
+    "walletAddress": "0x9adad55e915e7cd14bfed93dadbadee464b1bc57",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -2783,7 +2863,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line97"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 11,
+    "_6529Rep": 3000
   },
   {
     "lineNumber": 98,
@@ -2798,7 +2880,7 @@
     "artworksDisplayed": 29,
     "purchaseUrl": null,
     "description": "Digital artist.",
-    "walletAddress": null,
+    "walletAddress": "0xb579160db92b6e9f92791ed3003625d97a4951cc",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -2810,7 +2892,8 @@
     "oncyberUrls": [
       "https://oncyber.io/line98"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Rep": 1
   },
   {
     "lineNumber": 99,
@@ -2863,7 +2946,7 @@
     "artworksDisplayed": 50,
     "purchaseUrl": null,
     "description": "NFT creator or project account.",
-    "walletAddress": null,
+    "walletAddress": "0xcedc341308903051b8b117d62f9c51ec4c180fc5",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -3572,7 +3655,7 @@
     "artworksDisplayed": 17,
     "purchaseUrl": null,
     "description": "High-energy sports shots",
-    "walletAddress": null,
+    "walletAddress": "0x7056d3ff77c3ac9811bba12783ba3c51a40e6664",
     "walletType": null,
     "xHandle": "_focuspirate",
     "bioOverride": "Photographer, visual artist, and developer who treats code as art while semi-nomadic; he posts macro/close-up series like crystal growths, milk pours, or top-down abstracts, often with scientific notes on patterns and GM coffee shots.",
@@ -3584,7 +3667,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line126"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 25,
+    "_6529Rep": 115086
   },
   {
     "lineNumber": 127,
@@ -4216,7 +4301,7 @@
     "walletAddress": "0x4D48B015da844B2a8a86ac4e8DeDBBee5780E314",
     "walletType": "eth",
     "xHandle": "poptoday",
-    "bioOverride": "Character designer, cartoon content creator, and toy/game lover; he shares fun, playful illustrations (like Pok\u00e9mon-inspired or Pariroro girls pieces) and occasional lighthearted posts about daily life or creative frustrations.",
+    "bioOverride": "Character designer, cartoon content creator, and toy/game lover; he shares fun, playful illustrations (like Pokémon-inspired or Pariroro girls pieces) and occasional lighthearted posts about daily life or creative frustrations.",
     "bioLocked": false,
     "heroImage": "https://pub-40df8e6473b14a10a093ecf8c80c2f92.r2.dev/artists/line0150-pop-today.png",
     "allLineNumbers": [
@@ -5876,7 +5961,7 @@
   {
     "lineNumber": 213,
     "slug": "g-k-ay-karamano-lu",
-    "name": "G\u00f6k\u00e7ay Karamano\u011flu",
+    "name": "Gökçay Karamanoğlu",
     "category": "lens-based",
     "blockchain": "ethereum",
     "featured": false,
@@ -6255,7 +6340,7 @@
     "oncyberUrl": "https://oncyber.io/line227",
     "artworksDisplayed": 83,
     "purchaseUrl": "https://foundation.app/collection/intothenight",
-    "description": "Landscape photography capturing earth\u2019s quiet power.",
+    "description": "Landscape photography capturing earth’s quiet power.",
     "walletAddress": "astrodaddy.eth",
     "walletType": "ens",
     "xHandle": "paulwilsonimage",
@@ -6907,7 +6992,7 @@
     "artworksDisplayed": 240,
     "purchaseUrl": null,
     "description": "Abstracts with conceptual layers and deep meaning.",
-    "walletAddress": null,
+    "walletAddress": "0xd40b63bf04a44e43fbfe5784bcf22acaab34a180",
     "walletType": null,
     "xHandle": "mintfaced",
     "bioOverride": "Artist and founder of @thelinegallery, she creates and shares digital art pieces like \"Conflagration\" while highlighting quality emerging work in the NFT space and thoughtful commentary on market trends.",
@@ -6935,7 +7020,9 @@
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
       }
-    ]
+    ],
+    "_6529Level": 66,
+    "_6529Rep": 2343070
   },
   {
     "lineNumber": 251,
@@ -6953,7 +7040,7 @@
     "walletAddress": "0x36ED2D75A82e180e0871456b15c239b73B4EE9F4",
     "walletType": "eth",
     "xHandle": "Dikasso_",
-    "bioOverride": "VR/digital NFT artist, ideas man, and game dev active in NFTs since August 2020; founder of The Coop Troop (currently minting), he shares detailed mouse-drawn illustrations (like intricate devil-themed pieces highlighting the challenge of fine details) and engages casually in community chats (e.g., Pok\u00e9mon fandom or mouse-drawing pride).",
+    "bioOverride": "VR/digital NFT artist, ideas man, and game dev active in NFTs since August 2020; founder of The Coop Troop (currently minting), he shares detailed mouse-drawn illustrations (like intricate devil-themed pieces highlighting the challenge of fine details) and engages casually in community chats (e.g., Pokémon fandom or mouse-drawing pride).",
     "bioLocked": false,
     "heroImage": "https://pub-40df8e6473b14a10a093ecf8c80c2f92.r2.dev/artists/line0251-dikasso.png",
     "allLineNumbers": [
@@ -9204,7 +9291,7 @@
     "walletAddress": "0x0BCf5544D234DD45f20fB3F9BAc8ABfDF0937054",
     "walletType": "eth",
     "xHandle": "RamiroTorrents",
-    "bioOverride": "Landscape photographer guiding photo tours worldwide; he shares stunning Patagonia scenes (e.g., frozen mornings in El Chalt\u00e9n, autumn views, camping under stars), appreciative replies to fellow photographers, and focuses on evocative, location-based captures from remote adventures.",
+    "bioOverride": "Landscape photographer guiding photo tours worldwide; he shares stunning Patagonia scenes (e.g., frozen mornings in El Chaltén, autumn views, camping under stars), appreciative replies to fellow photographers, and focuses on evocative, location-based captures from remote adventures.",
     "bioLocked": false,
     "heroImage": "https://pub-40df8e6473b14a10a093ecf8c80c2f92.r2.dev/artists/line0334-ramiro-torrents.png",
     "allLineNumbers": [
@@ -10448,7 +10535,7 @@
     "artworksDisplayed": 80,
     "purchaseUrl": "https://objkt.com/profile/cassimoghan/",
     "description": "Visual artist focusing on nature and color",
-    "walletAddress": null,
+    "walletAddress": "0xd724adfe5fe2404f9b5b979f6546788a0a7c28f0",
     "walletType": null,
     "xHandle": "Cassi_Moghan",
     "bioOverride": null,
@@ -10815,7 +10902,7 @@
     "artworksDisplayed": 0,
     "purchaseUrl": null,
     "description": "Glitchy, abstract digital art",
-    "walletAddress": null,
+    "walletAddress": "0xf70ebfd828b993e2863670530c2ec62c049f37ad",
     "walletType": null,
     "xHandle": "NoCreative_eth",
     "bioOverride": null,
@@ -10833,7 +10920,9 @@
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
       }
-    ]
+    ],
+    "_6529Level": 21,
+    "_6529Rep": 477
   },
   {
     "lineNumber": 393,
@@ -11064,7 +11153,7 @@
     "artworksDisplayed": 1,
     "purchaseUrl": null,
     "description": "Nature and wilderness digital art",
-    "walletAddress": null,
+    "walletAddress": "0x2afc032aaf6d7ead33fb05f9d42d874874dfb9d1",
     "walletType": null,
     "xHandle": "CryptoForager81",
     "bioOverride": "Crypto forager and NFT collector with a focus on discovering emerging projects and onchain gems; he shares supportive GM replies, celebrates mints/drops from small creators, and engages in community discussions around value hunting in web3 art and tokens.",
@@ -11078,7 +11167,9 @@
       "https://oncyber.io/line401",
       "https://oncyber.io/line640"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 31,
+    "_6529Rep": 3
   },
   {
     "lineNumber": 402,
@@ -13185,7 +13276,7 @@
     "artworksDisplayed": 0,
     "purchaseUrl": null,
     "description": "Creator of the iconic Nyan Cat internet meme",
-    "walletAddress": null,
+    "walletAddress": "0x484ec62385e780f2460feac34864a77ba5a18134",
     "walletType": null,
     "xHandle": "nyancat",
     "bioOverride": "Iconic internet meme and early NFT pioneer; the original Nyan Cat maintains nostalgic meme culture, occasional rainbow and cat visuals, and engagement in lighthearted web3 and meme discussions tied to early NFT history.",
@@ -13203,7 +13294,9 @@
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
       }
-    ]
+    ],
+    "_6529Level": 13,
+    "_6529Rep": 23583
   },
   {
     "lineNumber": 485,
@@ -15835,7 +15928,7 @@
     "artworksDisplayed": 0,
     "purchaseUrl": null,
     "description": "NFT artist with geometric, minimalist aesthetic",
-    "walletAddress": null,
+    "walletAddress": "0xb033daedca113b0386eb3e8f4c72c79fc50ae32e",
     "walletType": null,
     "xHandle": "ze_blocks",
     "bioOverride": null,
@@ -15847,7 +15940,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line585"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 38,
+    "_6529Rep": 179387
   },
   {
     "lineNumber": 586,
@@ -16229,7 +16324,7 @@
     "oncyberUrl": "https://oncyber.io/line603",
     "artworksDisplayed": 0,
     "purchaseUrl": null,
-    "description": "Exploring the world\u2019s spirit through nature and portraiture",
+    "description": "Exploring the world’s spirit through nature and portraiture",
     "walletAddress": "0x1E06D5927cF2749894F6e3B54793FB88e9EF38a7",
     "walletType": "eth",
     "xHandle": null,
@@ -16650,7 +16745,7 @@
     "oncyberUrl": "https://oncyber.io/line618",
     "artworksDisplayed": 0,
     "purchaseUrl": "https://dankset.io/by/greencrossxcp",
-    "description": "Lush, organic forms exploring life\u2019s textures and colors",
+    "description": "Lush, organic forms exploring life’s textures and colors",
     "walletAddress": "0x0DD399a7ED92283e4983C2974FE377070D67f4eB",
     "walletType": "eth",
     "xHandle": null,
@@ -16785,7 +16880,7 @@
     "oncyberUrl": "https://oncyber.io/line623",
     "artworksDisplayed": 0,
     "purchaseUrl": "https://objkt.com/collection/KT1DPQFxKdZXZmtT3Tg4ZQFSNV64i1MsMfvQ",
-    "description": "Exploring nature\u2019s abstract beauty through dynamic light",
+    "description": "Exploring nature’s abstract beauty through dynamic light",
     "walletAddress": "tz1MaSEnax38sCmadfefrVjdpBmzaTLZfpAr",
     "walletType": "tezos",
     "xHandle": null,
@@ -16895,7 +16990,7 @@
     "oncyberUrl": "https://oncyber.io/line627",
     "artworksDisplayed": 0,
     "purchaseUrl": null,
-    "description": "Melancholic urban art exploring humanity\u2019s shadows",
+    "description": "Melancholic urban art exploring humanity’s shadows",
     "walletAddress": "larryn.eth",
     "walletType": "ens",
     "xHandle": null,
@@ -17447,7 +17542,7 @@
     "oncyberUrl": "https://oncyber.io/line649",
     "artworksDisplayed": 0,
     "purchaseUrl": null,
-    "description": "Exploring culture\u2019s fabric through visual narratives",
+    "description": "Exploring culture’s fabric through visual narratives",
     "walletAddress": "0xacaB3617f2a0f92F04313c303Dfe9344c19Ebd47",
     "walletType": "eth",
     "xHandle": null,
@@ -17696,7 +17791,7 @@
     "oncyberUrl": "https://oncyber.io/line660",
     "artworksDisplayed": 0,
     "purchaseUrl": null,
-    "description": "Raw, cinematic photography capturing life\u2019s authenticity",
+    "description": "Raw, cinematic photography capturing life’s authenticity",
     "walletAddress": "0x86dB3904cbec100C6E3e6beF91D5D353440b8F2f",
     "walletType": "eth",
     "xHandle": null,
@@ -17832,7 +17927,7 @@
     "artworksDisplayed": 54,
     "purchaseUrl": null,
     "description": null,
-    "walletAddress": null,
+    "walletAddress": "0xaa9bff236cf51518da774714d50ad07db5149479",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -17850,7 +17945,9 @@
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
       }
-    ]
+    ],
+    "_6529Level": 21,
+    "_6529Rep": 11066
   },
   {
     "lineNumber": 667,
@@ -20066,7 +20163,7 @@
     "oncyberUrl": "https://oncyber.io/line771",
     "artworksDisplayed": 0,
     "purchaseUrl": "https://foundation.app/@paradigmstories/rhole/3",
-    "description": "Narrative art exploring life\u2019s mysteries with emotive visuals",
+    "description": "Narrative art exploring life’s mysteries with emotive visuals",
     "walletAddress": "0x52f7c1c2E69e2049e23Cce0e2A7E3Bf8393c3581",
     "walletType": "eth",
     "xHandle": null,
@@ -20153,7 +20250,7 @@
     "oncyberUrl": "https://oncyber.io/line775",
     "artworksDisplayed": 0,
     "purchaseUrl": "https://www.joyn.xyz/profile/kambizasadzadeh?tab=&onlyListed=false",
-    "description": "Bold, monochromatic photography capturing New Zealand\u2019s essence",
+    "description": "Bold, monochromatic photography capturing New Zealand’s essence",
     "walletAddress": "compez.eth",
     "walletType": "ens",
     "xHandle": null,
@@ -20585,7 +20682,7 @@
     "oncyberUrl": "https://oncyber.io/line793",
     "artworksDisplayed": 0,
     "purchaseUrl": "https://foundation.app/collection/seilife",
-    "description": "Illustrations celebrating life\u2019s little details with charm",
+    "description": "Illustrations celebrating life’s little details with charm",
     "walletAddress": "0x002652B2ceBDA595dA4C2707A83146B5f5b63494",
     "walletType": "eth",
     "xHandle": null,
@@ -20738,7 +20835,7 @@
     "artworksDisplayed": 21,
     "purchaseUrl": null,
     "description": "Conceptual art exploring cultural and digital storytelling",
-    "walletAddress": null,
+    "walletAddress": "0x66104a8ade280c1fac0e6c1177a67e8a548510be",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -20761,7 +20858,9 @@
         "label": "Fake Rare",
         "url": "https://opensea.io/collection/fake-rares-curated"
       }
-    ]
+    ],
+    "_6529Level": 19,
+    "_6529Rep": 326
   },
   {
     "lineNumber": 799,
@@ -20944,7 +21043,7 @@
     "artworksDisplayed": 120,
     "purchaseUrl": null,
     "description": "Witty, conceptual art blending humor with high concept",
-    "walletAddress": null,
+    "walletAddress": "0xb033daedca113b0386eb3e8f4c72c79fc50ae32e",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -20956,7 +21055,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line808"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 38,
+    "_6529Rep": 179387
   },
   {
     "lineNumber": 809,
@@ -21231,7 +21332,7 @@
     "artworksDisplayed": 45,
     "purchaseUrl": null,
     "description": null,
-    "walletAddress": null,
+    "walletAddress": "0x7ab28bcea2e4a58e8c1a896c79583830c6aace2d",
     "walletType": null,
     "xHandle": null,
     "bioOverride": null,
@@ -22107,7 +22208,7 @@
     "artworksDisplayed": 0,
     "purchaseUrl": null,
     "description": null,
-    "walletAddress": null,
+    "walletAddress": "0x078430ebd8db8288fd056d137e0e11cf67fb8fc1",
     "walletType": null,
     "xHandle": null,
     "bioOverride": "Collector of digital artifacts, multidisciplinary artist, and meme maxi who tells stories through shared experiences; he shares humorous visuals, GM replies, and appreciative comments on fine art photography like northern lights or scenic shots.",
@@ -22119,7 +22220,9 @@
     "oncyberUrls": [
       "https://oncyber.io/line887"
     ],
-    "curations": []
+    "curations": [],
+    "_6529Level": 12,
+    "_6529Rep": 16529
   },
   {
     "lineNumber": 888,
