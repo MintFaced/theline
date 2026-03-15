@@ -20,6 +20,7 @@ const ERAS = [
     galleryLocation: 'Global, decentralized',
     galleryDetail: 'A decentralized digital gallery aiming to showcase one million artworks in a singular virtual space.',
     image: '/images/cryptoart-gallery.png',
+    highlightImage: '/images/jaknft-gallery.png',
     imageCredit: null,
     accent: '#C8A96E',
     isFeatured: true,
@@ -36,8 +37,8 @@ const ERAS = [
     galleryHref: 'https://www.tate.org.uk',
     galleryLocation: 'London, UK',
     galleryDetail: 'Iconic for Warhol, Hockney, and installation art.',
-    image: 'https://theline.wtf/wp-content/uploads/2024/11/Screenshot-2024-11-20-at-12.42.59%20PM-1536x1086.png',
-    imageCredit: 'Photo: Noah Kalina',
+    image: '/images/tate-modern.jpg',
+    imageCredit: 'Tate Modern, photo by Sebastien Vincon',
     accent: '#8B9EB7',
     isFeatured: false,
   },
@@ -271,7 +272,7 @@ export default function CryptoartPage() {
                       <div className="relative">
                         <div className="aspect-square relative overflow-hidden"
                           style={{ border: '1px solid var(--color-line-border)' }}>
-                          <img src={era.image!} alt={era.title}
+                          <img src={(era as any).highlightImage || era.image!} alt={era.title}
                             className="w-full h-full object-cover opacity-80" />
                           {/* Gold corner accents */}
                           <div className="absolute top-0 left-0 w-8 h-8 border-t border-l"
