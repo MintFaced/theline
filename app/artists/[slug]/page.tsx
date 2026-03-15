@@ -188,6 +188,29 @@ export default async function ArtistPage(props: { params: Promise<{ slug: string
         </RevealSection>
       )}
 
+      {/* ── Curated Collections ────────────────────────────────────────────── */}
+      {artist.curations && artist.curations.length > 0 && (
+        <RevealSection className="px-6 pb-16">
+          <div className="max-w-content mx-auto">
+            <div className="the-line mb-10" />
+            <p className="label mb-6">Curated Collections</p>
+            <div className="flex flex-wrap gap-2">
+              {artist.curations.map(({ key, label, url }) => (
+                <a
+                  key={key}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[10px] tracking-widest uppercase px-3 py-1.5 border border-line-border text-line-muted hover:border-line-accent hover:text-line-accent transition-colors"
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </RevealSection>
+      )}
+
       {/* ── Line Position Strip ───────────────────────────────────────────── */}
       <RevealSection className="px-6 pb-24">
         <div className="max-w-content mx-auto">
