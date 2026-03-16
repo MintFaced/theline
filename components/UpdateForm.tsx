@@ -108,8 +108,18 @@ function UpdateFormInner({ prefill, selfVerified }: { prefill: Partial<FormData>
           </div>
           <div className="grid md:grid-cols-2 gap-5">
             <div>
-              <label className={labelClass}>Line Number</label>
-              <div className={lockedClass}>{form.lineNumber || '—'}</div>
+              <label className={labelClass}>Line Number *</label>
+              {selfVerified ? (
+                <div className={lockedClass}>{form.lineNumber} <span className="text-line-accent/60 text-[9px] ml-2">auto-filled</span></div>
+              ) : (
+                <input
+                  type="text"
+                  value={form.lineNumber}
+                  onChange={set('lineNumber')}
+                  placeholder="e.g. 42"
+                  className={inputClass}
+                />
+              )}
             </div>
             <div>
               <label className={labelClass}>X / Twitter handle</label>
