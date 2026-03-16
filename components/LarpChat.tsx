@@ -143,18 +143,17 @@ function LarpLanding({ login }: { login: () => void }) {
               <p>101 positions remain. Mint yours to join the community and lock in your place on The Line.</p>
             </div>
             <div className="flex flex-wrap gap-3">
+              <Link href="/join" className="btn-primary">
+                Join The Line →
+              </Link>
               <a href="https://manifold.xyz/@mintfaced/id/3807920368"
-                target="_blank" rel="noopener noreferrer" className="btn-primary">
-                Mint on Manifold →
-              </a>
-              <a href="https://opensea.io/collection/first-1000-artists-on-the-line"
                 target="_blank" rel="noopener noreferrer" className="btn-outline">
-                View on OpenSea
+                Mint on Manifold
               </a>
             </div>
           </div>
           {/* NFT image — click through to OpenSea */}
-          <a href="https://opensea.io/collection/first-1000-artists-on-the-line"
+          <a href="https://opensea.io/item/ethereum/0x269bc803c233620506c9d25d980e979bf8bcbbf6/8"
             target="_blank" rel="noopener noreferrer"
             className="block group relative overflow-hidden border border-line-border hover:border-line-accent transition-colors">
             <img
@@ -193,6 +192,11 @@ function LarpLanding({ login }: { login: () => void }) {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="mt-6">
+            <Link href="/join" className="btn-primary">
+              Join The Line →
+            </Link>
           </div>
         </div>
 
