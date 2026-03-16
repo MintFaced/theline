@@ -139,10 +139,6 @@ const nextConfig = {
       // Old WP pages -> new equivalents
       { source: '/art-timeline',           destination: '/cryptoart',       permanent: true },
       { source: '/art-timeline/',          destination: '/cryptoart',       permanent: true },
-      { source: '/vision',                 destination: '/vision',          permanent: true },
-      { source: '/vision/',                destination: '/vision',          permanent: true },
-      { source: '/faq',                    destination: '/faq',             permanent: true },
-      { source: '/faq/',                   destination: '/faq',             permanent: true },
       { source: '/crypto-books',           destination: '/books',           permanent: true },
       { source: '/crypto-books/',          destination: '/books',           permanent: true },
       { source: '/proposal',               destination: '/vision',          permanent: true },
