@@ -46,7 +46,10 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
         const { StreamChat } = await import('stream-chat')
         const client = new (StreamChat as any)(apiKey)
         clientRef.current = client
-        await client.connectUser({ id: walletAddress, name: displayName || shortAddress }, token)
+        // connectUser with full profile so avatar shows in messages immediately
+        const userProfile: any = { id: walletAddress, name: displayName || shortAddress }
+        if (tokenBody.userImage) userProfile.image = tokenBody.userImage
+        await client.connectUser(userProfile, token)
         if (!mountedRef.current) { client.disconnectUser(); return }
 
         setStep('Joining LARP channel...')
