@@ -1,5 +1,19 @@
 [
   {
+    "title": "Tokenized Photographs",
+    "slug": "tokenized-photographs",
+    "date": "2026-03-15",
+    "author": "MintFace",
+    "excerpt": "Why tokenize a photo? Because photographs are worth saving. They are a form of visual history that shows who we were at that time.",
+    "categories": [
+      "Photography",
+      "Collecting",
+      "News On The Line"
+    ],
+    "readTime": "3 min read",
+    "featuredImage": "https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fabb8dd8d-35ba-4f2e-b4f8-839aa8473d72_3504x2336.heic"
+  },
+  {
     "title": "Talking About Artists",
     "slug": "talking-about-artists",
     "date": "2026-03-15",
