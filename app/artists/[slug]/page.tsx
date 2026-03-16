@@ -318,7 +318,7 @@ export default async function ArtistPage(props: { params: Promise<{ slug: string
             <div className="the-line mb-12" />
             <div className="flex items-baseline justify-between mb-10">
               <p className="label">More {CATEGORY_LABELS[artist.category]} Artists</p>
-              <Link href={`/category/${artist.category}`}
+              <Link href={`/artists?category=${artist.category}`}
                 className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase">
                 View all →
               </Link>
