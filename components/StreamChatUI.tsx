@@ -1,5 +1,5 @@
 // components/StreamChatUI.tsx
-// This component is ALWAYS loaded client-only via dynamic() — never SSR
+// This component is ALWAYS loaded client-only via dynamic() - never SSR
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader } from 'stream-chat-react'
@@ -10,7 +10,7 @@ type Props = { walletAddress: string; shortAddress: string }
 
 export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
-  const [step, setStep] = useState('Requesting token…')
+  const [step, setStep] = useState('Requesting token...')
   const [errorMsg, setErrorMsg] = useState('')
   const mountedRef = useRef(true)
   const clientRef = useRef<any>(null)
@@ -35,21 +35,21 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
 
     ;(async () => {
       try {
-        setStep('Requesting token…')
+        setStep('Requesting token...')
         const tokenRes = await fetch(`/api/members/chat-token?address=${walletAddress}`)
         const tokenBody = await tokenRes.json()
         if (!tokenRes.ok) throw new Error(`Token error (${tokenRes.status}): ${tokenBody.error ?? 'unknown'}`)
-        const { token } = tokenBody
+        const { token, displayName } = tokenBody
         if (!mountedRef.current) return
 
-        setStep('Connecting to Stream…')
+        setStep('Connecting to Stream...')
         const { StreamChat } = await import('stream-chat')
         const client = new (StreamChat as any)(apiKey)
         clientRef.current = client
-        await client.connectUser({ id: walletAddress, name: shortAddress }, token)
+        await client.connectUser({ id: walletAddress, name: displayName || shortAddress }, token)
         if (!mountedRef.current) { client.disconnectUser(); return }
 
-        setStep('Joining LARP channel…')
+        setStep('Joining LARP channel...')
         const channel = client.channel('messaging', 'larp-main')
         await channel.watch()
         if (!mountedRef.current) { client.disconnectUser(); return }
@@ -61,7 +61,7 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
         clearTimeout(timeout)
         console.error('StreamChatUI error:', err)
         if (mountedRef.current) {
-          setErrorMsg(`${step} — ${err.message ?? String(err)}`)
+          setErrorMsg(`${step} - ${err.message ?? String(err)}`)
           setStatus('error')
         }
       }
@@ -108,7 +108,27 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
         .larp-chat .str-chat__date-separator-date { color: #666; background: #0A0A0A; font-size: 10px; }
         .larp-chat .str-chat__send-button { color: #C8A96E; }
       `}</style>
-      <div className="larp-chat h-full">
+      <div className="larp-chat h-full flex flex-col">
+        <div className="flex items-center justify-between px-4 py-2 border-b border-line-border bg-line-surface">
+          <span className="font-mono text-[10px] text-line-muted tracking-widest">
+            {chatData.client.user?.name || shortAddress}
+          </span>
+          <label className="font-mono text-[9px] text-line-accent tracking-widest cursor-pointer hover:opacity-70 transition-opacity">
+            Update avatar
+            <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+              const file = e.target.files?.[0]
+              if (!file) return
+              const reader = new FileReader()
+              reader.onload = async (ev) => {
+                const dataUrl = ev.target?.result as string
+                await chatData.client.upsertUser({ id: walletAddress, image: dataUrl })
+                await chatData.client.partialUpdateUser({ id: walletAddress, set: { image: dataUrl } })
+              }
+              reader.readAsDataURL(file)
+            }} />
+          </label>
+        </div>
+        <div className="flex-1 min-h-0">
         <Chat client={chatData.client} theme="str-chat__theme-dark">
           <Channel channel={chatData.channel}>
             <Window>
@@ -118,6 +138,7 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
             </Window>
           </Channel>
         </Chat>
+        </div>
       </div>
     </>
   )
