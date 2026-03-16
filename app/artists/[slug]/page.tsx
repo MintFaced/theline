@@ -192,7 +192,38 @@ export default async function ArtistPage(props: { params: Promise<{ slug: string
         </RevealSection>
       )}
 
-      {/* ── Curated Collections ────────────────────────────────────────────── */}
+      {/* -- Storyline Articles -- */}
+      {artist.storylineArticles && artist.storylineArticles.length > 0 && (
+        <div className="border-t border-line-border pt-10 mt-10">
+          <p className="label mb-5">Storyline Articles</p>
+          <div className="flex flex-col gap-2">
+            {(artist.storylineArticles as Array<{title: string; slug: string; type: string; date: string}>).map((article) => (
+              <a
+                key={article.slug}
+                href={'/storyline/' + article.slug}
+                className="group flex items-center justify-between gap-4 py-3 border-b border-line-border/40 hover:border-line-accent/40 transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  {article.type === 'feature' && (
+                    <span className="font-mono text-[9px] text-line-accent tracking-widest shrink-0">FEATURE</span>
+                  )}
+                  {article.type === 'mention' && (
+                    <span className="font-mono text-[9px] text-line-muted/50 tracking-widest shrink-0">MENTION</span>
+                  )}
+                  <span className="font-sans text-sm text-line-muted group-hover:text-line-text transition-colors truncate">
+                    {article.title}
+                  </span>
+                </div>
+                <span className="font-mono text-[9px] text-line-muted/50 tracking-widest shrink-0 group-hover:text-line-accent transition-colors">
+                  {article.date} -&gt;
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* -- Curated Collections -- */}
       {artist.curations && artist.curations.length > 0 && (
         <RevealSection className="px-6 pb-16">
           <div className="max-w-content mx-auto">
