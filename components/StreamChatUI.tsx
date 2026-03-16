@@ -50,10 +50,7 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
         if (!mountedRef.current) { client.disconnectUser(); return }
 
         setStep('Joining LARP channel…')
-        const channel = client.channel('messaging', 'larp-main', {
-          name: 'LARP — Line Artists Rad Party',
-          members: [walletAddress],
-        })
+        const channel = client.channel('messaging', 'larp-main')
         await channel.watch()
         if (!mountedRef.current) { client.disconnectUser(); return }
 
