@@ -14,6 +14,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
           accentColor: '#C8A96E',
         },
         loginMethods: ['wallet'],
+        allowedDomains: [
+          'theline.wtf',
+          'www.theline.wtf',
+          'theline.nz',
+          'theline-j55m.vercel.app',
+        ],
       }}
     >
       {children}
