@@ -204,7 +204,9 @@ export async function checkMembership(address: string): Promise<boolean> {
   if (!ALCHEMY_KEY) return false
 
   const contracts = [
-    process.env.MEMBERSHIP_CONTRACT_ADDRESS,          // The Line contract (original + new mints)
+    process.env.MEMBERSHIP_CONTRACT_ADDRESS,          // The Line original airdrop contract
+    process.env.MANIFOLD_LARP_CONTRACT_ADDRESS,       // Manifold mint contract
+    '0x269bc803c233620506c9d25d980e979bf8bcbbf6',     // hardcoded fallback
   ].filter(Boolean) as string[]
 
   const results = await Promise.all(contracts.map(c => holdsContract(address, c)))
