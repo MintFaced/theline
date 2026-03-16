@@ -68,7 +68,7 @@ async function uploadToR2(
       'x-amz-date': amzDate,
       'Authorization': authorization,
     },
-    body: buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
+    body: new Uint8Array(buffer) as unknown as BodyInit,
   })
 
   if (!res.ok) {
