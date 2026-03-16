@@ -77,6 +77,7 @@ export async function GET(request: Request) {
       channelType: CHANNEL_TYPE,
       displayName,
       hasLineProfile: !!artist,
+      userImage: artist?.image || null,
     })
   } catch (err: any) {
     console.error('Stream token error:', err)
