@@ -24,6 +24,8 @@ export interface Artist {
   heroImage: string | null
   lastActiveX?: string | null
   curations?: Array<{ key: string; label: string; url: string }>
+  storylineArticles?: Array<{ title: string; slug: string; type: string; date: string }>
+  identity6529?: { level: number; rep: number } | null
 }
 
 export interface CollectorStats {
