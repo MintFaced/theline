@@ -180,14 +180,6 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
         await client.connectUser(userProfile, token)
         if (!mountedRef.current) { client.disconnectUser(); return }
 
-        // Re-query user from Stream to pick up server-stored image (set by upsertUser)
-        try {
-          const { users } = await client.queryUsers({ id: { $eq: walletAddress } })
-          if (users?.[0]?.image && !userProfile.image) {
-            await client.partialUpdateUser({ id: walletAddress, set: { image: users[0].image } })
-          }
-        } catch {}
-
         setStep('Joining LARP channel...')
         const channel = client.channel('messaging', 'larp-main')
         await channel.watch()
@@ -311,9 +303,7 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
                 <ChannelHeader />
                 <MessageList
                   Message={({ message }: any) => {
-                    // Look up full user profile from Stream's client cache (has image)
-                    const cachedUser = chatData.client.state?.users?.[message.user?.id]
-                    const user = { ...message.user, ...cachedUser }
+                    const user = message.user
                     const msgLineNum = user?.lineNumber
                     return (
                       <div style={{ display: 'flex', gap: '10px', padding: '4px 0', alignItems: 'flex-start' }}>
