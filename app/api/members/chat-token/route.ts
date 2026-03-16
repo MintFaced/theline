@@ -1,9 +1,24 @@
 // app/api/members/chat-token/route.ts
 import { NextResponse } from 'next/server'
 import { checkMembership } from '@/lib/alchemy'
+import artistsData from '@/data/artists.json'
 
 const CHANNEL_ID = 'larp-main'
 const CHANNEL_TYPE = 'messaging'
+
+// Build wallet -> artist lookup at module level (cached)
+const walletMap: Record<string, { name: string; image?: string; lineNumber: number; slug: string }> = {}
+for (const a of artistsData as any[]) {
+  const w = a.walletAddress?.toLowerCase()
+  if (w) {
+    walletMap[w] = {
+      name: a.name,
+      image: a.galleryImage || a.heroImage || undefined,
+      lineNumber: a.lineNumber,
+      slug: a.slug,
+    }
+  }
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -29,27 +44,40 @@ export async function GET(request: Request) {
     const { StreamChat } = await import('stream-chat')
     const serverClient = StreamChat.getInstance(streamApiKey, streamSecret)
 
-    // Upsert user with channel_member role so they can read/write
-    await serverClient.upsertUser({
-      id: address,
-      role: 'user',
-      name: address.slice(0, 8) + '...' + address.slice(-4),
-    })
+    // Look up artist profile for this wallet
+    const artist = walletMap[address]
+    const shortAddr = address.slice(0, 6) + '...' + address.slice(-4)
+    const displayName = artist ? `${artist.name} (Line ${artist.lineNumber})` : shortAddr
 
-    // Get or create the channel and add this user as a member
+    // Upsert user with Line Artist name and gallery image
+    // Only set image if we have one from our data — don't overwrite a custom one
+    const userPayload: any = {
+      id: address,
+      name: displayName,
+    }
+    if (artist?.image) {
+      userPayload.image = artist.image
+    }
+
+    await serverClient.upsertUser(userPayload)
+
+    // Get or create channel and add member
     const channel = serverClient.channel(CHANNEL_TYPE, CHANNEL_ID, {
       name: 'LARP Chat',
       created_by_id: address,
     })
-
     await channel.create()
-
-    // Add user as channel member so they have read/write access
     await channel.addMembers([address])
 
     const token = serverClient.createToken(address)
 
-    return NextResponse.json({ token, channelId: CHANNEL_ID, channelType: CHANNEL_TYPE })
+    return NextResponse.json({
+      token,
+      channelId: CHANNEL_ID,
+      channelType: CHANNEL_TYPE,
+      displayName,
+      hasLineProfile: !!artist,
+    })
   } catch (err: any) {
     console.error('Stream token error:', err)
     return NextResponse.json({ error: err?.message ?? String(err) }, { status: 500 })
