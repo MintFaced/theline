@@ -68,7 +68,7 @@ async function uploadToR2(
       'x-amz-date': amzDate,
       'Authorization': authorization,
     },
-    body: buffer,
+    body: buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
   })
 
   if (!res.ok) {
