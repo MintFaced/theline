@@ -119,13 +119,12 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
     }
   }, [walletAddress])
 
-  const handlePfpUploaded = async (url: string) => {
+  const handlePfpUploaded = (url: string) => {
     setPfpUrl(url)
-    // Update Stream client user image so it shows on new messages immediately
-    if (chatData?.client) {
-      try {
-        await chatData.client.partialUpdateUser({ id: walletAddress, set: { image: url } })
-      } catch {}
+    // Server-side already updated Stream via partialUpdateUser in /api/members/avatar
+    // Update local client state so header shows new image immediately
+    if (chatData?.client?.user) {
+      chatData.client.user.image = url
     }
   }
 
