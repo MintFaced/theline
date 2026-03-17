@@ -154,8 +154,11 @@ export default async function ArticlePage({ params }: Props) {
             Artist features, new works, and essays on cryptoart — direct from The Line. Free, no spam.
           </p>
           <form
-            action="https://linestories.substack.com/api/v1/free?nojs=true"
-            method="post"
+            onSubmit={(e) => {
+              e.preventDefault()
+              const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement)?.value
+              window.open('https://linestories.substack.com/subscribe?email=' + encodeURIComponent(email), '_blank')
+            }}
             className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto"
           >
             <input
