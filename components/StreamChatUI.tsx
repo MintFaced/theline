@@ -8,28 +8,71 @@ import { Spinner } from './LarpChat'
 
 type Props = { walletAddress: string; shortAddress: string }
 
+function AddPfpButton({ walletAddress, onUploaded }: { walletAddress: string; onUploaded: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState('')
+
+  return (
+    <label className={`font-mono text-[10px] tracking-widest uppercase border px-3 py-1.5 cursor-pointer transition-all ${
+      uploading
+        ? 'border-line-border text-line-muted opacity-50 cursor-not-allowed'
+        : 'border-line-accent/40 text-line-accent hover:bg-line-accent hover:text-line-bg'
+    }`}>
+      {uploading ? 'Uploading...' : 'Add PFP'}
+      <input
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        className="hidden"
+        disabled={uploading}
+        onChange={async (e) => {
+          const file = e.target.files?.[0]
+          if (!file) return
+          if (file.size > 2 * 1024 * 1024) { setError('Max 2MB'); return }
+          setUploading(true)
+          setError('')
+          try {
+            const reader = new FileReader()
+            reader.onload = async (ev) => {
+              const base64 = (ev.target?.result as string).split(',')[1]
+              const res = await fetch('/api/members/avatar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address: walletAddress, imageData: base64, mimeType: file.type }),
+              })
+              const data = await res.json()
+              if (!res.ok) throw new Error(data.error || 'Upload failed')
+              onUploaded(data.imageUrl)
+            }
+            reader.readAsDataURL(file)
+          } catch (err: any) {
+            setError(err.message)
+            setUploading(false)
+          }
+        }}
+      />
+      {error && <span className="ml-2 text-red-400">{error}</span>}
+    </label>
+  )
+}
+
 export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [step, setStep] = useState('Requesting token...')
   const [errorMsg, setErrorMsg] = useState('')
+  const [pfpUrl, setPfpUrl] = useState<string | null>(null)
   const mountedRef = useRef(true)
   const clientRef = useRef<any>(null)
-  const [chatData, setChatData] = useState<{ client: any; channel: any } | null>(null)
+  const [chatData, setChatData] = useState<{ client: any; channel: any; tokenBody: any } | null>(null)
 
   useEffect(() => {
     mountedRef.current = true
 
     const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
-    if (!apiKey) {
-      setErrorMsg('NEXT_PUBLIC_STREAM_API_KEY not set')
-      setStatus('error')
-      return
-    }
+    if (!apiKey) { setErrorMsg('Stream API key not set'); setStatus('error'); return }
 
     const timeout = setTimeout(() => {
       if (mountedRef.current && status !== 'ready') {
-        setErrorMsg(`Timed out at: ${step}`)
-        setStatus('error')
+        setErrorMsg(`Timed out at: ${step}`); setStatus('error')
       }
     }, 15000)
 
@@ -39,14 +82,20 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
         const tokenRes = await fetch(`/api/members/chat-token?address=${walletAddress}`)
         const tokenBody = await tokenRes.json()
         if (!tokenRes.ok) throw new Error(`Token error (${tokenRes.status}): ${tokenBody.error ?? 'unknown'}`)
-        const { token, displayName } = tokenBody
+        const { token, displayName, userImage } = tokenBody
         if (!mountedRef.current) return
+
+        if (userImage) setPfpUrl(userImage)
 
         setStep('Connecting to Stream...')
         const { StreamChat } = await import('stream-chat')
         const client = new (StreamChat as any)(apiKey)
         clientRef.current = client
-        await client.connectUser({ id: walletAddress, name: displayName || shortAddress }, token)
+
+        const userProfile: any = { id: walletAddress, name: displayName || shortAddress }
+        if (userImage) userProfile.image = userImage
+
+        await client.connectUser(userProfile, token)
         if (!mountedRef.current) { client.disconnectUser(); return }
 
         setStep('Joining LARP channel...')
@@ -55,15 +104,11 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
         if (!mountedRef.current) { client.disconnectUser(); return }
 
         clearTimeout(timeout)
-        setChatData({ client, channel })
+        setChatData({ client, channel, tokenBody })
         setStatus('ready')
       } catch (err: any) {
         clearTimeout(timeout)
-        console.error('StreamChatUI error:', err)
-        if (mountedRef.current) {
-          setErrorMsg(`${step} - ${err.message ?? String(err)}`)
-          setStatus('error')
-        }
+        if (mountedRef.current) { setErrorMsg(`${step} - ${err.message ?? String(err)}`); setStatus('error') }
       }
     })()
 
@@ -73,6 +118,16 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
       clientRef.current?.disconnectUser?.()
     }
   }, [walletAddress])
+
+  const handlePfpUploaded = async (url: string) => {
+    setPfpUrl(url)
+    // Update Stream client user image so it shows on new messages immediately
+    if (chatData?.client) {
+      try {
+        await chatData.client.partialUpdateUser({ id: walletAddress, set: { image: url } })
+      } catch {}
+    }
+  }
 
   if (status === 'error') {
     return (
@@ -91,6 +146,8 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
     )
   }
 
+  const { lineNumber } = chatData.tokenBody
+
   return (
     <>
       <style>{`
@@ -107,8 +164,36 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
         .larp-chat .str-chat__date-separator-line { border-color: #1E1E1E; }
         .larp-chat .str-chat__date-separator-date { color: #666; background: #0A0A0A; font-size: 10px; }
         .larp-chat .str-chat__send-button { color: #C8A96E; }
+        .larp-chat .str-chat__avatar img { border-radius: 2px !important; border: 1px solid #1E1E1E; }
+        .larp-chat .str-chat__avatar-fallback { border-radius: 2px !important; background: #1A1A1A !important; color: #C8A96E !important; font-family: monospace !important; font-size: 10px !important; border: 1px solid rgba(200,169,110,0.3); }
       `}</style>
-      <div className="larp-chat h-full">
+
+      {/* Identity bar */}
+      <div className="flex items-center justify-between px-4 py-2 border-b border-line-border bg-line-surface shrink-0">
+        <div className="flex items-center gap-3">
+          {pfpUrl ? (
+            <img src={pfpUrl} alt="pfp" className="w-8 h-8 object-cover" style={{ border: '1px solid #1E1E1E', borderRadius: '2px' }} />
+          ) : (
+            <div className="w-8 h-8 flex items-center justify-center bg-line-border" style={{ borderRadius: '2px' }}>
+              <span className="font-mono text-[10px] text-line-accent">
+                {lineNumber !== null && lineNumber !== undefined ? `L${lineNumber}` : '?'}
+              </span>
+            </div>
+          )}
+          <div>
+            <p className="font-sans text-xs text-line-text leading-none">
+              {chatData.client.user?.name?.replace(` (Line ${lineNumber})`, '') || shortAddress}
+            </p>
+            {lineNumber !== null && lineNumber !== undefined && (
+              <p className="font-mono text-[9px] text-line-accent tracking-widest mt-0.5">Line {lineNumber}</p>
+            )}
+          </div>
+        </div>
+        <AddPfpButton walletAddress={walletAddress} onUploaded={handlePfpUploaded} />
+      </div>
+
+      {/* Chat */}
+      <div className="larp-chat flex-1 min-h-0">
         <Chat client={chatData.client} theme="str-chat__theme-dark">
           <Channel channel={chatData.channel}>
             <Window>
