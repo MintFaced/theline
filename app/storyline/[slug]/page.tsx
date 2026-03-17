@@ -156,7 +156,6 @@ export default async function ArticlePage({ params }: Props) {
           <form
             action="https://linestories.substack.com/api/v1/free?nojs=true"
             method="post"
-            target="_blank"
             className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto"
           >
             <input
@@ -167,7 +166,7 @@ export default async function ArticlePage({ params }: Props) {
               className="flex-1 bg-line-bg border border-line-border px-4 py-3 font-mono text-sm text-line-text placeholder:text-line-muted focus:outline-none focus:border-line-accent transition-colors"
             />
             <button type="submit" className="btn-primary whitespace-nowrap">
-              Join on Substack →
+              Subscribe
             </button>
           </form>
         </div>
