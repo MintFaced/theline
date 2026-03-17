@@ -251,7 +251,7 @@ export default function StorylinePage() {
             <p className="font-display font-light text-2xl text-line-text mb-8" style={{ letterSpacing: '-0.02em' }}>
               Subscribe to Storyline
             </p>
-            <form action="https://linestories.substack.com/api/v1/free?nojs=true" method="post" target="_blank" className="flex flex-col gap-3 mt-2">
+            <form action="https://linestories.substack.com/api/v1/free?nojs=true" method="post" className="flex flex-col gap-3 mt-2">
               <input type="email" name="email" placeholder="your@email.com" required
                 className="w-full bg-line-bg border border-line-border px-4 py-3 font-mono text-sm text-line-text placeholder:text-line-muted focus:outline-none focus:border-line-accent transition-colors" />
               <button type="submit" className="btn-primary w-full text-center">Join on Substack →</button>
