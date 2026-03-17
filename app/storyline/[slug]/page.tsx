@@ -1,5 +1,6 @@
 // app/storyline/[slug]/page.tsx
 import type { Metadata } from 'next'
+import { SubstackForm } from '@/components/SubstackForm'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { promises as fs } from 'fs'
@@ -153,25 +154,7 @@ export default async function ArticlePage({ params }: Props) {
           <p className="font-sans text-sm text-line-muted mb-8 max-w-sm mx-auto">
             Artist features, new works, and essays on cryptoart — direct from The Line. Free, no spam.
           </p>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement)?.value
-              window.open('https://linestories.substack.com/subscribe?email=' + encodeURIComponent(email), '_blank')
-            }}
-            className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto"
-          >
-            <input
-              type="email"
-              name="email"
-              placeholder="your@email.com"
-              required
-              className="flex-1 bg-line-bg border border-line-border px-4 py-3 font-mono text-sm text-line-text placeholder:text-line-muted focus:outline-none focus:border-line-accent transition-colors"
-            />
-            <button type="submit" className="btn-primary whitespace-nowrap">
-              Subscribe
-            </button>
-          </form>
+          <SubstackForm />
         </div>
       </div>
 
