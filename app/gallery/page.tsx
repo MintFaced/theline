@@ -80,39 +80,6 @@ export default function GalleryPage() {
           </div>
         </RevealSection>
 
-        {/* ── Art Cloud to Landed Gallery ──────────────────────────────────── */}
-        <RevealSection className="py-16 md:py-24 border-b border-line-border">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="relative">
-              <img
-                src="/images/art-cloud-to-land.jpg"
-                alt="New Zealand connected to the world — The Line art cloud to landed gallery"
-                className="w-full"
-              />
-            </div>
-            <div>
-              <p className="label mb-6">From Art Cloud to Landed Gallery</p>
-              <h2 className="font-display font-light text-4xl text-line-text mb-8" style={{ letterSpacing: '-0.02em' }}>
-                Cloud first,<br />land last
-              </h2>
-              <div className="space-y-5 font-sans text-sm text-line-muted leading-relaxed">
-                <p>
-                  "From cloud to land" is a core tenet of Balaji Srinivasan's Network State theory — a strategy for building new societies by organising online first and acquiring physical land later. The Line is living proof of that process.
-                </p>
-                <p>
-                  The community formed digitally: a shared purpose, a shared culture, and an economy rooted in tokenized art. Before any wall was hung, The Line existed on-chain. 1,000 positions. Artists from every continent. A continuous, ordered archive built in the cloud.
-                </p>
-                <p>
-                  Printing the cloud means moving from the digital realm to the physical. Instead of one contiguous territory, the Network State model builds an archipelago — dispersed nodes connected by shared values rather than shared borders. The Line gallery in Hastings, New Zealand is the first node. It won't be the last.
-                </p>
-                <p>
-                  Where traditional galleries start with walls and find artists to fill them, The Line inverted the sequence. The artists came first. The wall followed. That's not a small difference — it's the whole philosophy.
-                </p>
-              </div>
-            </div>
-          </div>
-        </RevealSection>
-
         {/* ── The Line IRL ─────────────────────────────────────────────────── */}
         <RevealSection className="py-16 md:py-24 border-b border-line-border">
           <div className="grid md:grid-cols-2 gap-16 items-center">
@@ -141,6 +108,42 @@ export default function GalleryPage() {
               <div className="absolute bottom-0 left-0 right-0 p-6" style={{ background: 'linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 100%)' }}>
                 <p className="font-mono text-[10px] text-line-accent tracking-widest mb-1">Founder</p>
                 <p className="font-display font-light text-xl text-line-text">MintFace · The Line 0</p>
+              </div>
+            </div>
+          </div>
+        </RevealSection>
+
+        {/* ── Art Cloud to Landed Gallery ──────────────────────────────────── */}
+        <RevealSection className="py-16 md:py-24 border-b border-line-border">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div className="relative">
+              <img
+                src="/images/art-cloud-to-land.jpg"
+                alt="New Zealand connected to the world — The Line art cloud to landed gallery"
+                className="w-full"
+              />
+            </div>
+            <div>
+              <p className="label mb-6">From Art Cloud to Landed Gallery</p>
+              <h2 className="font-display font-light text-4xl text-line-text mb-8" style={{ letterSpacing: '-0.02em' }}>
+                Cloud first,<br />land last
+              </h2>
+              <div className="space-y-5 font-sans text-sm text-line-muted leading-relaxed">
+                <p>
+                  {'From cloud to land'} is a core tenet of <a href="https://balajis.com/p/the-network-state-2021" target="_blank" rel="noopener noreferrer" className="text-line-accent hover:opacity-70 transition-opacity">Balaji Srinivasan{'\''}s Network State theory</a> — a strategy for building new societies by organising online first and acquiring physical land later. The Line is living proof of that process.
+                </p>
+                <blockquote className="border-l-2 border-line-accent pl-4 italic text-line-text">
+                  "A network state is a social network with an agreed-upon leader, an integrated cryptocurrency, a definite purpose, a sense of national consciousness, and a plan to crowdfund territory." — Balaji
+                </blockquote>
+                <p>
+                  The Line community formed digitally in October 2022 with a shared purpose of exhibiting our digital artworks in a single line of culture through tokenized art. Before any lease was signed or artwork hung, The Line existed on-chain. 1,000 positions. Artists from every continent across 82+ countries set about building a continuous, ordered archive built in the blockchain secured cloud.
+                </p>
+                <p>
+                  {'\'Printing\''} the cloud means moving The Line from the digital realm to the physical. Instead of one singular territory, the Network State model builds an archipelago with dispersed nodes connected by shared values of cryptoart, rather than shared borders.
+                </p>
+                <p>
+                  The Line gallery in Hawke{'\''}s Bay, New Zealand is the very first node. lfffline. It won{'\''}t be the last. Where traditional galleries start with walls and find artists to fill them, The Line inverted the sequence so the artists came first. The space followed. That{'\''}s a philosophy that will slowly transform our cities into places we love to live again.
+                </p>
               </div>
             </div>
           </div>
