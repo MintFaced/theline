@@ -148,6 +148,12 @@
         "slug": "power-within-ana-isabel",
         "date": "2021-12-17",
         "type": "mention"
+      },
+      {
+        "title": "Blacklisted",
+        "slug": "blacklisted",
+        "date": "2026-03-18",
+        "type": "mention"
       }
     ]
   },
@@ -3066,6 +3072,12 @@
     ],
     "storylineArticles": [
       {
+        "title": "Blacklisted",
+        "slug": "blacklisted",
+        "date": "2026-03-18",
+        "type": "feature"
+      },
+      {
         "title": "Class of 2021. Active in 2024.",
         "slug": "class-of-2021-active-in-2024",
         "date": "2024-12-17",
@@ -3384,6 +3396,12 @@
         "title": "Digital Sensuality",
         "slug": "digital-sensuality",
         "date": "2021-08-23",
+        "type": "mention"
+      },
+      {
+        "title": "Blacklisted",
+        "slug": "blacklisted",
+        "date": "2026-03-18",
         "type": "mention"
       }
     ]
@@ -13081,7 +13099,15 @@
     "oncyberUrls": [
       "https://oncyber.io/line413"
     ],
-    "curations": []
+    "curations": [],
+    "storylineArticles": [
+      {
+        "title": "Blacklisted",
+        "slug": "blacklisted",
+        "date": "2026-03-18",
+        "type": "mention"
+      }
+    ]
   },
   {
     "lineNumber": 414,
@@ -14000,7 +14026,15 @@
     "oncyberUrls": [
       "https://oncyber.io/line444"
     ],
-    "curations": []
+    "curations": [],
+    "storylineArticles": [
+      {
+        "title": "Blacklisted",
+        "slug": "blacklisted",
+        "date": "2026-03-18",
+        "type": "mention"
+      }
+    ]
   },
   {
     "lineNumber": 445,
@@ -19314,6 +19348,12 @@
         "slug": "class-of-2021-active-in-2024",
         "date": "2024-12-17",
         "type": "mention"
+      },
+      {
+        "title": "Blacklisted",
+        "slug": "blacklisted",
+        "date": "2026-03-18",
+        "type": "mention"
       }
     ]
   },
@@ -21612,7 +21652,15 @@
     "oncyberUrls": [
       "https://oncyber.io/line719"
     ],
-    "curations": []
+    "curations": [],
+    "storylineArticles": [
+      {
+        "title": "Blacklisted",
+        "slug": "blacklisted",
+        "date": "2026-03-18",
+        "type": "mention"
+      }
+    ]
   },
   {
     "lineNumber": 720,
@@ -24516,7 +24564,15 @@
     "oncyberUrls": [
       "https://oncyber.io/line873"
     ],
-    "curations": []
+    "curations": [],
+    "storylineArticles": [
+      {
+        "title": "Blacklisted",
+        "slug": "blacklisted",
+        "date": "2026-03-18",
+        "type": "mention"
+      }
+    ]
   },
   {
     "lineNumber": 874,
@@ -24945,6 +25001,14 @@
     "oncyberUrls": [
       "https://oncyber.io/line899"
     ],
-    "curations": []
+    "curations": [],
+    "storylineArticles": [
+      {
+        "title": "Blacklisted",
+        "slug": "blacklisted",
+        "date": "2026-03-18",
+        "type": "mention"
+      }
+    ]
   }
 ]
