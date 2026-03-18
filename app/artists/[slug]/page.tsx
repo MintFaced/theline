@@ -149,9 +149,9 @@ export default async function ArtistPage(props: { params: Promise<{ slug: string
               <div className="flex flex-wrap gap-4 mt-10">
                 {artist.xHandle && (
                   <div className="flex flex-col gap-1">
-                    <a href={`https://x.com/${artist.xHandle}`} target="_blank" rel="noopener noreferrer"
+                    <a href={`https://x.com/${artist.xHandle.replace(/^@/, '')}`} target="_blank" rel="noopener noreferrer"
                       className="font-mono text-[11px] text-line-muted hover:text-line-accent transition-colors tracking-widest uppercase flex items-center gap-1.5">
-                      𝕏 @{artist.xHandle}
+                      𝕏 @{artist.xHandle.replace(/^@/, '')}
                     </a>
 
                   </div>
