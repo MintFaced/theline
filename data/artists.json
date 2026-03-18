@@ -670,7 +670,13 @@
     "oncyberUrls": [
       "https://oncyber.io/line18"
     ],
-    "curations": []
+    "curations": [
+      {
+        "key": "SR",
+        "label": "SuperRare",
+        "url": "https://superrare.com/adacrow"
+      }
+    ]
   },
   {
     "lineNumber": 19,
@@ -4332,8 +4338,8 @@
     "description": "Expressive, bold colors",
     "walletAddress": "0x3a5e247429201d70FAe0fF28e41fd8A1CA50AF5A",
     "walletType": "eth",
-    "xHandle": "whalepapi4",
-    "bioOverride": "Backup/older account for ocean photographer @MattWalch4 (based in French Polynesia, NFT creator/collector, nurse anesthetist); limited recent activity here, but ties to marine photography and web3 community support from past posts.",
+    "xHandle": "@mattwalch4",
+    "bioOverride": "Matt Walch is an Ocean photographer based in Tahiti. Picturing the underwater world in a dreamy way, his goal is to make you feel what it's like to experience these moments.",
     "bioLocked": false,
     "heroImage": "https://pub-40df8e6473b14a10a093ecf8c80c2f92.r2.dev/artists/line0128-whale-papi.png",
     "allLineNumbers": [
@@ -4342,7 +4348,13 @@
     "oncyberUrls": [
       "https://oncyber.io/line128"
     ],
-    "curations": []
+    "curations": [
+      {
+        "key": "SR",
+        "label": "SuperRare",
+        "url": "https://superrare.com/mattwalch"
+      }
+    ]
   },
   {
     "lineNumber": 129,
@@ -10201,8 +10213,8 @@
     "description": "AI-generated abstract landscapes and textures",
     "walletAddress": "0x2EAe4738Fe75C88CF1D6521433d30cfd85961992",
     "walletType": "ens",
-    "xHandle": "EBleicher",
-    "bioOverride": "Alaskan photographer fond of northern lights and JPEGs, 5717.eth; he shares GM landscape photos (e.g., good morning aurora scenes), supportive morning replies to creators, and engages in photography communities with thanks and congrats on sales or milestones.",
+    "xHandle": "@ebleicher",
+    "bioOverride": "Alaskan | Aurora Chaser | Line 312. All tokenized work links at: www.ebleicher.com/blockchain",
     "bioLocked": false,
     "heroImage": "https://pub-40df8e6473b14a10a093ecf8c80c2f92.r2.dev/artists/line0312-eric-bleicher.png",
     "allLineNumbers": [
@@ -11358,8 +11370,8 @@
     "description": "Artist exploring animal and nature themes",
     "walletAddress": "0xc1d040b7ebcc0a571d9e2d54e10bd04c505e7d37",
     "walletType": "eth",
-    "xHandle": "dbadgerNFT",
-    "bioOverride": null,
+    "xHandle": "@badgerdnft",
+    "bioOverride": "Sydney based photographer working across landscape, ocean and urban environments. Using long exposure and minimal composition, my work explores stillness, movement and the subtle tension between them. Since entering the digital art space in April 2021 I have released 1/1 works and limited editions collected globally while building strong connections within the digital art community. My practice is evolving toward more conceptual and narrative driven photography.",
     "bioLocked": false,
     "heroImage": "https://pub-40df8e6473b14a10a093ecf8c80c2f92.r2.dev/artists/line0353-dbadger-nft.png",
     "allLineNumbers": [
@@ -11368,7 +11380,13 @@
     "oncyberUrls": [
       "https://oncyber.io/line353"
     ],
-    "curations": []
+    "curations": [
+      {
+        "key": "SR",
+        "label": "SuperRare",
+        "url": "https://www.transient.xyz/@badgerdnft"
+      }
+    ]
   },
   {
     "lineNumber": 354,
