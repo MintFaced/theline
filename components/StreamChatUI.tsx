@@ -2,7 +2,7 @@
 // Client-only via dynamic() - never SSR
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader, useMessageInputContext } from 'stream-chat-react'
+import { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader, useMessageInputContext, ReactionSelector, useMessageContext } from 'stream-chat-react'
 import 'stream-chat-react/dist/css/v2/index.css'
 import { init, SearchIndex } from 'emoji-mart'
 import data from '@emoji-mart/data'
@@ -38,6 +38,56 @@ function EmojiPicker() {
         style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', padding: '4px 8px', opacity: 0.6 }}
       >
         🙂
+      </button>
+    </div>
+  )
+}
+
+
+function CustomReactionSelector(
+  props: React.ComponentPropsWithRef<typeof ReactionSelector>
+) {
+  const [open, setOpen] = useState(false)
+  const { message } = useMessageContext('CustomReactionSelector')
+
+  const handleEmojiSelect = async (emoji: any) => {
+    const hasReacted = (message.own_reactions || []).some(
+      (r: any) => r.type === emoji.native
+    )
+    // Use the default handler if available, otherwise noop
+    if (props.handleReaction) {
+      await props.handleReaction(emoji.native, {} as any)
+    }
+    setOpen(false)
+  }
+
+  return (
+    <div style={{ position: 'relative' }}>
+      {open && (
+        <div style={{ position: 'absolute', bottom: '40px', right: 0, zIndex: 200 }}>
+          <EmojiMartPicker
+            data={data}
+            theme="dark"
+            previewPosition="none"
+            skinTonePosition="none"
+            onEmojiSelect={handleEmojiSelect}
+          />
+        </div>
+      )}
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        style={{
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '16px',
+          padding: '4px 6px',
+          opacity: 0.7,
+          lineHeight: 1,
+        }}
+      >
+        {open ? '✕' : '😊'}
       </button>
     </div>
   )
@@ -231,7 +281,7 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
       {/* Chat */}
       <div className="larp-chat flex-1 min-h-0">
         <Chat client={chatData.client} theme="str-chat__theme-dark">
-          <Channel channel={chatData.channel} EmojiPicker={EmojiPicker} emojiSearchIndex={SearchIndex}>
+          <Channel channel={chatData.channel} EmojiPicker={EmojiPicker} emojiSearchIndex={SearchIndex} ReactionSelector={CustomReactionSelector}>
             <Window>
               <ChannelHeader />
               <MessageList />
