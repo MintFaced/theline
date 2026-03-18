@@ -22,14 +22,14 @@ export async function GET(request: Request) {
     const submissions = rows.slice(1).map((row, i) => ({
       index: i + 2,
       timestamp: row[0] || '',
-      name: row[1] || '',
-      email: row[2] || '',
-      lineNumber: row[3] || '',
-      handle: row[4] || '',
-      bio: row[5] || '',
-      wallet: row[6] || '',
-      collectLink: row[7] || '',
-      worksAvailable: row[8] || '',
+      lineNumber: isApproved ? row[1] || '' : row[3] || '',
+      handle:     isApproved ? row[2] || '' : row[4] || '',
+      bio:        isApproved ? row[3] || '' : row[5] || '',
+      wallet:     isApproved ? row[4] || '' : row[6] || '',
+      collectLink:isApproved ? row[5] || '' : row[7] || '',
+      name:       isApproved ? '' : row[1] || '',
+      email:      isApproved ? '' : row[2] || '',
+      worksAvailable: isApproved ? '' : row[8] || '',
     })).filter(s => s.lineNumber)
 
     return NextResponse.json({ submissions, total: submissions.length })
