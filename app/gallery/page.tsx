@@ -130,20 +130,17 @@ export default function GalleryPage() {
               </h2>
               <div className="space-y-5 font-sans text-sm text-line-muted leading-relaxed">
                 <p>
-                  {'From cloud to land'} is a core tenet of <a href="https://balajis.com/p/the-network-state-2021" target="_blank" rel="noopener noreferrer" className="text-line-accent hover:opacity-70 transition-opacity">Balaji Srinivasan{'\''}s Network State theory</a> — a strategy for building new societies by organising online first and acquiring physical land later. The Line is living proof of that process.
+                  The Line community formed digitally in October 2022 by exhibiting a single line of culture through tokenized digital art. The Line existed on-chain first with 1,000 positions. Artists from 82+ countries built The Line in the cloud, secured by blockchain.
+                </p>
+                <p>
+                  From cloud to land is a core tenet of <a href="https://balajis.com/p/the-network-state-2021" target="_blank" rel="noopener noreferrer" className="text-line-accent hover:opacity-70 transition-opacity">Balaji Srinivasan{'\''}s Network State theory</a>... a strategy for building new societies by organising online first and acquiring a physical presence next. The Line is living proof of that process.
+                </p>
+                <p>
+                  Traditional galleries start with walls and find artists to fill them. In a digital first era, that seems backwards. The Line inverted the sequence so the artists came first. The space followed. That is a blueprint that will slowly transform our cities into places we love to live again.
                 </p>
                 <blockquote className="border-l-2 border-line-accent pl-4 italic text-line-text">
-                  "A network state is a social network with an agreed-upon leader, an integrated cryptocurrency, a definite purpose, a sense of national consciousness, and a plan to crowdfund territory." — Balaji
+                  "We moved The Line from the digital realm into the physical as the first node of a Network State with shared values of cryptoart. It won{'\''}t be the last." — MintFace
                 </blockquote>
-                <p>
-                  The Line community formed digitally in October 2022 with a shared purpose of exhibiting our digital artworks in a single line of culture through tokenized art. Before any lease was signed or artwork hung, The Line existed on-chain. 1,000 positions. Artists from every continent across 82+ countries set about building a continuous, ordered archive built in the blockchain secured cloud.
-                </p>
-                <p>
-                  {'\'Printing\''} the cloud means moving The Line from the digital realm to the physical. Instead of one singular territory, the Network State model builds an archipelago with dispersed nodes connected by shared values of cryptoart, rather than shared borders.
-                </p>
-                <p>
-                  The Line gallery in Hawke{'\''}s Bay, New Zealand is the very first node. lfffline. It won{'\''}t be the last. Where traditional galleries start with walls and find artists to fill them, The Line inverted the sequence so the artists came first. The space followed. That{'\''}s a philosophy that will slowly transform our cities into places we love to live again.
-                </p>
               </div>
             </div>
           </div>
