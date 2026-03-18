@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: ['emoji-mart', '@emoji-mart/react', '@emoji-mart/data'],
   async headers() {
     return [
       {
