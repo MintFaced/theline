@@ -4,33 +4,9 @@
 // GET with ?secret=xxx to list pending submissions
 
 import { NextResponse } from 'next/server'
-import { appendRow } from '@/lib/sheets'
+import { appendRow, readSheet } from '@/lib/sheets'
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'theline-admin-2026'
-const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID
-
-async function getAccessToken(): Promise<string> {
-  const { GoogleAuth } = await import('google-auth-library')
-  const auth = new GoogleAuth({
-    credentials: {
-      client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-      private_key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    },
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-  })
-  const client = await auth.getClient()
-  const token = await (client as any).getAccessToken()
-  return token.token
-}
-
-async function readSheet(sheet: string): Promise<string[][]> {
-  const token = await getAccessToken()
-  const range = encodeURIComponent(`${sheet}!A:Z`)
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}`
-  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
-  const data = await res.json()
-  return data.values || []
-}
 
 // GET — list pending bio updates from the Update Bio sheet
 export async function GET(request: Request) {
