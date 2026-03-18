@@ -4,7 +4,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader } from 'stream-chat-react'
 import 'stream-chat-react/dist/css/v2/index.css'
+import { EmojiPicker } from 'stream-chat-react/emojis'
+import { init, SearchIndex } from 'emoji-mart'
+import data from '@emoji-mart/data'
 import { Spinner } from './LarpChat'
+
+
+init({ data })
 
 type Props = { walletAddress: string; shortAddress: string }
 
@@ -194,7 +200,7 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
       {/* Chat */}
       <div className="larp-chat flex-1 min-h-0">
         <Chat client={chatData.client} theme="str-chat__theme-dark">
-          <Channel channel={chatData.channel}>
+          <Channel channel={chatData.channel} EmojiPicker={EmojiPicker} emojiSearchIndex={SearchIndex}>
             <Window>
               <ChannelHeader />
               <MessageList />
