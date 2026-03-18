@@ -6,11 +6,14 @@ import artistsData from '@/data/artists.json'
 const CHANNEL_ID = 'larp-main'
 const CHANNEL_TYPE = 'messaging'
 
-// Build wallet -> artist lookup at module level (cached)
+// Build wallet -> artist lookup -- use LOWEST line number if wallet appears multiple times
 const walletMap: Record<string, { name: string; image?: string; lineNumber: number; slug: string }> = {}
 for (const a of artistsData as any[]) {
   const w = a.walletAddress?.toLowerCase()
-  if (w) {
+  if (!w) continue
+  const existing = walletMap[w]
+  // Keep the entry with the lowest line number
+  if (!existing || a.lineNumber < existing.lineNumber) {
     walletMap[w] = {
       name: a.name,
       image: a.galleryImage || a.heroImage || undefined,
@@ -49,14 +52,33 @@ export async function GET(request: Request) {
     const shortAddr = address.slice(0, 6) + '...' + address.slice(-4)
     const displayName = artist ? `${artist.name} (Line ${artist.lineNumber})` : shortAddr
 
-    // Upsert user with Line Artist name and gallery image
-    // Only set image if we have one from our data — don't overwrite a custom one
+    // Check if user already exists in Stream with a custom PFP
+    let existingImage: string | null = null
+    try {
+      const { users } = await serverClient.queryUsers({ id: { $eq: address } })
+      if (users?.[0]?.image) {
+        existingImage = users[0].image as string
+      }
+    } catch {}
+
+    // Build upsert payload -- never overwrite a custom PFP with the gallery image
     const userPayload: any = {
       id: address,
       name: displayName,
     }
-    if (artist?.image) {
-      userPayload.image = artist.image
+    if (artist?.lineNumber !== undefined) userPayload.lineNumber = artist.lineNumber
+    if (artist?.slug) userPayload.slug = artist.slug
+
+    // Only set image if:
+    // 1. No existing image (first time), OR
+    // 2. Existing image is from our gallery (not a custom upload to R2 avatars bucket)
+    const isCustomPfp = existingImage && existingImage.includes('theline-avatars')
+    if (!isCustomPfp) {
+      // Use custom PFP if set, otherwise fall back to gallery image
+      userPayload.image = existingImage || artist?.image || null
+    } else {
+      // Keep custom PFP -- don't set image in payload, Stream keeps existing
+      existingImage = existingImage // no-op, just clarity
     }
 
     await serverClient.upsertUser(userPayload)
@@ -71,13 +93,18 @@ export async function GET(request: Request) {
 
     const token = serverClient.createToken(address)
 
+    // Return the image to show -- custom PFP takes priority
+    const imageToShow = isCustomPfp ? existingImage : (userPayload.image || null)
+
     return NextResponse.json({
       token,
       channelId: CHANNEL_ID,
       channelType: CHANNEL_TYPE,
       displayName,
       hasLineProfile: !!artist,
-      userImage: artist?.image || null,
+      userImage: imageToShow,
+      lineNumber: artist?.lineNumber ?? null,
+      slug: artist?.slug ?? null,
     })
   } catch (err: any) {
     console.error('Stream token error:', err)
