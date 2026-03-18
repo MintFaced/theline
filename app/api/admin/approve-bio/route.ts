@@ -15,20 +15,23 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const sheet = searchParams.get('sheet') === 'approved' ? 'Approved Bios' : 'Update Bio'
+  const isApproved = sheet === 'Approved Bios'
+
   try {
-    const rows = await readSheet('Update Bio')
-    // Skip header row, return all submissions
-    // Columns: Date | Name | Email | Line | X Handle | Bio | Wallet | Collect Link | # Works
+    const rows = await readSheet(sheet)
+    // Update Bio columns:   Date | Name | Email | Line | X Handle | Bio | Wallet | Collect Link | # Works
+    // Approved Bios columns: Timestamp | Line | Handle | Bio | Wallet | Collect Link
     const submissions = rows.slice(1).map((row, i) => ({
       index: i + 2,
-      timestamp: row[0] || '',
-      lineNumber: isApproved ? row[1] || '' : row[3] || '',
-      handle:     isApproved ? row[2] || '' : row[4] || '',
-      bio:        isApproved ? row[3] || '' : row[5] || '',
-      wallet:     isApproved ? row[4] || '' : row[6] || '',
-      collectLink:isApproved ? row[5] || '' : row[7] || '',
-      name:       isApproved ? '' : row[1] || '',
-      email:      isApproved ? '' : row[2] || '',
+      timestamp:      row[0] || '',
+      lineNumber:     isApproved ? row[1] || '' : row[3] || '',
+      handle:         isApproved ? row[2] || '' : row[4] || '',
+      bio:            isApproved ? row[3] || '' : row[5] || '',
+      wallet:         isApproved ? row[4] || '' : row[6] || '',
+      collectLink:    isApproved ? row[5] || '' : row[7] || '',
+      name:           isApproved ? '' : row[1] || '',
+      email:          isApproved ? '' : row[2] || '',
       worksAvailable: isApproved ? '' : row[8] || '',
     })).filter(s => s.lineNumber)
 
