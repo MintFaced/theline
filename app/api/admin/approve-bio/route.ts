@@ -18,16 +18,18 @@ export async function GET(request: Request) {
   try {
     const rows = await readSheet('Update Bio')
     // Skip header row, return all submissions
+    // Columns: Date | Name | Email | Line | X Handle | Bio | Wallet | Collect Link | # Works
     const submissions = rows.slice(1).map((row, i) => ({
-      index: i + 2, // Sheet row number (1-indexed, skip header)
+      index: i + 2,
       timestamp: row[0] || '',
-      email: row[1] || '',
-      lineNumber: row[2] || '',
-      handle: row[3] || '',
-      bio: row[4] || '',
-      wallet: row[5] || '',
-      superrare: row[6] || '',
-      selfVerified: row[7] || '',
+      name: row[1] || '',
+      email: row[2] || '',
+      lineNumber: row[3] || '',
+      handle: row[4] || '',
+      bio: row[5] || '',
+      wallet: row[6] || '',
+      collectLink: row[7] || '',
+      worksAvailable: row[8] || '',
     })).filter(s => s.lineNumber)
 
     return NextResponse.json({ submissions, total: submissions.length })
@@ -38,7 +40,7 @@ export async function GET(request: Request) {
 
 // POST — approve a specific submission by line number
 export async function POST(request: Request) {
-  const { secret, lineNumber, bio, handle, wallet, superrare } = await request.json()
+  const { secret, lineNumber, bio, handle, wallet, collectLink } = await request.json()
 
   if (secret !== ADMIN_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -56,10 +58,10 @@ export async function POST(request: Request) {
       handle || '',
       bio || '',
       wallet || '',
-      superrare || '',
+      collectLink || '',
     ])
 
-    return NextResponse.json({ ok: true, approved: { lineNumber, bio, handle, wallet, superrare } })
+    return NextResponse.json({ ok: true, approved: { lineNumber, bio, handle, wallet, collectLink } })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
