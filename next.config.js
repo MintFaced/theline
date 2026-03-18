@@ -125,6 +125,7 @@ const nextConfig = {
       // wp-content images -> R2
       { source: '/wp-content/uploads/:path*', destination: 'https://pub-40df8e6473b14a10a093ecf8c80c2f92.r2.dev/migrated/wp-content/uploads/:path*', permanent: true },
       { source: '/all-listings',           destination: '/artists',         permanent: true },
+      { source: '/artists/whale-papi',      destination: '/artists/matt-walch', permanent: true },
       { source: '/all-listings/',          destination: '/artists',         permanent: true },
       { source: '/new-zealand',            destination: '/gallery',         permanent: true },
       { source: '/new-zealand/',           destination: '/gallery',         permanent: true },
