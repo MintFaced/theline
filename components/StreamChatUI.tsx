@@ -2,15 +2,46 @@
 // Client-only via dynamic() - never SSR
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader } from 'stream-chat-react'
+import { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader, useMessageInputContext } from 'stream-chat-react'
 import 'stream-chat-react/dist/css/v2/index.css'
-import { EmojiPicker } from 'stream-chat-react/emojis'
 import { init, SearchIndex } from 'emoji-mart'
 import data from '@emoji-mart/data'
+import EmojiMartPicker from '@emoji-mart/react'
 import { Spinner } from './LarpChat'
 
 
 init({ data })
+
+function EmojiPicker() {
+  const [open, setOpen] = useState(false)
+  const { insertText, textareaRef } = useMessageInputContext('EmojiPicker')
+
+  return (
+    <div style={{ position: 'relative', display: 'flex', alignItems: 'flex-end' }}>
+      {open && (
+        <div style={{ position: 'absolute', bottom: '40px', right: 0, zIndex: 100 }}>
+          <EmojiMartPicker
+            data={data}
+            theme="dark"
+            previewPosition="none"
+            onEmojiSelect={(emoji: any) => {
+              insertText(emoji.native)
+              textareaRef.current?.focus()
+              setOpen(false)
+            }}
+          />
+        </div>
+      )}
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', padding: '4px 8px', opacity: 0.6 }}
+      >
+        🙂
+      </button>
+    </div>
+  )
+}
 
 type Props = { walletAddress: string; shortAddress: string }
 
