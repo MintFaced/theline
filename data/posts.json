@@ -1,5 +1,19 @@
 [
   {
+    "title": "New Zealand Pioneers",
+    "slug": "new-zealand-pioneers",
+    "date": "2026-03-19",
+    "author": "MintFace",
+    "excerpt": "The pioneers of cryptoart in New Zealand peeled away from the norms of waiting to be picked by a gallery and created their own opportunities. These are the collective that began it all and never stopped believing.",
+    "categories": [
+      "Artist Features",
+      "New Zealand",
+      "News On The Line"
+    ],
+    "readTime": "5",
+    "featuredImage": "https://pub-40df8e6473b14a10a093ecf8c80c2f92.r2.dev/artists/line0000-mintface.png"
+  },
+  {
     "title": "Blacklisted",
     "slug": "blacklisted",
     "date": "2026-03-18",
