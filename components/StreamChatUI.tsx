@@ -1,7 +1,7 @@
 // components/StreamChatUI.tsx
 // Client-only via dynamic() - never SSR
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, forwardRef } from 'react'
 import { Chat, Channel, Window, MessageList, MessageInput, ChannelHeader, useMessageInputContext, ReactionSelector, useMessageContext } from 'stream-chat-react'
 import 'stream-chat-react/dist/css/v2/index.css'
 import { init, SearchIndex } from 'emoji-mart'
@@ -44,9 +44,7 @@ function EmojiPicker() {
 }
 
 
-function CustomReactionSelector(
-  props: React.ComponentPropsWithRef<typeof ReactionSelector>
-) {
+const CustomReactionSelector = forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof ReactionSelector>>(function CustomReactionSelector(props, ref) {
   const [open, setOpen] = useState(false)
   const { message } = useMessageContext('CustomReactionSelector')
 
@@ -91,7 +89,7 @@ function CustomReactionSelector(
       </button>
     </div>
   )
-}
+})
 
 type Props = { walletAddress: string; shortAddress: string }
 
