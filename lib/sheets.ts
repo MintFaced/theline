@@ -96,3 +96,13 @@ export async function appendRow(sheet: string, values: string[]): Promise<void> 
     throw new Error(`Sheets append failed: ${err}`)
   }
 }
+
+export async function readSheet(sheet: string): Promise<string[][]> {
+  const token = await getAccessToken()
+  const range = encodeURIComponent(`${sheet}!A:Z`)
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}`
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+  if (!res.ok) return []
+  const data = await res.json()
+  return data.values || []
+}
