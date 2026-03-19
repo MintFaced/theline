@@ -1,6 +1,7 @@
 // app/film/page.tsx
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { SendEthButton } from '@/components/SendEthButton'
 
 export const metadata: Metadata = {
   title: 'Off The Charts -- The Line',
@@ -35,7 +36,7 @@ export default function FilmPage() {
             <span> / </span>
             <span>Production 2026-27</span>
             <span> / </span>
-            <span>Premiere NFTNZ 2028</span>
+            <span>Premiere NFTNYC 2027</span>
           </div>
         </div>
       </div>
@@ -52,7 +53,7 @@ export default function FilmPage() {
             </div>
             <div className="md:col-span-2 space-y-5 font-sans text-sm text-line-muted leading-relaxed">
               <p>
-                <em>Off The Charts</em> follows six New Zealand artists who chose a different path. No gallery jury. No waiting to be discovered. Beginning in 2022, they built an international audience on the blockchain -- and then brought that community back to physical ground in Aotearoa.
+                <em>Off The Charts</em> follows six New Zealand artists who chose a different path. No gallery jury. No waiting to be discovered. Beginning in 2022, they built an international audience on the blockchain and then brought that community back to physical ground in Aotearoa.
               </p>
               <p>
                 The film visits each artist across three locations: their studio, the landscape that shapes their work, and a nearby New Zealand destination that anchors them to place. The pacing is observational. Long takes. Natural light. The land does as much talking as the artists.
@@ -63,7 +64,7 @@ export default function FilmPage() {
                 {' '}-- a tokenized gallery in Hawke's Bay that formed digitally before it ever had walls. Cloud first, land last. The film makes that philosophy concrete and human.
               </p>
               <p>
-                The second half travels to the United States. Vox pops with American crypto artists on both coasts -- candid, unscripted -- establish what the scene looks like from inside, and why New Zealand's <em>touching grass</em> reality feels both peripheral and essential to it. The contrast is the point.
+                The second half travels to the United States. Vox pops with American crypto artists on both coasts... candid, unscripted... establish what the scene looks like from inside, and why New Zealand's 'touching grass' reality feels both peripheral and essential to it. The contrast is the point.
               </p>
               <p>
                 Read the full{' '}
@@ -138,26 +139,28 @@ export default function FilmPage() {
               {
                 tier: 'Lead Producer',
                 eth: '2-3 ETH',
+                defaultAmount: '3',
                 benefits: [
                   'Credit as Lead Producer',
                   'Minted 1/1 of the completed film',
-                  'Two invites to NFTNZ 2028, Hawke\'s Bay',
+                  'Two invites to NFTNYC 2027, New York',
                 ]
               },
               {
                 tier: 'Associate Producer',
                 eth: '1-2 ETH',
+                defaultAmount: '2',
                 benefits: [
                   'Credit as Associate Producer',
                   'Minted limited edition of the film',
-                  'One invite to NFTNZ 2028, Hawke\'s Bay',
+                  'One invite to NFTNYC 2027, New York',
                 ]
               },
             ].map((tier) => (
               <div key={tier.tier} className="bg-line-bg p-8">
                 <p className="font-mono text-[10px] text-line-accent tracking-widest mb-2">{tier.eth}</p>
                 <h3 className="font-display font-light text-2xl text-line-text mb-6" style={{ letterSpacing: '-0.02em' }}>{tier.tier}</h3>
-                <ul className="space-y-3">
+                <ul className="space-y-3 mb-0">
                   {tier.benefits.map((b) => (
                     <li key={b} className="flex gap-3 font-sans text-sm text-line-muted">
                       <span className="text-line-accent mt-0.5">--</span>
@@ -165,6 +168,7 @@ export default function FilmPage() {
                     </li>
                   ))}
                 </ul>
+                <SendEthButton defaultAmount={tier.defaultAmount} label={tier.tier} />
               </div>
             ))}
           </div>
@@ -183,7 +187,10 @@ export default function FilmPage() {
             </div>
             <div className="md:col-span-2">
               <p className="font-sans text-sm text-line-muted leading-relaxed mb-8">
-                The dominant narrative of cryptoart has been American, urban, and male. <em>Off The Charts</em> documents what the scene has never seen clearly -- what it looks like when artists build from the most remote corners of the world, grounded in landscape and culture, and meet the centre on their own terms. That story deserves to exist. February 2028 -- NFTNZ, Hawke's Bay -- is when it premieres.
+                The dominant narrative of cryptoart has been American, urban, and male. <em>Off The Charts</em> documents what the scene has never seen clearly... what it looks like when artists build from the most remote corners of the world, grounded in landscape and culture, and meet the centre on their own terms.
+              </p>
+              <p>
+                That story deserves to exist. September 2027 -- NFTNYC is when it premieres.
               </p>
               <Link
                 href="/storyline/new-zealand-pioneers"
