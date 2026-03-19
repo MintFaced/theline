@@ -629,6 +629,12 @@
         "slug": "class-of-2021-active-in-2024",
         "date": "2024-12-17",
         "type": "mention"
+      },
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "mention"
       }
     ]
   },
@@ -1088,7 +1094,15 @@
     "oncyberUrls": [
       "https://oncyber.io/line31"
     ],
-    "curations": []
+    "curations": [],
+    "storylineArticles": [
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "mention"
+      }
+    ]
   },
   {
     "lineNumber": 32,
@@ -6661,6 +6675,12 @@
     ],
     "storylineArticles": [
       {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "feature"
+      },
+      {
         "title": "Class of 2021. Active in 2024.",
         "slug": "class-of-2021-active-in-2024",
         "date": "2024-12-17",
@@ -6693,7 +6713,15 @@
     "oncyberUrls": [
       "https://oncyber.io/line197"
     ],
-    "curations": []
+    "curations": [],
+    "storylineArticles": [
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "feature"
+      }
+    ]
   },
   {
     "lineNumber": 198,
@@ -6770,6 +6798,14 @@
         "key": "SR",
         "label": "SuperRare",
         "url": "https://superrare.com/c4rdinal"
+      }
+    ],
+    "storylineArticles": [
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "feature"
       }
     ]
   },
@@ -7443,6 +7479,14 @@
         "key": "6529",
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
+      }
+    ],
+    "storylineArticles": [
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "feature"
       }
     ]
   },
@@ -10018,6 +10062,12 @@
     ],
     "curations": [],
     "storylineArticles": [
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "feature"
+      },
       {
         "title": "Future Nostalgia with Matty Furious",
         "slug": "future-nostalgia-with-matty-furious",
@@ -14497,6 +14547,12 @@
         "slug": "scarcity-and-rewards",
         "date": "2021-08-17",
         "type": "mention"
+      },
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "mention"
       }
     ]
   },
@@ -16001,7 +16057,15 @@
     "oncyberUrls": [
       "https://oncyber.io/line512"
     ],
-    "curations": []
+    "curations": [],
+    "storylineArticles": [
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "feature"
+      }
+    ]
   },
   {
     "lineNumber": 513,
@@ -17207,6 +17271,12 @@
     ],
     "curations": [],
     "storylineArticles": [
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "feature"
+      },
       {
         "title": "Mostly Implicit with hisartwork",
         "slug": "mostly-implicit-with-hisartwork",
@@ -18454,6 +18524,14 @@
         "key": "6529",
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
+      }
+    ],
+    "storylineArticles": [
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "feature"
       }
     ]
   },
@@ -21147,6 +21225,12 @@
         "slug": "maxxed-out-with-max-capacity",
         "date": "2025-01-06",
         "type": "feature"
+      },
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
+        "type": "mention"
       }
     ]
   },
@@ -21217,6 +21301,12 @@
         "title": "Seize and Share Memes 3",
         "slug": "seize-and-share-memes-3",
         "date": "2022-12-16",
+        "type": "mention"
+      },
+      {
+        "title": "Glitch Canon",
+        "slug": "glitch-canon",
+        "date": "2026-03-19",
         "type": "mention"
       }
     ]
