@@ -105,7 +105,7 @@ export default function FAQPage() {
           <p className="font-sans text-sm text-line-muted">DM MintFaced on X or explore the membership page.</p>
         </div>
         <div className="flex gap-4">
-          <a href="https://x.com/mintfaced" target="_blank" rel="noopener noreferrer" className="btn-primary">DM on X</a>
+          <a href="https://x.com/mintface" target="_blank" rel="noopener noreferrer" className="btn-primary">DM on X</a>
           <Link href="/membership" className="btn-outline">Membership</Link>
         </div>
       </div>
