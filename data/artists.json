@@ -1020,6 +1020,11 @@
         "key": "6529",
         "label": "6529 Memes",
         "url": "https://opensea.io/collection/thememes6529"
+      },
+      {
+        "key": "deca",
+        "label": "Deca",
+        "url": "https://deca.art"
       }
     ],
     "storylineArticles": [
@@ -4510,7 +4515,13 @@
     "oncyberUrls": [
       "https://oncyber.io/line131"
     ],
-    "curations": [],
+    "curations": [
+      {
+        "key": "deca",
+        "label": "Deca",
+        "url": "https://deca.art"
+      }
+    ],
     "storylineArticles": []
   },
   {
@@ -9937,6 +9948,11 @@
         "key": "SR",
         "label": "SuperRare",
         "url": "https://superrare.com/grantyun2"
+      },
+      {
+        "key": "deca",
+        "label": "Deca",
+        "url": "https://deca.art"
       }
     ],
     "storylineArticles": [
@@ -23486,6 +23502,11 @@
         "key": "FR",
         "label": "Fake Rare",
         "url": "https://opensea.io/collection/fake-rares-curated"
+      },
+      {
+        "key": "deca",
+        "label": "Deca",
+        "url": "https://deca.art"
       }
     ]
   },
