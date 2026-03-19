@@ -208,8 +208,8 @@ export default function FilmPage() {
         <p className="font-mono text-[11px] text-line-muted tracking-widest uppercase mb-2">Interested in producing?</p>
         <p className="font-sans text-sm text-line-muted">
           Reach out to{' '}
-          <a href="https://x.com/mintfaced" target="_blank" rel="noopener noreferrer" className="text-line-accent hover:opacity-70 transition-opacity">
-            @mintfaced
+          <a href="https://x.com/mintface" target="_blank" rel="noopener noreferrer" className="text-line-accent hover:opacity-70 transition-opacity">
+            @mintface
           </a>
           {' '}on X or connect via{' '}
           <Link href="/join" className="text-line-accent hover:opacity-70 transition-opacity">
