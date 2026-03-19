@@ -36,7 +36,7 @@ export default function FilmPage() {
             <span> / </span>
             <span>Production 2026-27</span>
             <span> / </span>
-            <span>Premiere NFTNYC 2027</span>
+            <span>Premiere NFTNYC 2026</span>
           </div>
         </div>
       </div>
@@ -143,7 +143,7 @@ export default function FilmPage() {
                 benefits: [
                   'Credit as Lead Producer',
                   'Minted 1/1 of the completed film',
-                  'Two invites to NFTNYC 2027, New York',
+                  'Two invites to NFTNYC 2026, New York',
                 ]
               },
               {
@@ -153,7 +153,7 @@ export default function FilmPage() {
                 benefits: [
                   'Credit as Associate Producer',
                   'Minted limited edition of the film',
-                  'One invite to NFTNYC 2027, New York',
+                  'One invite to NFTNYC 2026, New York',
                 ]
               },
             ].map((tier) => (
@@ -189,8 +189,8 @@ export default function FilmPage() {
               <p className="font-sans text-sm text-line-muted leading-relaxed mb-8">
                 The dominant narrative of cryptoart has been American, urban, and male. <em>Off The Charts</em> documents what the scene has never seen clearly... what it looks like when artists build from the most remote corners of the world, grounded in landscape and culture, and meet the centre on their own terms.
               </p>
-              <p>
-                That story deserves to exist. September 2027 -- NFTNYC is when it premieres.
+              <p className="font-sans text-sm text-line-muted leading-relaxed mb-8">
+                That story deserves to exist. September 2026 -- NFTNYC is when it premieres.
               </p>
               <Link
                 href="/storyline/new-zealand-pioneers"
