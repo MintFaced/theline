@@ -34,7 +34,7 @@ export default function FilmPage() {
           <div className="flex flex-wrap gap-6 font-mono text-[11px] text-line-muted tracking-widest uppercase">
             <span>25-30 minutes</span>
             <span> / </span>
-            <span>Production 2026-27</span>
+            <span>Production H1 2026</span>
             <span> / </span>
             <span>Premiere NFTNYC 2026</span>
           </div>
