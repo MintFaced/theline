@@ -45,7 +45,7 @@ interface SimNode {
 // /api/ens/reverse which runs server-side with no CORS restrictions.
 // Batches of 50 addresses per request.
 
-async function resolveEnsBatch(addrs: string[]): Promise<Record<string, string | null>> {
+async function resolveEnsBatch(addrs: string[]): Promise<Record<string, string | null | false>> {
   try {
     const res = await fetch('/api/ens/reverse', {
       method: 'POST',
@@ -112,7 +112,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   const [hoveredPos, setHoveredPos]   = useState({ x: 0, y: 0 })
   const [pan, setPan]                 = useState({ x: 0, y: 0 })
   const [scale, setScale]             = useState(1)
-  const [ensCache, setEnsCache]       = useState<Record<string, string | null>>({})
+  const [ensCache, setEnsCache]       = useState<Record<string, string | null | false>>({})
   const [ensStatus, setEnsStatus]     = useState<'idle' | 'loading' | 'live'>('idle')
   const [ensCount, setEnsCount]       = useState({ done: 0, total: 0 })
   const [search, setSearch]           = useState('')
@@ -122,7 +122,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   const hovRef      = useRef(hovered)
   const filterRef   = useRef(filter)
   const searchRef   = useRef(search)
-  const ensCacheRef = useRef<Record<string, string | null>>({})
+  const ensCacheRef = useRef<Record<string, string | null | false>>({})
   panRef.current    = pan
   scaleRef.current  = scale
   hovRef.current    = hovered
@@ -411,7 +411,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
       const allAddrs = [...new Set(collectors.map(d => d.addr))]
 
       // Load pre-cached names — instant, no RPC
-      let preCache: Record<string, string | null> = {}
+      let preCache: Record<string, string | null | false> = {}
       try {
         const r = await fetch(ensUrl)
         if (r.ok) preCache = await r.json()
