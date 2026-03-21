@@ -115,17 +115,20 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   const [ensCache, setEnsCache]       = useState<Record<string, string | null>>({})
   const [ensStatus, setEnsStatus]     = useState<'idle' | 'loading' | 'live'>('idle')
   const [ensCount, setEnsCount]       = useState({ done: 0, total: 0 })
+  const [search, setSearch]           = useState('')
 
   const panRef      = useRef(pan)
   const scaleRef    = useRef(scale)
   const hovRef      = useRef(hovered)
   const filterRef   = useRef(filter)
+  const searchRef   = useRef(search)
   const ensCacheRef = useRef<Record<string, string | null>>({})
   panRef.current    = pan
   scaleRef.current  = scale
   hovRef.current    = hovered
   filterRef.current = filter
-  ensCacheRef.current = ensCache  // always mirrors latest state — safe to read anywhere
+  searchRef.current = search
+  ensCacheRef.current = ensCache
 
   const colMap = Object.fromEntries(collections.map(c => [c.id, c]))
   const accentRgb = hex2rgb(accent)
@@ -228,8 +231,15 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
     ctx.translate(W / 2 + p.x, H / 2 + p.y)
     ctx.scale(s, s)
 
-    const isVis = (n: SimNode) =>
-      fil === 'all' || (n.data.holdings[fil] || 0) > 0
+    const srch = searchRef.current.trim().toLowerCase()
+    const isVis = (n: SimNode) => {
+      const filterOk = fil === 'all' || (n.data.holdings[fil] || 0) > 0
+      if (!filterOk) return false
+      if (!srch) return true
+      // Match against ENS name or address
+      const name = ensCacheRef.current[n.id]?.toLowerCase() ?? ''
+      return name.includes(srch) || n.id.toLowerCase().includes(srch)
+    }
 
     // Edges
     nodes.forEach(n => {
@@ -411,12 +421,17 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
 
       // Apply confirmed string names from pre-cache immediately
       const confirmed = Object.fromEntries(
-        Object.entries(preCache).filter(([, v]) => typeof v === 'string')
+        Object.entries(preCache).filter(([, v]) => typeof v === 'string') as [string, string][]
       )
       if (Object.keys(confirmed).length) setEnsCache(confirmed)
 
-      // Only resolve addresses without a confirmed string name
-      const unknown = allAddrs.filter(a => typeof preCache[a] !== 'string')
+      // preCache values (set by ncm-ens-cache.mjs):
+      //   string = resolved ENS name → show it
+      //   false  = confirmed no ENS  → skip, show short address
+      //   null   = not yet checked   → live lookup
+      const unknown = allAddrs.filter(a =>
+        preCache[a] !== false && typeof preCache[a] !== 'string'
+      )
 
       if (!unknown.length) {
         setEnsStatus('live')
@@ -520,6 +535,23 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
 
       {/* Filter panel — top left */}
       <div className="absolute top-7 left-7 z-10 w-44">
+        {/* Search */}
+        <div className="relative mb-2">
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search collector…"
+            className="w-full bg-transparent border border-line-border px-2 py-1.5 font-mono text-[9px] text-line-text placeholder:text-line-muted tracking-wide focus:outline-none focus:border-line-muted"
+            style={{ caretColor: accent }}
+          />
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 font-mono text-[10px] text-line-muted hover:text-line-text"
+            >×</button>
+          )}
+        </div>
         <p className="font-mono text-[7px] tracking-[0.38em] uppercase text-line-muted mb-2 pb-2 px-2 border-b border-line-border">
           Collections
         </p>
