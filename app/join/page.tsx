@@ -210,10 +210,8 @@ export default function JoinPage() {
 
             <div className="flex flex-col gap-3">
               <a href={OPENSEA_GUARDIANS} target="_blank" rel="noopener noreferrer"
-                className="text-center font-mono text-[11px] tracking-widest uppercase px-6 py-3.5 border transition-colors"
+                className="text-center font-mono text-[11px] tracking-widest uppercase px-6 py-3.5 border transition-colors hover:opacity-70"
                 style={{ borderColor: C_GUARDIAN, color: C_GUARDIAN }}
-                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = C_GUARDIAN + '15' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent' }}
               >
                 Acquire Guardian NFT
               </a>
