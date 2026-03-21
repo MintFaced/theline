@@ -27,6 +27,7 @@ interface NcmProps {
     cross_collection: number
   }
   collectorsUrl: string // e.g. "/ncm/apocalypse.collectors.json"
+  ensUrl: string        // e.g. "/ncm/apocalypse.ens.json"
 }
 
 interface SimNode {
@@ -87,7 +88,7 @@ function mkRng(seed: number) {
 
 // ── Component ─────────────────────────────────────────────────────────────
 
-export function NetworkCollectorsMap({ artistName, accent, collections, stats, collectorsUrl }: NcmProps) {
+export function NetworkCollectorsMap({ artistName, accent, collections, stats, collectorsUrl, ensUrl }: NcmProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animRef   = useRef<number>(0)
   const simRef    = useRef<d3.Simulation<SimNode, undefined> | null>(null)
@@ -358,23 +359,46 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   }
 
   // ── ENS resolution ────────────────────────────────────────────────────
-  // Only resolve the ~317 addresses rendered as nodes — not all 4173 in
-  // the collectors file. Batch of 20 with 50ms gap ≈ 2 minutes to complete.
+  // Step 1: load the pre-baked .ens.json cache instantly (no RPC needed).
+  // Step 2: live-resolve only addresses absent from the cache file.
+  // To regenerate the cache: visit the map, open console, run window.__saveENS()
   useEffect(() => {
     if (!nodes.length) return
-
-    const addrs = [...new Set(nodes.map(n => n.id))]
-    setEnsCount({ done: 0, total: addrs.length })
-    setEnsStatus('loading')
-
     let cancelled = false
-    const BATCH = 20
-    let done = 0
 
     async function run() {
-      for (let i = 0; i < addrs.length; i += BATCH) {
+      // Load pre-cached names — instant, no RPC
+      let preCache: Record<string, string | null> = {}
+      try {
+        const r = await fetch(ensUrl)
+        if (r.ok) preCache = await r.json()
+      } catch { /* cache file missing — proceed to live lookup */ }
+
+      if (cancelled) return
+
+      // Apply pre-cache immediately so names appear on first paint
+      setEnsCache(preCache)
+
+      // Find addresses NOT in the cache file (genuinely unknown)
+      const allAddrs = [...new Set(nodes.map(n => n.id))]
+      const unknown  = allAddrs.filter(a => !(a in preCache))
+
+      if (!unknown.length) {
+        setEnsStatus('live')
+        setEnsCount({ done: allAddrs.length, total: allAddrs.length })
+        return
+      }
+
+      // Live-resolve only the unknowns
+      setEnsCount({ done: allAddrs.length - unknown.length, total: allAddrs.length })
+      setEnsStatus('loading')
+
+      const BATCH = 20
+      let done = allAddrs.length - unknown.length
+
+      for (let i = 0; i < unknown.length; i += BATCH) {
         if (cancelled) return
-        const batch = addrs.slice(i, i + BATCH)
+        const batch = unknown.slice(i, i + BATCH)
         const results = await Promise.allSettled(
           batch.map(addr => viemClient.getEnsName({ address: addr as `0x${string}` }))
         )
@@ -384,15 +408,29 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
         })
         done += batch.length
         setEnsCache(prev => ({ ...prev, ...updates }))
-        setEnsCount({ done, total: addrs.length })
-        await new Promise(r => setTimeout(r, 50))
+        setEnsCount({ done, total: allAddrs.length })
+        await new Promise(res => setTimeout(res, 50))
       }
-      if (!cancelled) setEnsStatus('live')
+
+      if (!cancelled) {
+        setEnsStatus('live')
+        // Expose helper so dev can snapshot the full cache to regenerate the .ens.json
+        ;(window as any).__saveENS = () => {
+          setEnsCache(current => {
+            const blob = new Blob([JSON.stringify(current, null, 2)], { type: 'application/json' })
+            const a    = document.createElement('a')
+            a.href     = URL.createObjectURL(blob)
+            a.download = ensUrl.split('/').pop() ?? 'ens-cache.json'
+            a.click()
+            return current
+          })
+        }
+      }
     }
 
-    const t = setTimeout(run, 2000)
+    const t = setTimeout(run, 800)
     return () => { cancelled = true; clearTimeout(t) }
-  }, [nodes.length])
+  }, [nodes.length, ensUrl])
 
   // ── Render ────────────────────────────────────────────────────────────
   const ncols = collections.length
@@ -467,13 +505,13 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
 
       {/* Filter panel — top left */}
       <div className="absolute top-7 left-7 z-10 w-44">
-        <p className="font-mono text-[7px] tracking-[0.38em] uppercase text-line-muted mb-2 pb-2 border-b border-line-border">
-          View / Collections
+        <p className="font-mono text-[7px] tracking-[0.38em] uppercase text-line-muted mb-2 pb-2 px-2 border-b border-line-border">
+          Collections
         </p>
         {/* All */}
         <button
           onClick={() => setFilter('all')}
-          className={`flex items-center gap-2 w-full px-2 py-1.5 border text-left transition-all ${
+          className={`relative flex items-center gap-2 w-full px-2 py-1.5 border text-left transition-all ${
             filter === 'all'
               ? 'border-line-border bg-white/[0.03]'
               : 'border-transparent hover:border-line-border'
