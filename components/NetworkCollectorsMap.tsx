@@ -237,7 +237,8 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
       if (!filterOk) return false
       if (!srch) return true
       // Match against ENS name or address
-      const name = ensCacheRef.current[n.id]?.toLowerCase() ?? ''
+      const cached = ensCacheRef.current[n.id]
+      const name = typeof cached === 'string' ? cached.toLowerCase() : ''
       return name.includes(srch) || n.id.toLowerCase().includes(srch)
     }
 
