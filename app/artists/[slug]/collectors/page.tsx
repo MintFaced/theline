@@ -69,6 +69,7 @@ export default async function CollectorsPage(
           collections={ncm.collections}
           stats={ncm.stats}
           collectorsUrl={`/ncm/${slug}.collectors.json`}
+          ensUrl={`/ncm/${slug}.ens.json`}
         />
       </div>
     </div>
