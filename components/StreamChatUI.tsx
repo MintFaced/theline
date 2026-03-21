@@ -130,6 +130,38 @@ export default function StreamChatUI({ walletAddress, shortAddress }: Props) {
     }
   }
 
+  // ── Sound effects ──────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!chatData?.channel || !chatData?.client) return
+
+    const msgAudio = new Audio('/sounds/new_chat_message.mp3')
+    const mentionAudio = new Audio('/sounds/new_mention.mp3')
+    msgAudio.volume = 0.5
+    mentionAudio.volume = 0.7
+
+    const handleMessage = (event: any) => {
+      const myId = chatData.client.userID
+      // Don't play for own messages
+      if (event.message?.user?.id === myId) return
+
+      const mentionedUsers: any[] = event.message?.mentioned_users ?? []
+      const isMentioned = mentionedUsers.some((u: any) => u.id === myId)
+
+      if (isMentioned) {
+        mentionAudio.currentTime = 0
+        mentionAudio.play().catch(() => {})
+      } else {
+        msgAudio.currentTime = 0
+        msgAudio.play().catch(() => {})
+      }
+    }
+
+    chatData.channel.on('message.new', handleMessage)
+    return () => {
+      chatData.channel.off('message.new', handleMessage)
+    }
+  }, [chatData])
+
   if (status === 'error') {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4 px-6">
