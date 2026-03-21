@@ -2639,7 +2639,24 @@
         "date": "2025-01-06",
         "type": "mention"
       }
-    ]
+    ],
+    "ncm": {
+      "accent": "#c8391c",
+      "collections": [
+        { "id": "oversoul",    "name": "Oversoul",      "contract": "0x8fb9051d464ef8fed7832e05bacc675699a84401", "chain": "ethereum", "color": "#c8391c", "holders": 13,   "pieces": 19   },
+        { "id": "ordeal",      "name": "The Ordeal",    "contract": "0xdc77d7a6bae09fe36d23d27d8dfd7f930e7b981e", "chain": "shape",    "color": "#d4701a", "holders": 76,   "pieces": 156  },
+        { "id": "origins",     "name": "Origins",       "contract": "0x486f86728ba157cbd21f71cee7ff895e2892f9d6", "chain": "ethereum", "color": "#b89020", "holders": 23,   "pieces": 30   },
+        { "id": "meetings",    "name": "The Meetings",  "contract": "0x2318954d3add6175545d482bd648093740201805", "chain": "ethereum", "color": "#2878c0", "holders": 12,   "pieces": 12   },
+        { "id": "insights",    "name": "The InSights",  "contract": "0xceaeeb3f6984c970d5354a23d59e70ac3aa2b720", "chain": "ethereum", "color": "#1e8080", "holders": 18,   "pieces": 21   },
+        { "id": "editions",    "name": "Editions",      "contract": "0x8415d610f19641d97c088b532663cdca3dc58826", "chain": "ethereum", "color": "#7050c0", "holders": 4098, "pieces": 4653 },
+        { "id": "randommints", "name": "Random Mints",  "contract": "0xd60e8125558a4022e7fd0a2a456f27a3b8b6fd07", "chain": "ethereum", "color": "#3a7040", "holders": 20,   "pieces": 31   }
+      ],
+      "stats": {
+        "total_collectors": 4173,
+        "total_pieces": 4922,
+        "cross_collection": 59
+      }
+    }
   },
   {
     "lineNumber": 78,
