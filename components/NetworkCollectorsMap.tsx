@@ -392,10 +392,14 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   // Step 1: load the pre-baked .ens.json cache instantly (no RPC needed).
   // Step 2: live-resolve only addresses absent from the cache file.
   useEffect(() => {
-    if (!nodes.length) return
+    // Trigger on collectors load — stable, not on nodes (d3 ticks constantly)
+    if (!collectors.length) return
     let cancelled = false
 
     async function run() {
+      // All unique addresses from the collectors data
+      const allAddrs = [...new Set(collectors.map(d => d.addr))]
+
       // Load pre-cached names — instant, no RPC
       let preCache: Record<string, string | null> = {}
       try {
@@ -405,12 +409,14 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
 
       if (cancelled) return
 
-      // Apply pre-cache immediately so names appear on first paint
-      setEnsCache(preCache)
+      // Apply confirmed string names from pre-cache immediately
+      const confirmed = Object.fromEntries(
+        Object.entries(preCache).filter(([, v]) => typeof v === 'string')
+      )
+      if (Object.keys(confirmed).length) setEnsCache(confirmed)
 
-      // Find addresses NOT in the cache file (genuinely unknown)
-      const allAddrs = [...new Set(nodes.map(n => n.id))]
-      const unknown  = allAddrs.filter(a => !(a in preCache))
+      // Only resolve addresses without a confirmed string name
+      const unknown = allAddrs.filter(a => typeof preCache[a] !== 'string')
 
       if (!unknown.length) {
         setEnsStatus('live')
@@ -418,11 +424,10 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
         return
       }
 
-      // Live-resolve only the unknowns
       setEnsCount({ done: allAddrs.length - unknown.length, total: allAddrs.length })
       setEnsStatus('loading')
 
-      const BATCH = 50  // proxy handles up to 50 per request
+      const BATCH = 50
       let done = allAddrs.length - unknown.length
 
       for (let i = 0; i < unknown.length; i += BATCH) {
@@ -438,9 +443,9 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
       if (!cancelled) setEnsStatus('live')
     }
 
-    const t = setTimeout(run, 800)
-    return () => { cancelled = true; clearTimeout(t) }
-  }, [nodes.length, ensUrl])
+    run()
+    return () => { cancelled = true }
+  }, [collectors.length, ensUrl])
 
   // ── Render ────────────────────────────────────────────────────────────
   const ncols = collections.length
