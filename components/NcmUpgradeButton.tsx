@@ -11,7 +11,7 @@ export function NcmUpgradeButton({ accentColor }: Props) {
     <div className="flex flex-col gap-3">
 
       {/* Primary: send 0.1 ETH via connected wallet */}
-      <SendEthButton defaultAmount="0.1" label="NCM Upgrade — 0.1 ETH" />
+      <SendEthButton defaultAmount="0.1" label="NCM Upgrade — 0.1 ETH" accentColor={accentColor} />
 
       {/* Secondary: enquire on X */}
       <a
@@ -21,7 +21,7 @@ export function NcmUpgradeButton({ accentColor }: Props) {
         className="text-center font-mono text-[11px] tracking-widest uppercase px-6 py-3.5 border transition-colors hover:opacity-70"
         style={{ borderColor: accentColor, color: accentColor }}
       >
-        Enquire on X @mintface
+        DM Pay Receipt on X @mintface
       </a>
 
       <p className="font-mono text-[9px] text-line-muted tracking-widest text-center">
