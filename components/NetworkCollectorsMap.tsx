@@ -358,17 +358,22 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   }
 
   // ── ENS resolution ────────────────────────────────────────────────────
+  // Only resolve the ~317 addresses rendered as nodes — not all 4173 in
+  // the collectors file. Batch of 20 with 50ms gap ≈ 2 minutes to complete.
   useEffect(() => {
-    if (!collectors.length) return
-    const addrs = collectors.map(d => d.addr)
+    if (!nodes.length) return
+
+    const addrs = [...new Set(nodes.map(n => n.id))]
     setEnsCount({ done: 0, total: addrs.length })
     setEnsStatus('loading')
 
-    const BATCH = 5
+    let cancelled = false
+    const BATCH = 20
     let done = 0
 
     async function run() {
       for (let i = 0; i < addrs.length; i += BATCH) {
+        if (cancelled) return
         const batch = addrs.slice(i, i + BATCH)
         const results = await Promise.allSettled(
           batch.map(addr => viemClient.getEnsName({ address: addr as `0x${string}` }))
@@ -380,15 +385,14 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
         done += batch.length
         setEnsCache(prev => ({ ...prev, ...updates }))
         setEnsCount({ done, total: addrs.length })
-        await new Promise(r => setTimeout(r, 120))
+        await new Promise(r => setTimeout(r, 50))
       }
-      setEnsStatus('live')
+      if (!cancelled) setEnsStatus('live')
     }
 
-    // Start after a small delay so the map renders first
     const t = setTimeout(run, 2000)
-    return () => clearTimeout(t)
-  }, [collectors])
+    return () => { cancelled = true; clearTimeout(t) }
+  }, [nodes.length])
 
   // ── Render ────────────────────────────────────────────────────────────
   const ncols = collections.length
