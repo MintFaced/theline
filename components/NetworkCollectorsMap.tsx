@@ -42,46 +42,73 @@ interface SimNode {
 }
 
 // ── ENS reverse resolution via direct eth_call ───────────────────────────
-// Calls the ENS Public Resolver directly — no client setup, no forward-
-// verification step. Fast, reliable, works with Cloudflare's public RPC.
+// Two-step: (1) ask ENS Registry for the resolver of the reverse node,
+// (2) ask that resolver for the name. Uses LlamaNodes free RPC — more
+// reliable than Cloudflare for ENS bulk lookups.
 
-const ETH_RPC = 'https://cloudflare-eth.com'
+// Rotate through free RPCs — if one fails the next batch tries the next
+const ETH_RPCS = [
+  'https://eth.llamarpc.com',
+  'https://rpc.ankr.com/eth',
+  'https://ethereum.publicnode.com',
+]
+let rpcIdx = 0
+function rpc() { return ETH_RPCS[rpcIdx % ETH_RPCS.length] }
+
+// ENS Registry — same address on mainnet forever
+const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
+
+async function ethCall(to: string, data: string): Promise<string> {
+  const res = await fetch(rpc(), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0', id: 1, method: 'eth_call',
+      params: [{ to, data }, 'latest']
+    })
+  })
+  const json = await res.json()
+  if (json.error) throw new Error(json.error.message)
+  return json.result ?? '0x'
+}
+
+function decodeAddress(hex: string): string {
+  // ABI-encoded address: 32 bytes, address in last 20
+  return '0x' + hex.slice(-40)
+}
+
+function decodeString(hex: string): string | null {
+  if (!hex || hex === '0x') return null
+  const h      = hex.slice(2)
+  const offset = parseInt(h.slice(0, 64), 16) * 2
+  const len    = parseInt(h.slice(offset, offset + 64), 16) * 2
+  if (!len) return null
+  const bytes  = h.slice(offset + 64, offset + 64 + len)
+  let out = ''
+  for (let i = 0; i < bytes.length; i += 2) {
+    const code = parseInt(bytes.slice(i, i + 2), 16)
+    if (code >= 32 && code < 127) out += String.fromCharCode(code)
+  }
+  return out.trim() || null
+}
 
 async function resolveEnsAddress(addr: string): Promise<string | null> {
   try {
-    // Reverse node: namehash of "<addr-without-0x>.addr.reverse"
     const reversed = addr.slice(2).toLowerCase() + '.addr.reverse'
     const node     = namehash(reversed)
+    const nodeHex  = node.slice(2)
 
-    // ENS Public Resolver — name(bytes32) = 0x691f3431
-    const callData = '0x691f3431' + node.slice(2)
-    const resolver = '0xa2c122be93b0074270ebee7f6b7292c7deb45047'
+    // Step 1: ENS Registry → resolver(bytes32 node)  selector: 0x0178b8bf
+    const resolverHex = await ethCall(ENS_REGISTRY, '0x0178b8bf' + nodeHex)
+    const resolverAddr = decodeAddress(resolverHex)
+    if (!resolverAddr || resolverAddr === '0x' + '0'.repeat(40)) return null
 
-    const res = await fetch(ETH_RPC, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        jsonrpc: '2.0', id: 1, method: 'eth_call',
-        params: [{ to: resolver, data: callData }, 'latest']
-      })
-    })
-    const json = await res.json()
-    if (!json.result || json.result === '0x') return null
-
-    // Decode ABI-encoded string
-    const hex    = json.result.slice(2)
-    const offset = parseInt(hex.slice(0, 64), 16) * 2
-    const len    = parseInt(hex.slice(offset, offset + 64), 16) * 2
-    if (!len) return null
-    const bytes  = hex.slice(offset + 64, offset + 64 + len)
-    let name = ''
-    for (let i = 0; i < bytes.length; i += 2) {
-      const code = parseInt(bytes.slice(i, i + 2), 16)
-      if (code >= 32) name += String.fromCharCode(code)
-    }
-    const trimmed = name.trim()
-    return trimmed || null
+    // Step 2: resolver → name(bytes32 node)  selector: 0x691f3431
+    const nameHex = await ethCall(resolverAddr, '0x691f3431' + nodeHex)
+    return decodeString(nameHex)
   } catch {
+    // Rotate to next RPC on failure
+    rpcIdx++
     return null
   }
 }
