@@ -1,5 +1,25 @@
 // types/index.ts
 
+export interface NcmCollection {
+  id: string
+  name: string
+  contract: string
+  chain: string
+  color: string
+  holders: number
+  pieces: number
+}
+
+export interface NcmConfig {
+  accent: string
+  collections: NcmCollection[]
+  stats: {
+    total_collectors: number
+    total_pieces: number
+    cross_collection: number
+  }
+}
+
 export interface Artist {
   lineNumber: number
   allLineNumbers: number[]
@@ -26,6 +46,7 @@ export interface Artist {
   curations?: Array<{ key: string; label: string; url: string }>
   storylineArticles?: Array<{ title: string; slug: string; type: string; date: string }>
   identity6529?: { level: number; rep: number } | null
+  ncm?: NcmConfig | null
 }
 
 export interface CollectorStats {
