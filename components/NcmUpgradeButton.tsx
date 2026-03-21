@@ -1,37 +1,39 @@
 'use client'
 // components/NcmUpgradeButton.tsx
-// CTA buttons for the NCM upgrade package on the join page.
-// ETH path: mints via Manifold (same as artist join)
-// Contact path: opens mailto for artists who want to discuss first
 
 interface Props {
-  manifoldUrl: string
+  ethUri: string      // ethereum:mintface.eth?value=1e17
+  accentColor: string // matches the NCM ember color
 }
 
-export function NcmUpgradeButton({ manifoldUrl }: Props) {
+export function NcmUpgradeButton({ ethUri, accentColor }: Props) {
   return (
     <div className="flex flex-col gap-3">
 
-      {/* Primary: mint with ETH */}
+      {/* Primary: direct ETH send to mintface.eth */}
       <a
-        href={manifoldUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="btn-primary text-center"
+        href={ethUri}
+        className="text-center font-mono text-[11px] tracking-widest uppercase px-6 py-3.5 transition-colors text-line-bg"
+        style={{ background: accentColor }}
       >
         Upgrade — 0.1 ETH →
       </a>
 
-      {/* Secondary: email enquiry */}
+      {/* Secondary: enquire on X */}
       <a
-        href="mailto:mintface@digitalartisteconomy.com?subject=NCM%20Upgrade%20—%20The%20Line&body=Hi%2C%20I%27m%20a%20Line%20Artist%20and%20I%27d%20like%20to%20add%20the%20Networked%20Collectors%20Map%20to%20my%20profile.%0A%0AMy%20Line%20number%3A%20%0AMy%20website%3A%20%0AMy%20smart%20contracts%3A%20"
-        className="btn-outline text-center"
+        href="https://x.com/mintface"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-center font-mono text-[11px] tracking-widest uppercase px-6 py-3.5 border transition-colors"
+        style={{ borderColor: accentColor, color: accentColor }}
+        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = accentColor + '15' }}
+        onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent' }}
       >
-        Enquire first
+        Enquire on X @mintface
       </a>
 
       <p className="font-mono text-[9px] text-line-muted tracking-widest text-center">
-        Must be an existing Line Artist
+        Payment to ourline.eth · Must be an existing Line Artist
       </p>
     </div>
   )
