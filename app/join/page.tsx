@@ -8,24 +8,31 @@ export const metadata: Metadata = {
   description: 'Join The Line as an artist or support as a Guardian.',
 }
 
-const MANIFOLD_LARP       = 'https://manifold.xyz/@mintfaced/id/3807920368'
-const MANIFOLD_NCM        = 'https://manifold.xyz/@mintfaced/id/3807920368' // TODO: replace with NCM Manifold mint URL
-const OPENSEA_GUARDIANS   = 'https://opensea.io/collection/the-line-guardians'
+const MANIFOLD_LARP     = 'https://manifold.xyz/@mintfaced/id/3807920368'
+const OPENSEA_GUARDIANS = 'https://opensea.io/collection/the-line-guardians'
+
+// NCM upgrade: direct ETH send to mintface.eth via Ethereum URI
+// Opens MetaMask / wallet with pre-filled 0.1 ETH to mintface.eth
+const MINTFACE_ETH_URI  = 'ethereum:mintface.eth?value=1e17'
+
+// NCM colors drawn from the Apocalypse map palette
+const C_JOIN    = '#2878c0'  // The Ordeal blue  — established, trusted
+const C_NCM     = '#c8391c'  // Oversoul ember   — the map's own accent
+const C_GUARDIAN= '#7050c0'  // Editions violet  — collector identity
 
 const ARTIST_BENEFITS = [
   'Dedicated Line Artist bio written by The Line',
   'Your unique Line number, permanent on-chain identity',
   'A feature article written about you and your work',
   'Featured artist profile on The Line',
-  'Access to LARP Chat, free from bots and AI',
   'Identity Verification via 6529 Protocol',
 ]
 
 const NCM_BENEFITS = [
   'Everything in your existing Line Artist membership',
   'Networked Collectors Map live on your artist profile',
-  'Dedicated URL at collectors.yourwebsite.com',
-  'All your collectors visualised by name across every collection',
+  'Dedicated URL at theline.wtf/artists/yourname/collectors',
+  'All your collectors visualised across every collection',
   'ENS names resolved live — your community, identified',
   'Map updates as new collectors join your world',
 ]
@@ -66,9 +73,9 @@ export default function JoinPage() {
         <div className="grid md:grid-cols-3 gap-px bg-line-border">
 
           {/* ── Column 1: Join The Line ── */}
-          <div className="bg-line-bg p-8 md:p-10 flex flex-col">
+          <div className="bg-line-bg p-8 md:p-10 flex flex-col" style={{ borderTop: `2px solid ${C_JOIN}` }}>
             <div className="flex-1">
-              <p className="label mb-4">For Artists</p>
+              <p className="font-mono text-[9px] tracking-[0.35em] uppercase mb-4" style={{ color: C_JOIN }}>For Artists</p>
               <h2 className="font-display font-light text-3xl text-line-text mb-6" style={{ letterSpacing: '-0.02em' }}>
                 Join The Line
               </h2>
@@ -79,14 +86,14 @@ export default function JoinPage() {
                     <p className="font-mono text-[11px] text-line-text tracking-widest uppercase mb-1">One off</p>
                     <p className="font-sans text-xs text-line-muted">Pay once, yours forever</p>
                   </div>
-                  <span className="font-display font-light text-2xl text-line-accent" style={{ letterSpacing: '-0.02em' }}>0.1 ETH</span>
+                  <span className="font-display font-light text-2xl" style={{ letterSpacing: '-0.02em', color: C_JOIN }}>0.1 ETH</span>
                 </div>
                 <div className="bg-line-surface px-5 py-4 flex items-center justify-between">
                   <div>
                     <p className="font-mono text-[11px] text-line-text tracking-widest uppercase mb-1">Monthly</p>
                     <p className="font-sans text-xs text-line-muted">Cancel anytime</p>
                   </div>
-                  <span className="font-display font-light text-2xl text-line-accent" style={{ letterSpacing: '-0.02em' }}>
+                  <span className="font-display font-light text-2xl" style={{ letterSpacing: '-0.02em', color: C_JOIN }}>
                     $10 <span className="font-mono text-sm text-line-muted">/ mo</span>
                   </span>
                 </div>
@@ -95,7 +102,7 @@ export default function JoinPage() {
               <div className="space-y-px bg-line-border mb-8">
                 {ARTIST_BENEFITS.map((text, i) => (
                   <div key={i} className="bg-line-bg px-5 py-4 flex items-start gap-4">
-                    <span className="font-mono text-[10px] text-line-accent tracking-widest shrink-0 mt-0.5">
+                    <span className="font-mono text-[10px] tracking-widest shrink-0 mt-0.5" style={{ color: C_JOIN }}>
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <p className="font-sans text-sm text-line-muted leading-relaxed">{text}</p>
@@ -105,25 +112,28 @@ export default function JoinPage() {
             </div>
 
             <JoinButtons manifoldUrl={MANIFOLD_LARP} />
+            <p className="font-mono text-[9px] text-line-muted tracking-widest text-center mt-3">
+              All options include LARP Chat access
+            </p>
           </div>
 
-          {/* ── Column 2: NCM Upgrade — highlighted ── */}
-          <div className="bg-line-bg p-8 md:p-10 flex flex-col relative" style={{ borderTop: '2px solid #C8A96E' }}>
+          {/* ── Column 2: NCM Upgrade ── */}
+          <div className="bg-line-bg p-8 md:p-10 flex flex-col relative" style={{ borderTop: `2px solid ${C_NCM}` }}>
 
             {/* Badge */}
             <div className="absolute top-0 right-8 -translate-y-1/2">
-              <span className="font-mono text-[9px] tracking-widest uppercase bg-line-accent text-line-bg px-3 py-1.5">
+              <span className="font-mono text-[9px] tracking-widest uppercase px-3 py-1.5 text-line-bg" style={{ background: C_NCM }}>
                 Upgrade
               </span>
             </div>
 
             <div className="flex-1">
-              <p className="label mb-4">For Line Artists</p>
+              <p className="font-mono text-[9px] tracking-[0.35em] uppercase mb-4" style={{ color: C_NCM }}>For Line Artists</p>
               <h2 className="font-display font-light text-3xl text-line-text mb-2" style={{ letterSpacing: '-0.02em' }}>
                 Networked<br />Collectors Map
               </h2>
               <p className="font-sans text-xs text-line-muted mb-6 leading-relaxed">
-                Add a live collector network visualisation to your Line profile and your own website.
+                Add a live collector network visualisation to your Line profile.
               </p>
 
               <div className="space-y-px bg-line-border mb-8">
@@ -132,14 +142,14 @@ export default function JoinPage() {
                     <p className="font-mono text-[11px] text-line-text tracking-widest uppercase mb-1">One off setup</p>
                     <p className="font-sans text-xs text-line-muted">Includes all collections</p>
                   </div>
-                  <span className="font-display font-light text-2xl text-line-accent" style={{ letterSpacing: '-0.02em' }}>0.1 ETH</span>
+                  <span className="font-display font-light text-2xl" style={{ letterSpacing: '-0.02em', color: C_NCM }}>0.1 ETH</span>
                 </div>
               </div>
 
               <div className="space-y-px bg-line-border mb-8">
                 {NCM_BENEFITS.map((text, i) => (
                   <div key={i} className="bg-line-bg px-5 py-4 flex items-start gap-4">
-                    <span className="font-mono text-[10px] text-line-accent tracking-widest shrink-0 mt-0.5">
+                    <span className="font-mono text-[10px] tracking-widest shrink-0 mt-0.5" style={{ color: C_NCM }}>
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <p className="font-sans text-sm text-line-muted leading-relaxed">{text}</p>
@@ -147,27 +157,28 @@ export default function JoinPage() {
                 ))}
               </div>
 
-              {/* Live preview link */}
+              {/* Live preview */}
               <div className="mb-8 px-5 py-4 border border-line-border">
                 <p className="font-mono text-[9px] text-line-muted tracking-widest uppercase mb-2">Live example</p>
                 <Link
                   href="/artists/apocalypse/collectors"
-                  className="font-mono text-[11px] text-line-accent hover:opacity-70 transition-opacity tracking-wide"
+                  className="font-mono text-[11px] hover:opacity-70 transition-opacity tracking-wide"
+                  style={{ color: C_NCM }}
                 >
                   Apocalypse — Networked Collectors Map →
                 </Link>
               </div>
             </div>
 
-            <NcmUpgradeButton manifoldUrl={MANIFOLD_NCM} />
+            <NcmUpgradeButton ethUri={MINTFACE_ETH_URI} accentColor={C_NCM} />
           </div>
 
           {/* ── Column 3: Guardians ── */}
-          <div className="bg-line-surface p-8 md:p-10 flex flex-col">
+          <div className="bg-line-surface p-8 md:p-10 flex flex-col" style={{ borderTop: `2px solid ${C_GUARDIAN}` }}>
             <div className="flex-1">
               <div className="flex items-start justify-between mb-4">
-                <p className="label">For Collectors</p>
-                <span className="font-mono text-[9px] text-line-accent tracking-widest uppercase border border-line-accent/30 px-2 py-1">
+                <p className="font-mono text-[9px] tracking-[0.35em] uppercase" style={{ color: C_GUARDIAN }}>For Collectors</p>
+                <span className="font-mono text-[9px] tracking-widest uppercase border px-2 py-1" style={{ color: C_GUARDIAN, borderColor: C_GUARDIAN + '50' }}>
                   101 only
                 </span>
               </div>
@@ -181,14 +192,14 @@ export default function JoinPage() {
                     <p className="font-mono text-[11px] text-line-text tracking-widest uppercase mb-1">Guardian NFT</p>
                     <p className="font-sans text-xs text-line-muted">Buy once, access forever</p>
                   </div>
-                  <span className="font-display font-light text-2xl text-line-accent" style={{ letterSpacing: '-0.02em' }}>0.1 ETH</span>
+                  <span className="font-display font-light text-2xl" style={{ letterSpacing: '-0.02em', color: C_GUARDIAN }}>0.1 ETH</span>
                 </div>
               </div>
 
               <div className="space-y-px bg-line-border mb-8">
                 {GUARDIAN_BENEFITS.map((text, i) => (
                   <div key={i} className="bg-line-bg px-5 py-4 flex items-start gap-4">
-                    <span className="font-mono text-[10px] text-line-accent tracking-widest shrink-0 mt-0.5">
+                    <span className="font-mono text-[10px] tracking-widest shrink-0 mt-0.5" style={{ color: C_GUARDIAN }}>
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <p className="font-sans text-sm text-line-muted leading-relaxed">{text}</p>
@@ -198,7 +209,12 @@ export default function JoinPage() {
             </div>
 
             <div className="flex flex-col gap-3">
-              <a href={OPENSEA_GUARDIANS} target="_blank" rel="noopener noreferrer" className="btn-primary text-center">
+              <a href={OPENSEA_GUARDIANS} target="_blank" rel="noopener noreferrer"
+                className="text-center font-mono text-[11px] tracking-widest uppercase px-6 py-3.5 border transition-colors"
+                style={{ borderColor: C_GUARDIAN, color: C_GUARDIAN }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = C_GUARDIAN + '15' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent' }}
+              >
                 Acquire Guardian NFT
               </a>
               <p className="font-mono text-[9px] text-line-muted tracking-widest text-center">
@@ -232,8 +248,14 @@ export default function JoinPage() {
         <div className="mt-16 text-center">
           <p className="font-mono text-[10px] text-line-muted tracking-widest">
             Questions about the NCM upgrade?{' '}
-            <a href="mailto:mintface@digitalartisteconomy.com" className="text-line-accent hover:opacity-70 transition-opacity">
-              Get in touch
+            <a
+              href="https://x.com/mintface"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-70 transition-opacity"
+              style={{ color: C_NCM }}
+            >
+              Enquire on X @mintface →
             </a>
           </p>
         </div>
