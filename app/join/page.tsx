@@ -11,9 +11,6 @@ export const metadata: Metadata = {
 const MANIFOLD_LARP     = 'https://manifold.xyz/@mintfaced/id/3807920368'
 const OPENSEA_GUARDIANS = 'https://opensea.io/collection/the-line-guardians'
 
-// NCM upgrade: direct ETH send to mintface.eth via Ethereum URI
-// Opens MetaMask / wallet with pre-filled 0.1 ETH to mintface.eth
-const MINTFACE_ETH_URI  = 'ethereum:mintface.eth?value=1e17'
 
 // NCM colors drawn from the Apocalypse map palette
 const C_JOIN    = '#2878c0'  // The Ordeal blue  — established, trusted
@@ -112,9 +109,6 @@ export default function JoinPage() {
             </div>
 
             <JoinButtons manifoldUrl={MANIFOLD_LARP} />
-            <p className="font-mono text-[9px] text-line-muted tracking-widest text-center mt-3">
-              All options include LARP Chat access
-            </p>
           </div>
 
           {/* ── Column 2: NCM Upgrade ── */}
@@ -170,7 +164,7 @@ export default function JoinPage() {
               </div>
             </div>
 
-            <NcmUpgradeButton ethUri={MINTFACE_ETH_URI} accentColor={C_NCM} />
+            <NcmUpgradeButton accentColor={C_NCM} />
           </div>
 
           {/* ── Column 3: Guardians ── */}
