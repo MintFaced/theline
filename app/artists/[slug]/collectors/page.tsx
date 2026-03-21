@@ -39,11 +39,11 @@ export default async function CollectorsPage(
   const { ncm } = artist
 
   return (
-    // Full-screen layout — no site nav, pure canvas experience
-    <div className="fixed inset-0 bg-[#0a0a0a] flex flex-col">
+    // Full-screen layout — sits below the site nav (56px = var(--nav-height))
+    <div className="fixed left-0 right-0 bottom-0 bg-[#0a0a0a] flex flex-col" style={{ top: 'var(--nav-height)' }}>
 
       {/* Thin top bar — back link */}
-      <div className="flex-none flex items-center justify-between px-7 h-11 border-b border-line-border/50 z-50">
+      <div className="flex-none flex items-center justify-between px-7 h-11 border-b border-line-border/50 z-40">
         <Link
           href={`/artists/${slug}`}
           className="font-mono text-[9px] tracking-[0.3em] uppercase text-line-muted hover:text-line-accent transition-colors flex items-center gap-2"
