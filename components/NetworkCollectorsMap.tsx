@@ -1,12 +1,11 @@
 'use client'
 // components/NetworkCollectorsMap.tsx
 // Networked Collectors Map — canvas-based network visualisation
-// Uses d3-force (already in package.json) for layout, viem for ENS
+// Uses d3-force for layout, direct eth_call for ENS resolution
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import * as d3 from 'd3-force'
-import { createPublicClient, http } from 'viem'
-import { mainnet } from 'viem/chains'
+import { namehash } from 'viem'
 import type { NcmCollection } from '@/types'
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -42,12 +41,50 @@ interface SimNode {
   colId: string  // dominant collection id
 }
 
-// ── Viem client (ENS resolution) ─────────────────────────────────────────
+// ── ENS reverse resolution via direct eth_call ───────────────────────────
+// Calls the ENS Public Resolver directly — no client setup, no forward-
+// verification step. Fast, reliable, works with Cloudflare's public RPC.
 
-const viemClient = createPublicClient({
-  chain: mainnet,
-  transport: http('https://cloudflare-eth.com'),
-})
+const ETH_RPC = 'https://cloudflare-eth.com'
+
+async function resolveEnsAddress(addr: string): Promise<string | null> {
+  try {
+    // Reverse node: namehash of "<addr-without-0x>.addr.reverse"
+    const reversed = addr.slice(2).toLowerCase() + '.addr.reverse'
+    const node     = namehash(reversed)
+
+    // ENS Public Resolver — name(bytes32) = 0x691f3431
+    const callData = '0x691f3431' + node.slice(2)
+    const resolver = '0xa2c122be93b0074270ebee7f6b7292c7deb45047'
+
+    const res = await fetch(ETH_RPC, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0', id: 1, method: 'eth_call',
+        params: [{ to: resolver, data: callData }, 'latest']
+      })
+    })
+    const json = await res.json()
+    if (!json.result || json.result === '0x') return null
+
+    // Decode ABI-encoded string
+    const hex    = json.result.slice(2)
+    const offset = parseInt(hex.slice(0, 64), 16) * 2
+    const len    = parseInt(hex.slice(offset, offset + 64), 16) * 2
+    if (!len) return null
+    const bytes  = hex.slice(offset + 64, offset + 64 + len)
+    let name = ''
+    for (let i = 0; i < bytes.length; i += 2) {
+      const code = parseInt(bytes.slice(i, i + 2), 16)
+      if (code >= 32) name += String.fromCharCode(code)
+    }
+    const trimmed = name.trim()
+    return trimmed || null
+  } catch {
+    return null
+  }
+}
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 
@@ -418,7 +455,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
         if (cancelled) return
         const batch = unknown.slice(i, i + BATCH)
         const results = await Promise.allSettled(
-          batch.map(addr => viemClient.getEnsName({ address: addr as `0x${string}` }))
+          batch.map(addr => resolveEnsAddress(addr))
         )
         const updates: Record<string, string | null> = {}
         results.forEach((r, j) => {
