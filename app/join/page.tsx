@@ -13,8 +13,8 @@ const OPENSEA_GUARDIANS = 'https://opensea.io/collection/the-line-guardians'
 
 
 // NCM colors drawn from the Apocalypse map palette
-const C_JOIN    = '#2878c0'  // The Ordeal blue  — established, trusted
-const C_NCM     = '#c8391c'  // Oversoul ember   — the map's own accent
+const C_JOIN    = '#C8A96E'  // The Line tan — site accent, established
+const C_NCM     = '#1e8080'  // The InSights teal — collector identity
 const C_GUARDIAN= '#7050c0'  // Editions violet  — collector identity
 
 const ARTIST_BENEFITS = [
