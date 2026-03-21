@@ -69,16 +69,14 @@ export async function GET(request: Request) {
     if (artist?.lineNumber !== undefined) userPayload.lineNumber = artist.lineNumber
     if (artist?.slug) userPayload.slug = artist.slug
 
-    // Only set image if:
-    // 1. No existing image (first time), OR
-    // 2. Existing image is from our gallery (not a custom upload to R2 avatars bucket)
-    const isCustomPfp = existingImage && existingImage.includes('theline-avatars')
-    if (!isCustomPfp) {
-      // Use custom PFP if set, otherwise fall back to gallery image
-      userPayload.image = existingImage || artist?.image || null
+    // Always pass image explicitly so upsertUser never nulls it out
+    const isCustomPfp = !!(existingImage && existingImage.includes('theline-avatars'))
+    if (isCustomPfp) {
+      // Preserve the custom PFP -- pass it back into the upsert so Stream doesn't clear it
+      userPayload.image = existingImage
     } else {
-      // Keep custom PFP -- don't set image in payload, Stream keeps existing
-      existingImage = existingImage // no-op, just clarity
+      // No custom PFP yet -- use gallery image as default
+      userPayload.image = existingImage || artist?.image || null
     }
 
     await serverClient.upsertUser(userPayload)
