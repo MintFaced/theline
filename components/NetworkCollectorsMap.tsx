@@ -105,14 +105,16 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   const [ensStatus, setEnsStatus]     = useState<'idle' | 'loading' | 'live'>('idle')
   const [ensCount, setEnsCount]       = useState({ done: 0, total: 0 })
 
-  const panRef   = useRef(pan)
-  const scaleRef = useRef(scale)
-  const hovRef   = useRef(hovered)
-  const filterRef = useRef(filter)
+  const panRef      = useRef(pan)
+  const scaleRef    = useRef(scale)
+  const hovRef      = useRef(hovered)
+  const filterRef   = useRef(filter)
+  const ensCacheRef = useRef<Record<string, string | null>>({})
   panRef.current    = pan
   scaleRef.current  = scale
   hovRef.current    = hovered
   filterRef.current = filter
+  ensCacheRef.current = ensCache  // always mirrors latest state — safe to read anywhere
 
   const colMap = Object.fromEntries(collections.map(c => [c.id, c]))
   const accentRgb = hex2rgb(accent)
@@ -358,10 +360,26 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
     setScale(s => Math.max(0.15, Math.min(4.5, s * (e.deltaY < 0 ? 1.07 : 0.94))))
   }
 
+  // ── Register __saveENS immediately on mount ──────────────────────────
+  // Uses ensCacheRef which always has the latest resolved names.
+  // Works at any point — during resolution or after. Call from browser console.
+  useEffect(() => {
+    const filename = ensUrl.split('/').pop() ?? 'ens-cache.json'
+    ;(window as any).__saveENS = () => {
+      const data = ensCacheRef.current
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+      const a    = document.createElement('a')
+      a.href     = URL.createObjectURL(blob)
+      a.download = filename
+      a.click()
+      console.log(`Downloaded ${filename} with ${Object.keys(data).length} entries (${Object.values(data).filter(Boolean).length} resolved)`)
+    }
+    return () => { delete (window as any).__saveENS }
+  }, [ensUrl])
+
   // ── ENS resolution ────────────────────────────────────────────────────
   // Step 1: load the pre-baked .ens.json cache instantly (no RPC needed).
   // Step 2: live-resolve only addresses absent from the cache file.
-  // To regenerate the cache: visit the map, open console, run window.__saveENS()
   useEffect(() => {
     if (!nodes.length) return
     let cancelled = false
@@ -412,20 +430,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
         await new Promise(res => setTimeout(res, 50))
       }
 
-      if (!cancelled) {
-        setEnsStatus('live')
-        // Expose helper so dev can snapshot the full cache to regenerate the .ens.json
-        ;(window as any).__saveENS = () => {
-          setEnsCache(current => {
-            const blob = new Blob([JSON.stringify(current, null, 2)], { type: 'application/json' })
-            const a    = document.createElement('a')
-            a.href     = URL.createObjectURL(blob)
-            a.download = ensUrl.split('/').pop() ?? 'ens-cache.json'
-            a.click()
-            return current
-          })
-        }
-      }
+      if (!cancelled) setEnsStatus('live')
     }
 
     const t = setTimeout(run, 800)
