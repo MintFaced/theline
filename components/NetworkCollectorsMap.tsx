@@ -5,7 +5,6 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import * as d3 from 'd3-force'
-import { namehash } from 'viem'
 import type { NcmCollection } from '@/types'
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -41,75 +40,23 @@ interface SimNode {
   colId: string  // dominant collection id
 }
 
-// ── ENS reverse resolution via direct eth_call ───────────────────────────
-// Two-step: (1) ask ENS Registry for the resolver of the reverse node,
-// (2) ask that resolver for the name. Uses LlamaNodes free RPC — more
-// reliable than Cloudflare for ENS bulk lookups.
+// ── ENS reverse resolution via server-side proxy ────────────────────────
+// Browser can't call Ethereum RPCs directly (CORS). We proxy through
+// /api/ens/reverse which runs server-side with no CORS restrictions.
+// Batches of 50 addresses per request.
 
-// Rotate through free RPCs — if one fails the next batch tries the next
-const ETH_RPCS = [
-  'https://eth.llamarpc.com',
-  'https://rpc.ankr.com/eth',
-  'https://ethereum.publicnode.com',
-]
-let rpcIdx = 0
-function rpc() { return ETH_RPCS[rpcIdx % ETH_RPCS.length] }
-
-// ENS Registry — same address on mainnet forever
-const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
-
-async function ethCall(to: string, data: string): Promise<string> {
-  const res = await fetch(rpc(), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      jsonrpc: '2.0', id: 1, method: 'eth_call',
-      params: [{ to, data }, 'latest']
-    })
-  })
-  const json = await res.json()
-  if (json.error) throw new Error(json.error.message)
-  return json.result ?? '0x'
-}
-
-function decodeAddress(hex: string): string {
-  // ABI-encoded address: 32 bytes, address in last 20
-  return '0x' + hex.slice(-40)
-}
-
-function decodeString(hex: string): string | null {
-  if (!hex || hex === '0x') return null
-  const h      = hex.slice(2)
-  const offset = parseInt(h.slice(0, 64), 16) * 2
-  const len    = parseInt(h.slice(offset, offset + 64), 16) * 2
-  if (!len) return null
-  const bytes  = h.slice(offset + 64, offset + 64 + len)
-  let out = ''
-  for (let i = 0; i < bytes.length; i += 2) {
-    const code = parseInt(bytes.slice(i, i + 2), 16)
-    if (code >= 32 && code < 127) out += String.fromCharCode(code)
-  }
-  return out.trim() || null
-}
-
-async function resolveEnsAddress(addr: string): Promise<string | null> {
+async function resolveEnsBatch(addrs: string[]): Promise<Record<string, string | null>> {
   try {
-    const reversed = addr.slice(2).toLowerCase() + '.addr.reverse'
-    const node     = namehash(reversed)
-    const nodeHex  = node.slice(2)
-
-    // Step 1: ENS Registry → resolver(bytes32 node)  selector: 0x0178b8bf
-    const resolverHex = await ethCall(ENS_REGISTRY, '0x0178b8bf' + nodeHex)
-    const resolverAddr = decodeAddress(resolverHex)
-    if (!resolverAddr || resolverAddr === '0x' + '0'.repeat(40)) return null
-
-    // Step 2: resolver → name(bytes32 node)  selector: 0x691f3431
-    const nameHex = await ethCall(resolverAddr, '0x691f3431' + nodeHex)
-    return decodeString(nameHex)
+    const res = await fetch('/api/ens/reverse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ addresses: addrs })
+    })
+    if (!res.ok) return Object.fromEntries(addrs.map(a => [a, null]))
+    const json = await res.json()
+    return json.results ?? {}
   } catch {
-    // Rotate to next RPC on failure
-    rpcIdx++
-    return null
+    return Object.fromEntries(addrs.map(a => [a, null]))
   }
 }
 
@@ -475,23 +422,17 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
       setEnsCount({ done: allAddrs.length - unknown.length, total: allAddrs.length })
       setEnsStatus('loading')
 
-      const BATCH = 20
+      const BATCH = 50  // proxy handles up to 50 per request
       let done = allAddrs.length - unknown.length
 
       for (let i = 0; i < unknown.length; i += BATCH) {
         if (cancelled) return
-        const batch = unknown.slice(i, i + BATCH)
-        const results = await Promise.allSettled(
-          batch.map(addr => resolveEnsAddress(addr))
-        )
-        const updates: Record<string, string | null> = {}
-        results.forEach((r, j) => {
-          updates[batch[j]] = r.status === 'fulfilled' ? (r.value ?? null) : null
-        })
+        const batch   = unknown.slice(i, i + BATCH)
+        const updates = await resolveEnsBatch(batch)
         done += batch.length
         setEnsCache(prev => ({ ...prev, ...updates }))
         setEnsCount({ done, total: allAddrs.length })
-        await new Promise(res => setTimeout(res, 50))
+        await new Promise(res => setTimeout(res, 80))
       }
 
       if (!cancelled) setEnsStatus('live')
