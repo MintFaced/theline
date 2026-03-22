@@ -351,20 +351,22 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
     }
   }
 
-  const hitTest = (mx: number, my: number) => {
+  const hitTest = (mx: number, my: number, boost = 0) => {
     const { x, y } = worldPos(mx, my)
     let best: SimNode | null = null, bd = Infinity
     for (const n of nodes) {
       const fil = filterRef.current
       if (fil !== 'all' && !(n.data.holdings[fil] || 0)) continue
       const dx = x - n.x, dy = y - n.y, d = Math.sqrt(dx * dx + dy * dy)
-      if (d <= n.r + 8 && d < bd) { bd = d; best = n }
+      if (d <= n.r + 8 + boost && d < bd) { bd = d; best = n }
     }
     return best
   }
 
-  const isDragging = useRef(false)
-  const lastMouse  = useRef({ x: 0, y: 0 })
+  const isDragging   = useRef(false)
+  const lastMouse    = useRef({ x: 0, y: 0 })
+  const lastTouch    = useRef({ x: 0, y: 0 })
+  const lastTouchDist = useRef(0)  // for pinch-zoom
 
   const onMouseMove = (e: React.MouseEvent) => {
     if (isDragging.current) {
@@ -380,6 +382,61 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   const onWheel = (e: React.WheelEvent) => {
     e.preventDefault()
     setScale(s => Math.max(0.15, Math.min(4.5, s * (e.deltaY < 0 ? 1.07 : 0.94))))
+  }
+
+  // ── Touch handlers (mobile) ──────────────────────────────────────────
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      const t = e.touches[0]
+      lastTouch.current = { x: t.clientX, y: t.clientY }
+      isDragging.current = false // reset — decide on move
+    } else if (e.touches.length === 2) {
+      // pinch-zoom: record initial distance
+      const dx = e.touches[0].clientX - e.touches[1].clientX
+      const dy = e.touches[0].clientY - e.touches[1].clientY
+      lastTouchDist.current = Math.sqrt(dx * dx + dy * dy)
+    }
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    e.preventDefault()
+    if (e.touches.length === 1) {
+      const t   = e.touches[0]
+      const dx  = t.clientX - lastTouch.current.x
+      const dy  = t.clientY - lastTouch.current.y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      if (dist > 4) isDragging.current = true  // moved enough → it's a drag
+      if (isDragging.current) {
+        setPan(p => ({ x: p.x + dx, y: p.y + dy }))
+      }
+      lastTouch.current = { x: t.clientX, y: t.clientY }
+    } else if (e.touches.length === 2) {
+      // pinch-zoom
+      const dx   = e.touches[0].clientX - e.touches[1].clientX
+      const dy   = e.touches[0].clientY - e.touches[1].clientY
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      const ratio = dist / Math.max(lastTouchDist.current, 1)
+      setScale(s => Math.max(0.15, Math.min(4.5, s * ratio)))
+      lastTouchDist.current = dist
+    }
+  }
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!isDragging.current && e.changedTouches.length === 1) {
+      // Tap — show collector card with generous hit radius for touch
+      const t = e.changedTouches[0]
+      const h = hitTest(t.clientX, t.clientY, 16)
+      setHovered(h)
+      if (h) {
+        const canvas = canvasRef.current!
+        // On mobile: position card in upper portion of screen, centred
+        setHoveredPos({
+          x: Math.min(t.clientX, canvas.offsetWidth - 250),
+          y: Math.max(60, t.clientY - 280),
+        })
+      }
+    }
+    isDragging.current = false
   }
 
   // ── Register __saveENS immediately on mount ──────────────────────────
@@ -474,35 +531,46 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
-        style={{ cursor: hovered ? 'default' : 'crosshair' }}
+        style={{ cursor: hovered ? 'default' : 'crosshair', touchAction: 'none' }}
         onMouseMove={onMouseMove}
         onMouseDown={e => { isDragging.current = true; lastMouse.current = { x: e.clientX, y: e.clientY } }}
         onMouseUp={() => { isDragging.current = false }}
         onMouseLeave={() => { isDragging.current = false; setHovered(null) }}
         onWheel={onWheel}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       />
 
       {/* Vignette */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse 68% 62% at 50% 50%, transparent 28%, rgba(10,10,10,0.9) 100%)' }} />
 
+      {/* Mobile tap-to-dismiss when card is open */}
+      {hovered && (
+        <div
+          className="absolute inset-0 z-20 md:hidden"
+          onClick={() => setHovered(null)}
+        />
+      )}
+
       {/* Loading */}
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="w-1 h-1 rounded-full animate-pulse" style={{ background: accent }} />
-            <p className="font-mono text-[9px] tracking-widest uppercase text-line-muted">Loading Map</p>
+            <p className="font-mono text-[11px] tracking-widest uppercase text-line-muted">Loading Map</p>
           </div>
         </div>
       )}
 
       {/* Wordmark — bottom left */}
       <div className="absolute bottom-8 left-7 z-10 pointer-events-none">
-        <p className="font-mono text-[8px] tracking-[0.35em] uppercase text-line-muted mb-1">Networked Collectors Map</p>
+        <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-line-muted mb-1">Networked Collectors Map</p>
         <p className="font-display font-light text-2xl tracking-wide text-line-text" style={{ letterSpacing: '0.1em' }}>
           {artistName}
         </p>
-        <p className="font-mono text-[7px] tracking-[0.25em] uppercase mt-1.5" style={{ color: accent + '60' }}>
+        <p className="font-mono text-[9px] tracking-[0.2em] uppercase mt-1.5" style={{ color: accent + '60' }}>
           {ncols} Collections · {stats.total_collectors.toLocaleString()} Collectors · {stats.total_pieces.toLocaleString()} Works
         </p>
       </div>
@@ -516,7 +584,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
         ].map(({ n, l }) => (
           <div key={l} className="flex items-baseline justify-end gap-2">
             <span className="font-mono text-base text-line-text" style={{ letterSpacing: '-0.025em' }}>{n}</span>
-            <span className="font-mono text-[7px] tracking-[0.2em] uppercase text-line-muted">{l}</span>
+            <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-line-muted">{l}</span>
           </div>
         ))}
       </div>
@@ -527,7 +595,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
           ensStatus === 'live'    ? 'bg-green-700' :
           ensStatus === 'loading' ? 'bg-amber-700 animate-pulse' : 'bg-line-border'
         }`} />
-        <span className="font-mono text-[8px] tracking-[0.15em] uppercase text-line-muted">
+        <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-line-muted">
           {ensStatus === 'idle'    ? 'ENS' :
            ensStatus === 'loading' ? `ENS ${ensCount.done}/${ensCount.total}` :
            `ENS Live · ${ensCount.total}`}
@@ -535,7 +603,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
       </div>
 
       {/* Filter panel — top left */}
-      <div className="absolute top-7 left-7 z-10 w-44">
+      <div className="absolute top-7 left-7 z-10 w-40 md:w-44 max-h-[60vh] overflow-y-auto">
         {/* Search */}
         <div className="relative mb-2">
           <input
@@ -543,7 +611,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search collector…"
-            className="w-full bg-transparent border border-line-border px-2 py-1.5 font-mono text-[9px] text-line-text placeholder:text-line-muted tracking-wide focus:outline-none focus:border-line-muted"
+            className="w-full bg-transparent border border-line-border px-2 py-1.5 font-mono text-[11px] text-line-text placeholder:text-line-muted tracking-wide focus:outline-none focus:border-line-muted"
             style={{ caretColor: accent }}
           />
           {search && (
@@ -553,7 +621,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
             >×</button>
           )}
         </div>
-        <p className="font-mono text-[7px] tracking-[0.38em] uppercase text-line-muted mb-2 pb-2 px-2 border-b border-line-border">
+        <p className="font-mono text-[9px] tracking-[0.3em] uppercase text-line-muted mb-2 pb-2 px-2 border-b border-line-border">
           Collections
         </p>
         {/* All */}
@@ -567,7 +635,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
         >
           {filter === 'all' && <div className="absolute left-0 top-0 bottom-0 w-0.5" style={{ background: accent }} />}
           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-white/25" />
-          <span className="font-mono text-[9px] tracking-wide text-line-muted">All</span>
+          <span className="font-mono text-[11px] tracking-wide text-line-muted">All</span>
         </button>
         {/* Per collection */}
         {collections.map(col => (
@@ -586,8 +654,8 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
               <div className="absolute left-0 top-0 bottom-0 w-0.5" style={{ background: accent }} />
             )}
             <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: col.color }} />
-            <span className="font-mono text-[9px] tracking-wide text-line-muted flex-1 truncate">{col.name}</span>
-            <span className="font-mono text-[8px]" style={{ color: accent + '50' }}>
+            <span className="font-mono text-[11px] tracking-wide text-line-muted flex-1 truncate">{col.name}</span>
+            <span className="font-mono text-[10px]" style={{ color: accent + '50' }}>
               {col.holders.toLocaleString()}
             </span>
           </button>
@@ -610,7 +678,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
               <p className="font-sans font-medium text-sm text-line-text truncate mb-0.5">
                 {ensCache[hd.addr] || shortAddr(hd.addr)}
               </p>
-              <p className="font-mono text-[8px] text-line-muted tracking-wide mb-3">
+              <p className="font-mono text-[10px] text-line-muted tracking-wide mb-3">
                 {hd.addr.slice(0, 10)}…{hd.addr.slice(-8)}
               </p>
 
@@ -623,10 +691,10 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
                   </span>
                   <span className="font-display text-xl text-line-muted">%</span>
                 </div>
-                <p className="font-mono text-[8px] tracking-[0.3em] uppercase text-line-muted mt-0.5">
+                <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-line-muted mt-0.5">
                   Set Completion
                 </p>
-                <p className="font-mono text-[10px] text-line-muted mt-1">
+                <p className="font-mono text-[11px] text-line-muted mt-1">
                   {hd.total} work{hd.total !== 1 ? 's' : ''} across {collCount(hd, collections)} collection{collCount(hd, collections) !== 1 ? 's' : ''}
                 </p>
               </div>
@@ -645,11 +713,11 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
                     <div key={col.id} className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
                         <div className="w-1 h-1 rounded-full" style={{ background: col.color }} />
-                        <span className="font-mono text-[8px] tracking-wide uppercase text-line-muted">
+                        <span className="font-mono text-[10px] tracking-wide uppercase text-line-muted">
                           {col.name}
                         </span>
                       </div>
-                      <span className={`font-mono text-[10px] font-medium ${v ? 'text-line-text' : 'text-line-muted/30'}`}>
+                      <span className={`font-mono text-[11px] font-medium ${v ? 'text-line-text' : 'text-line-muted/30'}`}>
                         {v || '—'}
                       </span>
                     </div>
