@@ -386,8 +386,9 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
 
   // ── Touch handlers (mobile) ──────────────────────────────────────────
   // touchStart: record origin. touchMove: pan/zoom. touchEnd: tap if < 8px total movement.
-  const touchOrigin = useRef({ x: 0, y: 0 })
-  const touchMoved  = useRef(0)  // cumulative movement from origin
+  const touchOrigin   = useRef({ x: 0, y: 0 })
+  const touchMoved    = useRef(0)   // cumulative movement from origin
+  const lastCardShown = useRef(0)   // timestamp — prevent instant dismiss
 
   const onTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 1) {
@@ -426,20 +427,28 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   }
 
   const onTouchEnd = (e: React.TouchEvent) => {
-    // Tap = finger lifted with total movement < 8px
     if (touchMoved.current < 8 && e.changedTouches.length === 1) {
-      const t = e.changedTouches[0]
-      const h = hitTest(t.clientX, t.clientY, 20)  // generous 20px radius for fat fingers
-      setHovered(h)
+      const t    = e.changedTouches[0]
+      const now  = Date.now()
+      const h    = hitTest(t.clientX, t.clientY, 20)
+
       if (h) {
+        // Tapped a node — show its card
         const canvas = canvasRef.current!
-        const w = canvas.offsetWidth
+        const w    = canvas.offsetWidth
         const cardW = 240
-        // Centre card horizontally on tap point, keep within screen, place above finger
+        setHovered(h)
         setHoveredPos({
           x: Math.max(8, Math.min(t.clientX - cardW / 2, w - cardW - 8)),
           y: Math.max(60, t.clientY - 320),
         })
+        lastCardShown.current = now
+      } else {
+        // Tapped empty space — dismiss, but only if card has been visible > 400ms
+        // This prevents the show→dismiss happening in the same gesture
+        if (now - lastCardShown.current > 400) {
+          setHovered(null)
+        }
       }
     }
     touchMoved.current = 0
@@ -552,13 +561,7 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse 68% 62% at 50% 50%, transparent 28%, rgba(10,10,10,0.9) 100%)' }} />
 
-      {/* Mobile tap-to-dismiss when card is open */}
-      {hovered && (
-        <div
-          className="absolute inset-0 z-20 md:hidden"
-          onClick={() => setHovered(null)}
-        />
-      )}
+{/* dismiss handled in onTouchEnd — no overlay needed */}
 
       {/* Loading */}
       {loading && (
