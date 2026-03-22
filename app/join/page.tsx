@@ -112,7 +112,7 @@ export default function JoinPage() {
           </div>
 
           {/* ── Column 2: NCM Upgrade ── */}
-          <div className="bg-line-bg p-8 md:p-10 flex flex-col relative" style={{ borderTop: `2px solid ${C_NCM}` }}>
+          <div id="ncm" className="bg-line-bg p-8 md:p-10 flex flex-col relative" style={{ borderTop: `2px solid ${C_NCM}` }}>
 
             {/* Badge */}
             <div className="absolute top-0 right-8 -translate-y-1/2">
