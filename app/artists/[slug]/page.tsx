@@ -15,6 +15,7 @@ import { IdentityBadge } from '@/components/IdentityBadge'
 import { ArtistCard } from '@/components/ArtistCard'
 import { RevealSection } from '@/components/RevealSection'
 import { getBio } from '@/lib/bio'
+import { NcmLiteWidget } from '@/components/NcmLiteWidget'
 
 const artists = artistsData as Artist[]
 
@@ -170,38 +171,15 @@ export default async function ArtistPage(props: { params: Promise<{ slug: string
                   </span>
                 )}
               </div>
-
-              {/* NCM — Networked Collectors Map */}
-              {artist.ncm && (
-                <div className="mt-8 pt-8 border-t border-line-border">
-                  <Link
-                    href={`/artists/${artist.slug}/collectors`}
-                    className="group inline-flex items-center gap-3 border border-line-border px-5 py-3.5 hover:border-line-accent transition-all"
-                  >
-                    <div className="flex gap-0.5 items-end">
-                      {[8, 12, 16].map((h, i) => (
-                        <div key={i} className="w-1 rounded-full bg-line-muted group-hover:bg-line-accent transition-colors"
-                          style={{ height: `${h}px` }} />
-                      ))}
-                    </div>
-                    <div>
-                      <p className="font-mono text-[10px] tracking-widest uppercase text-line-text group-hover:text-line-accent transition-colors">
-                        Networked Collectors Map
-                      </p>
-                      <p className="font-mono text-[9px] text-line-muted mt-0.5">
-                        {artist.ncm.stats.total_collectors.toLocaleString()} collectors · {artist.ncm.collections.length} collections
-                      </p>
-                    </div>
-                    <span className="ml-2 font-mono text-[11px] text-line-muted group-hover:text-line-accent transition-colors">→</span>
-                  </Link>
-                </div>
-              )}
             </div>
 
             {/* Stats — 2/5 width */}
             <div className="md:col-span-2">
               <p className="label mb-8">Collector Data</p>
               <CollectorStatsPanel artist={artist} />
+              {!artist.ncm && artist.blockchain === 'ethereum' && artist.walletAddress && (
+                <NcmLiteWidget artist={artist} />
+              )}
             </div>
           </div>
         </div>
