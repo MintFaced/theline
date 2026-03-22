@@ -385,33 +385,37 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   }
 
   // ── Touch handlers (mobile) ──────────────────────────────────────────
+  // touchStart: record origin. touchMove: pan/zoom. touchEnd: tap if < 8px total movement.
+  const touchOrigin = useRef({ x: 0, y: 0 })
+  const touchMoved  = useRef(0)  // cumulative movement from origin
+
   const onTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 1) {
       const t = e.touches[0]
-      lastTouch.current = { x: t.clientX, y: t.clientY }
-      isDragging.current = false // reset — decide on move
+      lastTouch.current  = { x: t.clientX, y: t.clientY }
+      touchOrigin.current = { x: t.clientX, y: t.clientY }
+      touchMoved.current  = 0
     } else if (e.touches.length === 2) {
-      // pinch-zoom: record initial distance
       const dx = e.touches[0].clientX - e.touches[1].clientX
       const dy = e.touches[0].clientY - e.touches[1].clientY
       lastTouchDist.current = Math.sqrt(dx * dx + dy * dy)
+      touchMoved.current = 999  // two fingers = not a tap
     }
   }
 
   const onTouchMove = (e: React.TouchEvent) => {
     e.preventDefault()
     if (e.touches.length === 1) {
-      const t   = e.touches[0]
-      const dx  = t.clientX - lastTouch.current.x
-      const dy  = t.clientY - lastTouch.current.y
-      const dist = Math.sqrt(dx * dx + dy * dy)
-      if (dist > 4) isDragging.current = true  // moved enough → it's a drag
-      if (isDragging.current) {
-        setPan(p => ({ x: p.x + dx, y: p.y + dy }))
-      }
+      const t  = e.touches[0]
+      const dx = t.clientX - lastTouch.current.x
+      const dy = t.clientY - lastTouch.current.y
+      // Track total movement from origin so we can distinguish tap vs drag
+      const ox = t.clientX - touchOrigin.current.x
+      const oy = t.clientY - touchOrigin.current.y
+      touchMoved.current = Math.sqrt(ox * ox + oy * oy)
+      setPan(p => ({ x: p.x + dx, y: p.y + dy }))
       lastTouch.current = { x: t.clientX, y: t.clientY }
     } else if (e.touches.length === 2) {
-      // pinch-zoom
       const dx   = e.touches[0].clientX - e.touches[1].clientX
       const dy   = e.touches[0].clientY - e.touches[1].clientY
       const dist = Math.sqrt(dx * dx + dy * dy)
@@ -422,21 +426,23 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
   }
 
   const onTouchEnd = (e: React.TouchEvent) => {
-    if (!isDragging.current && e.changedTouches.length === 1) {
-      // Tap — show collector card with generous hit radius for touch
+    // Tap = finger lifted with total movement < 8px
+    if (touchMoved.current < 8 && e.changedTouches.length === 1) {
       const t = e.changedTouches[0]
-      const h = hitTest(t.clientX, t.clientY, 16)
+      const h = hitTest(t.clientX, t.clientY, 20)  // generous 20px radius for fat fingers
       setHovered(h)
       if (h) {
         const canvas = canvasRef.current!
-        // On mobile: position card in upper portion of screen, centred
+        const w = canvas.offsetWidth
+        const cardW = 240
+        // Centre card horizontally on tap point, keep within screen, place above finger
         setHoveredPos({
-          x: Math.min(t.clientX, canvas.offsetWidth - 250),
-          y: Math.max(60, t.clientY - 280),
+          x: Math.max(8, Math.min(t.clientX - cardW / 2, w - cardW - 8)),
+          y: Math.max(60, t.clientY - 320),
         })
       }
     }
-    isDragging.current = false
+    touchMoved.current = 0
   }
 
   // ── Register __saveENS immediately on mount ──────────────────────────
@@ -564,8 +570,8 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
         </div>
       )}
 
-      {/* Wordmark — bottom left */}
-      <div className="absolute bottom-8 left-7 z-10 pointer-events-none">
+      {/* Wordmark — bottom left — desktop only */}
+      <div className="hidden md:block absolute bottom-8 left-7 z-10 pointer-events-none">
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-line-muted mb-1">Networked Collectors Map</p>
         <p className="font-display font-light text-2xl tracking-wide text-line-text" style={{ letterSpacing: '0.1em' }}>
           {artistName}
@@ -575,8 +581,8 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
         </p>
       </div>
 
-      {/* Stats — bottom right */}
-      <div className="absolute bottom-8 right-7 z-10 pointer-events-none text-right flex flex-col gap-1">
+      {/* Stats — bottom right — desktop only */}
+      <div className="hidden md:flex absolute bottom-8 right-7 z-10 pointer-events-none text-right flex-col gap-1">
         {[
           { n: stats.total_collectors.toLocaleString(), l: 'Collectors' },
           { n: stats.total_pieces.toLocaleString(),     l: 'Works Held' },
@@ -587,6 +593,22 @@ export function NetworkCollectorsMap({ artistName, accent, collections, stats, c
             <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-line-muted">{l}</span>
           </div>
         ))}
+      </div>
+
+      {/* Mobile bottom bar — single line replacing wordmark + stats */}
+      <div className="md:hidden absolute bottom-0 left-0 right-0 z-10 pointer-events-none px-4 py-3"
+        style={{ background: 'linear-gradient(to top, rgba(10,10,10,0.95) 0%, transparent 100%)' }}>
+        <div className="flex items-baseline justify-between gap-2">
+          <p className="font-display font-light text-lg text-line-text truncate" style={{ letterSpacing: '0.06em' }}>
+            {artistName}
+          </p>
+          <p className="font-mono text-[9px] tracking-[0.15em] uppercase text-line-muted shrink-0" style={{ color: accent + '90' }}>
+            {stats.total_collectors.toLocaleString()} collectors
+          </p>
+        </div>
+        <p className="font-mono text-[8px] tracking-[0.2em] uppercase mt-0.5" style={{ color: accent + '50' }}>
+          {ncols} collections · {stats.total_pieces.toLocaleString()} works · {stats.cross_collection} cross-collection
+        </p>
       </div>
 
       {/* ENS status — top right */}
